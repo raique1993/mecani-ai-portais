@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Mecani">
+<link rel="manifest" href="/manifest.json">
+<title>Mecani.AI — Mecânico</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#0a0a0a;--bg1:#141414;--bg2:#1e1e1e;--bg3:#282828;--t1:#f5f3ef;--t2:#999;--t3:#555;--g:#22c55e;--b:#3b82f6;--a:#f59e0b;--r:#ef4444}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--t1);font-family:-apple-system,'SF Pro Display',sans-serif;min-height:100vh;max-width:430px;margin:0 auto;position:relative}
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--bg3);padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:16px;font-weight:700}.logo em{color:var(--g);font-style:normal}
+.status-live{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g)}
+.dot-live{width:6px;height:6px;border-radius:50%;background:var(--g);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.content{padding:16px 20px 120px}
+
+/* Cards de ação rápida */
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.quick-btn{padding:20px 16px;background:var(--bg1);border:1.5px solid var(--bg3);border-radius:14px;cursor:pointer;transition:all .15s;text-align:center;-webkit-user-select:none}
+.quick-btn:active{transform:scale(.97);background:var(--bg2)}
+.quick-btn.primary{border-color:var(--g);background:rgba(34,197,94,.08)}
+.qb-icon{font-size:28px;margin-bottom:8px}
+.qb-label{font-size:14px;font-weight:600}
+.qb-sub{font-size:11px;color:var(--t3);margin-top:3px}
+
+/* OS List */
+.section-label{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.os-card{background:var(--bg1);border:1px solid var(--bg3);border-radius:12px;padding:14px 16px;margin-bottom:8px;cursor:pointer;transition:all .2s;-webkit-user-select:none}
+.os-card:active{transform:scale(.99);background:var(--bg2)}
+.os-card.urgente{border-color:var(--r)}
+.os-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.os-num{font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.5px}
+.os-placa{font-size:16px;font-weight:700}
+.os-modelo{font-size:13px;color:var(--t2);margin-bottom:4px}
+.os-queixa{font-size:12px;color:var(--t3);line-height:1.4}
+.status-tag{font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px}
+.st-diag{background:rgba(99,102,241,.15);color:#818cf8}
+.st-ag{background:rgba(245,158,11,.15);color:var(--a)}
+.st-exec{background:rgba(59,130,246,.15);color:var(--b)}
+.st-peca{background:rgba(239,68,68,.15);color:var(--r)}
+.tempo{font-size:11px;color:var(--t3)}
+
+/* Modal de ação */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg1);border-radius:20px 20px 0 0;width:100%;padding:20px 20px 40px;transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-handle{width:36px;height:4px;background:var(--bg3);border-radius:2px;margin:0 auto 20px}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--t2);margin-bottom:20px}
+.action-list{display:flex;flex-direction:column;gap:8px}
+.action-btn{padding:15px 16px;background:var(--bg2);border:1px solid var(--bg3);border-radius:12px;color:var(--t1);font-size:15px;font-weight:500;cursor:pointer;text-align:left;transition:all .15s;display:flex;align-items:center;gap:12px}
+.action-btn:active{background:var(--bg3)}
+.action-btn.danger{color:var(--r);border-color:rgba(239,68,68,.3)}
+.action-btn.success{color:var(--g);border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.06)}
+.ab-icon{font-size:20px}
+.textarea-field{width:100%;padding:12px;background:var(--bg2);border:1px solid var(--bg3);border-radius:10px;color:var(--t1);font-size:15px;outline:none;resize:none;font-family:inherit;margin-bottom:12px}
+.textarea-field:focus{border-color:var(--g)}
+.confirm-btn{width:100%;padding:15px;background:var(--g);color:#000;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s}
+.confirm-btn:disabled{opacity:.5}
+.cancel-btn{width:100%;padding:13px;background:transparent;color:var(--t2);border:none;font-size:14px;cursor:pointer;margin-top:8px}
+
+/* Bottom nav */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(10,10,10,.95);backdrop-filter:blur(20px);border-top:1px solid var(--bg3);display:flex;padding:10px 0 20px}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:6px 0;-webkit-user-select:none}
+.nav-icon{font-size:22px}
+.nav-label{font-size:10px;color:var(--t3);font-weight:500}
+.nav-item.active .nav-label{color:var(--g)}
+
+/* Loading */
+.load{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:12px}
+.spin{width:28px;height:28px;border:2px solid var(--bg3);border-top-color:var(--g);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Badges */
+.badge-count{background:var(--r);color:#fff;font-size:10px;font-weight:700;padding:1px 5px;border-radius:100px;position:absolute;top:-2px;right:-4px}
+.rel{position:relative;display:inline-block}
+
+/* Install banner */
+.install-banner{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.install-text{font-size:13px;color:var(--t2);flex:1}
+.install-btn{padding:8px 14px;background:var(--g);color:#000;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.install-close{color:var(--t3);cursor:pointer;font-size:18px;padding:4px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">Mecani<em>.AI</em></div>
+  <div class="status-live"><div class="dot-live"></div>Ao vivo</div>
+</div>
+
+<div class="content" id="content">
+  <div class="load"><div class="spin"></div><div style="font-size:13px;color:var(--t3)">Carregando...</div></div>
+</div>
+
+<!-- Modal de ação -->
+<div class="modal-overlay" id="modal-overlay" onclick="fecharModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <div class="nav-item active" onclick="renderHome()"><div class="nav-icon">🏠</div><div class="nav-label">Início</div></div>
+  <div class="nav-item" onclick="renderOS()"><div class="rel"><div class="nav-icon">🔧</div><span class="badge-count" id="os-count" style="display:none">0</span></div><div class="nav-label">Minhas OS</div></div>
+  <div class="nav-item" onclick="renderCheckin()"><div class="nav-icon" style="font-size:28px">＋</div><div class="nav-label">Check-in</div></div>
+  <div class="nav-item" onclick="renderHistorico()"><div class="nav-icon">📋</div><div class="nav-label">Histórico</div></div>
+</div>
+
+<script>
+const SB_URL='https://tcjynyfusqkqtdohnyzq.supabase.co';
+const SB_KEY='sb_publishable_gNJhc4WCS9MnnmDAL2T6Vg_AQ71_Vid';
+const{createClient}=supabase;
+const sb=createClient(SB_URL,SB_KEY);
+const TENANT_ID='a1b2c3d4-0000-0000-0000-000000000001';
+
+const STATUS={
+  EM_DIAGNOSTICO:{l:'Diagnóstico',cls:'st-diag',icon:'🔍'},
+  AGUARDANDO_APROVACAO:{l:'Aguardando',cls:'st-ag',icon:'📋'},
+  EM_EXECUCAO:{l:'Execução',cls:'st-exec',icon:'🔧'},
+  AGUARDANDO_PECA:{l:'Ag. Peça',cls:'st-peca',icon:'📦'},
+  CONCLUIDO:{l:'Concluído',cls:'',icon:'✅'},
+};
+const PROXIMO={EM_DIAGNOSTICO:'AGUARDANDO_APROVACAO',AGUARDANDO_APROVACAO:'EM_EXECUCAO',EM_EXECUCAO:'CONCLUIDO',AGUARDANDO_PECA:'EM_EXECUCAO'};
+
+let osAtivas=[];
+let osModal=null;
+
+function tempo(dt){const d=Math.floor((Date.now()-new Date(dt))/60000);if(d<1)return'agora';if(d<60)return d+'min';const h=Math.floor(d/60);if(h<24)return h+'h';return Math.floor(h/24)+'d';}
+
+// Instalação PWA
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;});
+
+async function instalarApp(){
+  if(deferredPrompt){await deferredPrompt.prompt();deferredPrompt=null;document.getElementById('install-banner')?.remove();}
+}
+
+// HOME
+async function renderHome(){
+  setActiveNav(0);
+  const{data:os}=await sb.from('ordens_servico').select('*').eq('tenant_id',TENANT_ID).not('status','in','("CONCLUIDO","CANCELADO")').order('created_at',{ascending:false}).limit(50);
+  osAtivas=os||[];
+  
+  const abertas=osAtivas.length;
+  const urgentes=osAtivas.filter(o=>(Date.now()-new Date(o.created_at))>86400000).length;
+  const emExec=osAtivas.filter(o=>o.status==='EM_EXECUCAO').length;
+
+  const count=document.getElementById('os-count');
+  if(abertas>0){count.style.display='block';count.textContent=abertas;}
+
+  document.getElementById('content').innerHTML=`
+    ${deferredPrompt?`<div class="install-banner" id="install-banner"><div class="install-text">📱 Instale o app no seu celular para usar offline!</div><button class="install-btn" onclick="instalarApp()">Instalar</button><span class="install-close" onclick="this.closest('.install-banner').remove()">×</span></div>`:''}
+    
+    <div class="quick-grid">
+      <div class="quick-btn primary" onclick="renderCheckin()">
+        <div class="qb-icon">🚗</div><div class="qb-label">Check-in</div><div class="qb-sub">Novo veículo</div>
+      </div>
+      <div class="quick-btn" onclick="abrirDiagnostico()">
+        <div class="qb-icon">🔍</div><div class="qb-label">Diagnóstico</div><div class="qb-sub">Reportar problema</div>
+      </div>
+      <div class="quick-btn" onclick="marcarPronto()">
+        <div class="qb-icon">✅</div><div class="qb-label">Pronto!</div><div class="qb-sub">Fechar OS</div>
+      </div>
+      <div class="quick-btn" onclick="renderOS()">
+        <div class="qb-icon" style="font-size:22px">🔧 <span style="font-size:14px;font-weight:700;color:var(--g)">${abertas}</span></div>
+        <div class="qb-label">OS abertas</div><div class="qb-sub">${urgentes>0?urgentes+' urgentes':'tudo ok'}</div>
+      </div>
+    </div>
+
+    ${urgentes>0?`<div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:#f87171">⚠️ ${urgentes} OS aguardando há mais de 24h</div>`:''}
+
+    <div class="section-label">OS em andamento (${abertas})</div>
+    ${osAtivas.slice(0,8).map(os=>renderOSCard(os)).join('')}
+    ${abertas>8?`<div style="text-align:center;padding:12px;color:var(--t3);font-size:13px" onclick="renderOS()">Ver todas as ${abertas} OS →</div>`:''}`;
+
+  // Realtime
+  sb.channel('mecanico-rt').on('postgres_changes',{event:'*',schema:'public',table:'ordens_servico',filter:`tenant_id=eq.${TENANT_ID}`},()=>renderHome()).subscribe();
+}
+
+function renderOSCard(os){
+  const st=STATUS[os.status]||{l:os.status,cls:'',icon:'•'};
+  const urg=(Date.now()-new Date(os.created_at))>86400000;
+  return`<div class="os-card ${urg?'urgente':''}" onclick="abrirOSModal('${os.id}')">
+    <div class="os-header">
+      <div><div class="os-num">OS #${os.numero_os}</div><div class="os-placa">${os.placa_veiculo}</div></div>
+      <div style="text-align:right"><span class="status-tag ${st.cls}">${st.icon} ${st.l}</span><div class="tempo" style="margin-top:4px">${tempo(os.created_at)}</div></div>
+    </div>
+    <div class="os-modelo">${os.modelo_veiculo||'Veículo não informado'} — ${os.nome_cliente}</div>
+    <div class="os-queixa">${(os.relato_inicial||os.queixa_cliente||'').substring(0,80)}</div>
+  </div>`;
+}
+
+// TODAS AS OS
+async function renderOS(){
+  setActiveNav(1);
+  document.getElementById('content').innerHTML='<div class="load"><div class="spin"></div></div>';
+  const{data:os}=await sb.from('ordens_servico').select('*').eq('tenant_id',TENANT_ID).not('status','in','("CANCELADO")').order('created_at',{ascending:false}).limit(100);
+  const ativas=(os||[]).filter(o=>o.status!=='CONCLUIDO');
+  const concluidas=(os||[]).filter(o=>o.status==='CONCLUIDO');
+  document.getElementById('content').innerHTML=`
+    <div class="section-label">Em andamento (${ativas.length})</div>
+    ${ativas.map(o=>renderOSCard(o)).join('')||'<div style="color:var(--t3);font-size:13px;padding:20px 0">Nenhuma OS em andamento</div>'}
+    <div class="section-label" style="margin-top:20px">Concluídas recentes (${Math.min(concluidas.length,10)})</div>
+    ${concluidas.slice(0,10).map(o=>renderOSCard(o)).join('')}`;
+}
+
+// MODAL DE AÇÃO DA OS
+async function abrirOSModal(osId){
+  const os=osAtivas.find(o=>o.id===osId);
+  if(!os){const{data}=await sb.from('ordens_servico').select('*').eq('id',osId).single();if(data)osModal=data;}
+  else osModal=os;
+  if(!osModal)return;
+
+  const proximo=PROXIMO[osModal.status];
+  document.getElementById('modal-title').textContent=`OS #${osModal.numero_os} — ${osModal.placa_veiculo}`;
+  document.getElementById('modal-sub').textContent=`${osModal.modelo_veiculo||'Veículo'} • ${osModal.nome_cliente}`;
+  document.getElementById('modal-body').innerHTML=`
+    <div class="action-list">
+      ${proximo?`<div class="action-btn success" onclick="avancarStatus('${osModal.id}','${proximo}')"><span class="ab-icon">${STATUS[proximo]?.icon||'→'}</span>Avançar para ${STATUS[proximo]?.l||proximo}</div>`:''}
+      <div class="action-btn" onclick="abrirDiagnosticoModal('${osModal.id}')"><span class="ab-icon">📝</span>Registrar diagnóstico</div>
+      <div class="action-btn" onclick="abrirNotasModal('${osModal.id}')"><span class="ab-icon">💬</span>Adicionar observação</div>
+      ${osModal.status==='EM_EXECUCAO'||osModal.status==='AGUARDANDO_PECA'?`<div class="action-btn success" onclick="marcarProntoModal('${osModal.id}')"><span class="ab-icon">✅</span>Marcar como pronto</div>`:''}
+      <div class="action-btn" onclick="window.open('https://mecani-ai-dashboard.vercel.app/portal-cliente.html?placa=${osModal.placa_veiculo}','_blank')"><span class="ab-icon">👤</span>Ver portal do cliente</div>
+    </div>`;
+  abrirModal();
+}
+
+async function avancarStatus(osId,novoStatus){
+  fecharModal();
+  await sb.from('ordens_servico').update({status:novoStatus,...(novoStatus==='CONCLUIDO'?{concluido_at:new Date().toISOString()}:{})}).eq('id',osId);
+  renderHome();
+}
+
+function abrirDiagnosticoModal(osId){
+  document.getElementById('modal-body').innerHTML=`
+    <textarea class="textarea-field" id="diag-text" rows="5" placeholder="Descreva o que foi encontrado no veículo — problema, peças necessárias, serviços..."></textarea>
+    <button class="confirm-btn" onclick="salvarDiagnostico('${osId}')">Salvar diagnóstico</button>
+    <button class="cancel-btn" onclick="fecharModal()">Cancelar</button>`;
+}
+
+async function salvarDiagnostico(osId){
+  const texto=document.getElementById('diag-text').value.trim();
+  if(!texto)return;
+  await sb.from('ordens_servico').update({diagnostico_tecnico:texto,status:'AGUARDANDO_APROVACAO'}).eq('id',osId);
+  await sb.from('diagnosticos').insert({os_id:osId,tenant_id:TENANT_ID,relato_mecanico:texto});
+  fecharModal();renderHome();
+}
+
+function abrirNotasModal(osId){
+  document.getElementById('modal-body').innerHTML=`
+    <textarea class="textarea-field" id="nota-text" rows="4" placeholder="Observação interna..."></textarea>
+    <button class="confirm-btn" onclick="salvarNota('${osId}')">Salvar</button>
+    <button class="cancel-btn" onclick="fecharModal()">Cancelar</button>`;
+}
+
+async function salvarNota(osId){
+  const texto=document.getElementById('nota-text').value.trim();
+  if(!texto)return;
+  const{data:os}=await sb.from('ordens_servico').select('diagnostico_tecnico').eq('id',osId).single();
+  const novo=(os?.diagnostico_tecnico||'')+'\n\n[Nota '+new Date().toLocaleTimeString('pt-BR')+']: '+texto;
+  await sb.from('ordens_servico').update({diagnostico_tecnico:novo.trim()}).eq('id',osId);
+  fecharModal();
+}
+
+async function marcarProntoModal(osId){
+  fecharModal();
+  await avancarStatus(osId,'CONCLUIDO');
+}
+
+// CHECK-IN
+function renderCheckin(){
+  setActiveNav(2);
+  document.getElementById('content').innerHTML=`
+    <h2 style="font-size:20px;font-weight:700;margin-bottom:6px">Novo check-in</h2>
+    <p style="font-size:14px;color:var(--t2);margin-bottom:24px">Registre a entrada de um novo veículo</p>
+    
+    <div style="background:var(--bg1);border:1px solid var(--bg3);border-radius:12px;padding:16px;margin-bottom:12px">
+      <div style="font-size:12px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Dados do veículo</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:6px">Placa *</label><input id="ci-placa" style="width:100%;padding:11px;background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;color:var(--t1);font-size:15px;font-weight:700;letter-spacing:2px;outline:none;text-transform:uppercase" placeholder="ABC1D23" maxlength="8" oninput="this.value=this.value.toUpperCase()"></div>
+        <div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:6px">KM atual</label><input id="ci-km" type="number" style="width:100%;padding:11px;background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;color:var(--t1);font-size:15px;outline:none" placeholder="50000"></div>
+      </div>
+      <div style="margin-top:10px"><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:6px">Modelo (marca + modelo + ano)</label><input id="ci-modelo" style="width:100%;padding:11px;background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;color:var(--t1);font-size:15px;outline:none" placeholder="Ex: Toyota Corolla 2020"></div>
+    </div>
+    
+    <div style="background:var(--bg1);border:1px solid var(--bg3);border-radius:12px;padding:16px;margin-bottom:12px">
+      <div style="font-size:12px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Dados do cliente</div>
+      <div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:6px">Nome completo *</label><input id="ci-nome" style="width:100%;padding:11px;background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;color:var(--t1);font-size:15px;outline:none" placeholder="João Silva"></div>
+      <div style="margin-top:10px"><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:6px">WhatsApp *</label><input id="ci-tel" type="tel" style="width:100%;padding:11px;background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;color:var(--t1);font-size:15px;outline:none" placeholder="61999990000"></div>
+    </div>
+    
+    <div style="background:var(--bg1);border:1px solid var(--bg3);border-radius:12px;padding:16px;margin-bottom:20px">
+      <div style="font-size:12px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Queixa do cliente</div>
+      <textarea id="ci-queixa" rows="4" style="width:100%;padding:11px;background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;color:var(--t1);font-size:15px;outline:none;resize:none;font-family:inherit" placeholder="Descreva o problema relatado pelo cliente..."></textarea>
+    </div>
+    
+    <button onclick="salvarCheckin()" style="width:100%;padding:16px;background:var(--g);color:#000;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer">🚗 Abrir OS</button>`;
+}
+
+async function salvarCheckin(){
+  const placa=document.getElementById('ci-placa').value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+  const nome=document.getElementById('ci-nome').value.trim();
+  const tel=document.getElementById('ci-tel').value.replace(/\D/g,'');
+  const queixa=document.getElementById('ci-queixa').value.trim();
+  if(!placa||!nome||!tel||!queixa){alert('Preencha placa, nome, WhatsApp e queixa.');return;}
+  
+  const modelo=document.getElementById('ci-modelo').value.trim();
+  const km=parseInt(document.getElementById('ci-km').value)||null;
+  
+  const{data:v}=await sb.from('veiculos').upsert({tenant_id:TENANT_ID,placa,modelo:modelo.split(' ').slice(1).join(' ')||null,marca:modelo.split(' ')[0]||null,km_atual:km},{onConflict:'tenant_id,placa'}).select('id').single();
+  const{data:c}=await sb.from('clientes').upsert({tenant_id:TENANT_ID,nome,telefone:tel},{onConflict:'tenant_id,telefone'}).select('id').single();
+  const{data:os}=await sb.from('ordens_servico').insert({tenant_id:TENANT_ID,placa_veiculo:placa,modelo_veiculo:modelo,nome_cliente:nome,telefone_cliente:tel,queixa_cliente:queixa,km_entrada_real:km,veiculo_id:v?.id,cliente_id:c?.id,status:'EM_DIAGNOSTICO'}).select('numero_os').single();
+  
+  if(os){
+    document.getElementById('content').innerHTML=`
+      <div style="text-align:center;padding:60px 0">
+        <div style="font-size:56px;margin-bottom:16px">✅</div>
+        <div style="font-size:22px;font-weight:700;margin-bottom:8px">OS #${os.numero_os} aberta!</div>
+        <div style="font-size:14px;color:var(--t2);margin-bottom:32px">${placa} — ${nome}</div>
+        <button onclick="renderHome()" style="padding:14px 28px;background:var(--g);color:#000;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer">Ir para início</button>
+      </div>`;
+  }
+}
+
+// HISTÓRICO
+async function renderHistorico(){
+  setActiveNav(3);
+  document.getElementById('content').innerHTML='<div class="load"><div class="spin"></div></div>';
+  const{data:os}=await sb.from('ordens_servico').select('*').eq('tenant_id',TENANT_ID).eq('status','CONCLUIDO').order('concluido_at',{ascending:false}).limit(30);
+  document.getElementById('content').innerHTML=`
+    <div class="section-label">OS concluídas (${os?.length||0})</div>
+    ${(os||[]).map(o=>`
+      <div class="os-card" onclick="abrirOSModal('${o.id}')">
+        <div class="os-header">
+          <div><div class="os-num">OS #${o.numero_os}</div><div class="os-placa">${o.placa_veiculo}</div></div>
+          <div style="text-align:right"><span class="status-tag" style="background:rgba(34,197,94,.1);color:var(--g)">✅ Concluído</span><div class="tempo">${tempo(o.concluido_at||o.created_at)}</div></div>
+        </div>
+        <div class="os-modelo">${o.modelo_veiculo||'—'} — ${o.nome_cliente}</div>
+        ${o.valor_total?`<div style="font-size:13px;color:var(--g);margin-top:4px;font-weight:600">R$ ${Number(o.valor_total).toFixed(2).replace('.',',')}</div>`:''}
+      </div>`).join('')||'<div style="color:var(--t3);font-size:13px;padding:20px 0;text-align:center">Nenhuma OS concluída ainda</div>'}`;
+}
+
+// Ações rápidas
+function abrirDiagnostico(){
+  document.getElementById('modal-title').textContent='Registrar diagnóstico';
+  document.getElementById('modal-sub').textContent='Descreva o que foi encontrado na OS mais recente';
+  document.getElementById('modal-body').innerHTML=`
+    <textarea class="textarea-field" id="diag-rapido" rows="5" placeholder="Descreva o problema identificado, peças necessárias..."></textarea>
+    <button class="confirm-btn" onclick="salvarDiagnosticoRapido()">Salvar diagnóstico</button>
+    <button class="cancel-btn" onclick="fecharModal()">Cancelar</button>`;
+  abrirModal();
+}
+
+async function salvarDiagnosticoRapido(){
+  const texto=document.getElementById('diag-rapido').value.trim();
+  if(!texto)return;
+  const{data:os}=await sb.from('ordens_servico').select('id').eq('tenant_id',TENANT_ID).eq('status','EM_DIAGNOSTICO').order('created_at',{ascending:false}).limit(1).single();
+  if(!os){fecharModal();alert('Nenhuma OS em diagnóstico. Faça o check-in primeiro.');return;}
+  await sb.from('ordens_servico').update({diagnostico_tecnico:texto,status:'AGUARDANDO_APROVACAO'}).eq('id',os.id);
+  await sb.from('diagnosticos').insert({os_id:os.id,tenant_id:TENANT_ID,relato_mecanico:texto});
+  fecharModal();renderHome();
+}
+
+async function marcarPronto(){
+  document.getElementById('modal-title').textContent='Marcar como pronto';
+  document.getElementById('modal-sub').textContent='Selecione a OS que está pronta';
+  const{data:os}=await sb.from('ordens_servico').select('id,numero_os,placa_veiculo,nome_cliente').eq('tenant_id',TENANT_ID).in('status',['EM_EXECUCAO','AGUARDANDO_PECA']).order('created_at',{ascending:false}).limit(10);
+  document.getElementById('modal-body').innerHTML=`
+    <div class="action-list">
+      ${(os||[]).map(o=>`<div class="action-btn success" onclick="avancarStatus('${o.id}','CONCLUIDO')"><span class="ab-icon">✅</span>OS #${o.numero_os} — ${o.placa_veiculo}</div>`).join('')||'<div style="color:var(--t3);font-size:13px">Nenhuma OS em execução</div>'}
+      <button class="cancel-btn" onclick="fecharModal()">Cancelar</button>
+    </div>`;
+  abrirModal();
+}
+
+// Modal helpers
+function abrirModal(){document.getElementById('modal-overlay').classList.add('open');}
+function fecharModal(){document.getElementById('modal-overlay').classList.remove('open');}
+function setActiveNav(i){document.querySelectorAll('.nav-item').forEach((n,j)=>n.classList.toggle('active',i===j));}
+
+// Registrar Service Worker
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/sw.js').catch(()=>{});
+}
+
+renderHome();
+</script>
+</body>
+</html>
