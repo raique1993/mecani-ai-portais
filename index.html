@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mecani.AI — Portais</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#f5f3ef;font-family:-apple-system,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.wrap{max-width:480px;width:100%;padding:40px 24px;text-align:center}
+.logo{font-size:28px;font-weight:700;margin-bottom:8px}.logo em{color:#22c55e;font-style:normal}
+.sub{font-size:15px;color:#888;margin-bottom:40px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:#141414;border:1px solid #282828;border-radius:14px;padding:20px;text-decoration:none;color:#f5f3ef;transition:all .2s;display:block}
+.card:hover{border-color:#22c55e;transform:translateY(-2px)}
+.card-icon{font-size:28px;margin-bottom:10px}
+.card-title{font-size:15px;font-weight:600;margin-bottom:4px}
+.card-desc{font-size:12px;color:#666}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">Mecani<em>.AI</em></div>
+  <p class="sub">Sistema de Gestão para Oficinas Mecânicas</p>
+  <div class="grid">
+    <a href="portal-mecanico.html" class="card"><div class="card-icon">🔧</div><div class="card-title">Portal Mecânico</div><div class="card-desc">App do mecânico</div></a>
+    <a href="portal-cliente.html?placa=ABC1234" class="card"><div class="card-icon">🚗</div><div class="card-title">Portal Cliente</div><div class="card-desc">Acompanhe seu veículo</div></a>
+    <a href="portal-agendamento.html" class="card"><div class="card-icon">📅</div><div class="card-title">Agendamento</div><div class="card-desc">Agende online</div></a>
+    <a href="portal-fornecedor.html" class="card"><div class="card-icon">🏪</div><div class="card-title">Fornecedor</div><div class="card-desc">Portal de cotações</div></a>
+    <a href="portal-estoque.html" class="card"><div class="card-icon">📦</div><div class="card-title">Estoque</div><div class="card-desc">Controle de peças</div></a>
+    <a href="portal-admin.html" class="card"><div class="card-icon">👑</div><div class="card-title">Admin</div><div class="card-desc">Visão consolidada</div></a>
+  </div>
+</div>
+</body>
+</html>
