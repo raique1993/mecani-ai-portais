@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acompanhe seu veículo — Mecani.AI</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --black: #0f0f0f;
+  --white: #fafaf8;
+  --gray1: #1a1a1a;
+  --gray2: #252525;
+  --gray3: #333;
+  --gray4: #555;
+  --gray5: #888;
+  --gray6: #bbb;
+  --accent: #22c55e;
+  --accent2: #3b82f6;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--black); color:var(--white); font-family:-apple-system,'SF Pro Display','Segoe UI',sans-serif; min-height:100vh; }
+
+/* HEADER */
+.header { padding:20px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #1f1f1f; }
+.logo { font-size:18px; font-weight:700; letter-spacing:-0.5px; }
+.logo span { color:var(--accent); }
+.status-pill { display:flex; align-items:center; gap:6px; background:#1a2e1a; border:1px solid #2a4a2a; padding:6px 14px; border-radius:100px; font-size:13px; color:var(--accent); }
+.status-dot { width:7px; height:7px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(1.3)} }
+
+/* HERO */
+.hero { padding:40px 24px 32px; max-width:600px; margin:0 auto; }
+.hero-eyebrow { font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--gray5); margin-bottom:12px; }
+.hero-title { font-size:clamp(28px,6vw,40px); font-weight:700; line-height:1.1; letter-spacing:-1px; margin-bottom:8px; }
+.hero-plate { display:inline-flex; align-items:center; gap:8px; background:var(--gray2); border:1px solid var(--gray3); padding:8px 16px; border-radius:var(--radius-sm); font-size:20px; font-weight:700; letter-spacing:3px; margin-top:12px; }
+.hero-plate .flag { font-size:16px; }
+
+/* PROGRESS TRACK */
+.progress-wrap { max-width:600px; margin:0 auto; padding:0 24px 32px; }
+.progress-label { font-size:13px; color:var(--gray5); margin-bottom:16px; font-weight:500; }
+.progress-track { position:relative; }
+.progress-line { position:absolute; top:18px; left:18px; right:18px; height:2px; background:var(--gray3); z-index:0; }
+.progress-fill { position:absolute; top:18px; left:18px; height:2px; background:var(--accent); z-index:1; transition:width 1s ease; }
+.progress-steps { display:flex; justify-content:space-between; position:relative; z-index:2; }
+.step { display:flex; flex-direction:column; align-items:center; gap:8px; }
+.step-dot { width:36px; height:36px; border-radius:50%; border:2px solid var(--gray3); background:var(--gray1); display:flex; align-items:center; justify-content:center; font-size:14px; transition:all .4s; }
+.step-dot.done { background:var(--accent); border-color:var(--accent); }
+.step-dot.active { background:var(--gray2); border-color:var(--accent); box-shadow:0 0 0 4px rgba(34,197,94,.15); }
+.step-label { font-size:11px; color:var(--gray5); text-align:center; max-width:64px; }
+.step-label.active { color:var(--white); font-weight:600; }
+
+/* CARDS */
+.cards { max-width:600px; margin:0 auto; padding:0 24px; display:flex; flex-direction:column; gap:12px; }
+.card { background:var(--gray1); border:1px solid var(--gray2); border-radius:var(--radius); padding:20px; }
+.card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.card-title { font-size:13px; font-weight:600; color:var(--gray5); text-transform:uppercase; letter-spacing:1px; }
+.card-badge { font-size:11px; font-weight:600; padding:3px 10px; border-radius:100px; }
+.badge-green { background:rgba(34,197,94,.15); color:var(--accent); }
+.badge-blue { background:rgba(59,130,246,.15); color:var(--accent2); }
+.badge-warn { background:rgba(245,158,11,.15); color:var(--warn); }
+.badge-danger { background:rgba(239,68,68,.15); color:var(--danger); }
+
+/* OS INFO */
+.os-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.os-field label { font-size:11px; color:var(--gray5); display:block; margin-bottom:4px; font-weight:500; letter-spacing:.5px; text-transform:uppercase; }
+.os-field value { font-size:15px; color:var(--white); font-weight:500; }
+
+/* TIMELINE */
+.timeline { display:flex; flex-direction:column; gap:0; }
+.tl-item { display:flex; gap:16px; padding-bottom:20px; position:relative; }
+.tl-item:last-child { padding-bottom:0; }
+.tl-left { display:flex; flex-direction:column; align-items:center; }
+.tl-icon { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.tl-icon.done { background:rgba(34,197,94,.15); }
+.tl-icon.active { background:rgba(59,130,246,.15); animation:glow 2s infinite; }
+.tl-icon.pending { background:var(--gray2); }
+@keyframes glow { 0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,0)} 50%{box-shadow:0 0 0 6px rgba(59,130,246,.2)} }
+.tl-connector { width:1px; flex:1; background:var(--gray3); margin-top:4px; min-height:20px; }
+.tl-content { padding-top:6px; flex:1; }
+.tl-title { font-size:14px; font-weight:600; color:var(--white); margin-bottom:3px; }
+.tl-title.pending { color:var(--gray5); font-weight:400; }
+.tl-desc { font-size:13px; color:var(--gray5); line-height:1.5; }
+.tl-time { font-size:11px; color:var(--gray4); margin-top:4px; }
+
+/* APROVAÇÃO */
+.approve-box { background:rgba(59,130,246,.08); border:1px solid rgba(59,130,246,.3); border-radius:var(--radius-sm); padding:16px; margin-top:12px; }
+.approve-title { font-size:14px; font-weight:600; color:var(--accent2); margin-bottom:8px; }
+.approve-value { font-size:28px; font-weight:700; color:var(--white); margin-bottom:12px; }
+.approve-desc { font-size:13px; color:var(--gray5); margin-bottom:16px; line-height:1.5; }
+.approve-btns { display:flex; gap:10px; }
+.btn { padding:12px 24px; border-radius:var(--radius-sm); font-size:14px; font-weight:600; border:none; cursor:pointer; transition:all .2s; flex:1; }
+.btn-approve { background:var(--accent); color:#000; }
+.btn-approve:hover { background:#16a34a; }
+.btn-reject { background:var(--gray2); color:var(--gray6); border:1px solid var(--gray3); }
+.btn-reject:hover { border-color:var(--danger); color:var(--danger); }
+
+/* AVALIAÇÃO */
+.nps-stars { display:flex; gap:8px; margin:12px 0; flex-wrap:wrap; }
+.nps-btn { width:44px; height:44px; border-radius:var(--radius-sm); border:1px solid var(--gray3); background:var(--gray2); color:var(--gray6); font-size:14px; font-weight:600; cursor:pointer; transition:all .2s; }
+.nps-btn:hover { border-color:var(--accent); color:var(--accent); }
+.nps-btn.selected { background:var(--accent); border-color:var(--accent); color:#000; }
+
+/* AGENDAR */
+.agendar-btn { width:100%; padding:14px; background:var(--accent2); color:#fff; border:none; border-radius:var(--radius-sm); font-size:15px; font-weight:600; cursor:pointer; transition:all .2s; margin-top:12px; }
+.agendar-btn:hover { background:#2563eb; }
+
+/* LOADING */
+.loading { display:flex; flex-direction:column; align-items:center; justify-content:center; height:60vh; gap:16px; }
+.spinner { width:40px; height:40px; border:2px solid var(--gray3); border-top-color:var(--accent); border-radius:50%; animation:spin 1s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.loading-text { font-size:14px; color:var(--gray5); }
+
+/* SEARCH */
+.search-section { max-width:600px; margin:0 auto; padding:60px 24px; text-align:center; }
+.search-title { font-size:28px; font-weight:700; margin-bottom:8px; }
+.search-sub { font-size:15px; color:var(--gray5); margin-bottom:32px; }
+.search-form { display:flex; gap:10px; }
+.search-input { flex:1; padding:14px 16px; background:var(--gray1); border:1px solid var(--gray3); border-radius:var(--radius-sm); color:var(--white); font-size:16px; outline:none; letter-spacing:2px; font-weight:600; text-transform:uppercase; }
+.search-input:focus { border-color:var(--accent); }
+.search-btn { padding:14px 24px; background:var(--accent); color:#000; border:none; border-radius:var(--radius-sm); font-size:15px; font-weight:700; cursor:pointer; }
+.recent-label { font-size:13px; color:var(--gray5); margin:24px 0 12px; }
+.recent-plates { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+.plate-chip { padding:6px 14px; background:var(--gray1); border:1px solid var(--gray3); border-radius:100px; font-size:13px; letter-spacing:1px; font-weight:600; cursor:pointer; color:var(--gray6); transition:all .2s; }
+.plate-chip:hover { border-color:var(--accent); color:var(--accent); }
+
+/* FOOTER */
+.footer { text-align:center; padding:40px 24px; color:var(--gray5); font-size:12px; border-top:1px solid var(--gray2); margin-top:40px; }
+.footer strong { color:var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">Mecani<span>.AI</span></div>
+  <div class="status-pill">
+    <div class="status-dot"></div>
+    Atualização em tempo real
+  </div>
+</div>
+
+<div id="app">
+  <div class="loading">
+    <div class="spinner"></div>
+    <div class="loading-text">Carregando...</div>
+  </div>
+</div>
+
+<div class="footer">
+  Powered by <strong>Mecani.AI</strong> — Sistema de Gestão para Oficinas Mecânicas
+</div>
+
+<script>
+const SUPABASE_URL = 'https://tcjynyfusqkqtdohnyzq.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_gNJhc4WCS9MnnmDAL2T6Vg_AQ71_Vid';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── Pegar placa da URL ────────────────────────────────────
+const params = new URLSearchParams(location.search);
+let placa = params.get('placa')?.toUpperCase().replace(/[^A-Z0-9]/g,'') || '';
+let currentOS = null;
+
+const STATUS_INFO = {
+  EM_DIAGNOSTICO:      { label:'Em diagnóstico',   icon:'🔍', step:1, badge:'badge-blue' },
+  AGUARDANDO_APROVACAO:{ label:'Aguardando aprovação', icon:'📋', step:2, badge:'badge-warn' },
+  APROVADO:            { label:'Aprovado',          icon:'✅', step:3, badge:'badge-green' },
+  EM_EXECUCAO:         { label:'Em execução',       icon:'🔧', step:3, badge:'badge-blue' },
+  AGUARDANDO_PECA:     { label:'Aguardando peça',   icon:'📦', step:3, badge:'badge-warn' },
+  CONCLUIDO:           { label:'Concluído',         icon:'🏁', step:5, badge:'badge-green' },
+  CANCELADO:           { label:'Cancelado',         icon:'❌', step:0, badge:'badge-danger' },
+};
+
+const STEPS = ['Check-in','Diagnóstico','Aprovação','Execução','Pronto'];
+
+function tempoAgo(dt) {
+  const d = Math.floor((Date.now()-new Date(dt))/(60000));
+  if(d<1)return'agora mesmo';if(d<60)return d+'min atrás';
+  const h=Math.floor(d/60);if(h<24)return h+'h atrás';
+  return Math.floor(h/24)+'d atrás';
+}
+function moeda(v){return v?'R$ '+Number(v).toFixed(2).replace('.',','):'—';}
+
+// ── RENDERIZAR OS ─────────────────────────────────────────
+function renderOS(os, historico, comunicacoes) {
+  const si = STATUS_INFO[os.status]||{label:os.status,icon:'🔧',step:1,badge:'badge-blue'};
+  const stepPct = Math.max(0,Math.min(100,(si.step-1)/4*100));
+  const temAprovacao = os.status==='AGUARDANDO_APROVACAO';
+  const concluido = os.status==='CONCLUIDO';
+  const temNPS = comunicacoes?.some(c=>c.tipo==='NPS'&&!c.respondido);
+
+  document.getElementById('app').innerHTML = `
+    <div class="hero">
+      <div class="hero-eyebrow">Acompanhe seu veículo</div>
+      <h1 class="hero-title">${os.nome_cliente?.split(' ')[0]||'Olá'}, seu carro<br>está sendo cuidado 🔧</h1>
+      <div class="hero-plate">
+        <span class="flag">🇧🇷</span>
+        <span>${os.placa_veiculo}</span>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-label">Progresso do serviço</div>
+      <div class="progress-track">
+        <div class="progress-line"></div>
+        <div class="progress-fill" style="width:calc(${stepPct}% - 18px)"></div>
+        <div class="progress-steps">
+          ${STEPS.map((s,i)=>`
+            <div class="step">
+              <div class="step-dot ${i<si.step-1?'done':i===si.step-1?'active':''}">
+                ${i<si.step-1?'✓':i+1}
+              </div>
+              <span class="step-label ${i===si.step-1?'active':''}">${s}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="cards">
+
+      <!-- Status atual -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Status atual</div>
+          <span class="card-badge ${si.badge}">${si.label}</span>
+        </div>
+        <div class="os-grid">
+          <div class="os-field">
+            <label>Veículo</label>
+            <value>${os.modelo_veiculo||'—'}</value>
+          </div>
+          <div class="os-field">
+            <label>OS</label>
+            <value>#${os.numero_os}</value>
+          </div>
+          <div class="os-field">
+            <label>Entrada</label>
+            <value>${tempoAgo(os.created_at)}</value>
+          </div>
+          <div class="os-field">
+            <label>Valor</label>
+            <value>${moeda(os.valor_total)}</value>
+          </div>
+        </div>
+        ${os.relato_inicial?`
+        <div style="margin-top:14px;padding:12px;background:var(--gray2);border-radius:8px;">
+          <div style="font-size:11px;color:var(--gray5);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Problema relatado</div>
+          <div style="font-size:14px;color:var(--gray6);line-height:1.5">${os.relato_inicial}</div>
+        </div>`:''}
+        ${os.diagnostico_tecnico?`
+        <div style="margin-top:10px;padding:12px;background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.15);border-radius:8px;">
+          <div style="font-size:11px;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">✅ Diagnóstico</div>
+          <div style="font-size:14px;color:var(--gray6);line-height:1.5">${os.diagnostico_tecnico}</div>
+        </div>`:''}
+      </div>
+
+      <!-- Aprovação de orçamento -->
+      ${temAprovacao&&os.valor_total>0?`
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Orçamento</div>
+          <span class="card-badge badge-warn">Aguardando você</span>
+        </div>
+        <div class="approve-box">
+          <div class="approve-title">📋 Orçamento pronto para aprovação</div>
+          <div class="approve-value">${moeda(os.valor_total)}</div>
+          <div class="approve-desc">Confirme abaixo para autorizarmos o início do serviço no seu veículo.</div>
+          <div class="approve-btns">
+            <button class="btn btn-approve" onclick="aprovar('${os.id}')">✅ Aprovar serviço</button>
+            <button class="btn btn-reject" onclick="recusar('${os.id}')">Recusar</button>
+          </div>
+        </div>
+      </div>`:''}
+
+      <!-- Timeline de comunicações -->
+      ${comunicacoes&&comunicacoes.length?`
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Atualizações</div>
+        </div>
+        <div class="timeline">
+          ${comunicacoes.map((c,i)=>`
+            <div class="tl-item">
+              <div class="tl-left">
+                <div class="tl-icon done">
+                  ${{CHECKIN_CONFIRMACAO:'🚗',DIAGNOSTICO_INFO:'🔍',ORCAMENTO:'💰',SERVICO_INICIADO:'🔧',SERVICO_CONCLUIDO:'🏁',NPS:'⭐',LEMBRETE_MANUTENCAO:'🔔'}[c.tipo]||'📩'}
+                </div>
+                ${i<comunicacoes.length-1?'<div class="tl-connector"></div>':''}
+              </div>
+              <div class="tl-content">
+                <div class="tl-title">${{CHECKIN_CONFIRMACAO:'Check-in confirmado',DIAGNOSTICO_INFO:'Diagnóstico concluído',ORCAMENTO:'Orçamento enviado',SERVICO_INICIADO:'Serviço iniciado',SERVICO_CONCLUIDO:'Serviço concluído',NPS:'Pesquisa de satisfação',LEMBRETE_MANUTENCAO:'Lembrete de manutenção'}[c.tipo]||c.tipo}</div>
+                <div class="tl-desc">${c.mensagem?.substring(0,120)||''}</div>
+                <div class="tl-time">${tempoAgo(c.created_at)}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>`:''}
+
+      <!-- Avaliação NPS -->
+      ${concluido&&!os._nps_respondido?`
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Como foi?</div>
+          <span class="card-badge badge-green">Nos avalie</span>
+        </div>
+        <div style="font-size:15px;margin-bottom:8px">De 0 a 10, como foi a experiência?</div>
+        <div class="nps-stars" id="nps-stars">
+          ${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<button class="nps-btn" onclick="avaliar(${n},'${os.id}')">${n}</button>`).join('')}
+        </div>
+      </div>`:''}
+
+      <!-- Histórico do veículo -->
+      ${historico&&historico.length>1?`
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Histórico do veículo</div>
+          <span class="card-badge badge-blue">${historico.length} visitas</span>
+        </div>
+        ${historico.slice(0,5).map(h=>`
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray2)">
+            <div>
+              <div style="font-size:13px;font-weight:500">OS #${h.numero_os}</div>
+              <div style="font-size:12px;color:var(--gray5)">${h.relato_inicial?.substring(0,60)||'—'}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:13px;color:var(--accent)">${moeda(h.valor_total)}</div>
+              <div style="font-size:11px;color:var(--gray5)">${tempoAgo(h.created_at)}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>`:''}
+
+      <!-- Agendar próximo serviço -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Próxima manutenção</div>
+        </div>
+        <div style="font-size:14px;color:var(--gray5);margin-bottom:4px">Quer agendar o próximo serviço?</div>
+        <div style="font-size:13px;color:var(--gray5);margin-bottom:12px">Nossa IA verifica os horários disponíveis e confirma em segundos.</div>
+        <button class="agendar-btn" onclick="agendar('${os.telefone_cliente}')">📅 Agendar próximo serviço</button>
+      </div>
+
+    </div>
+  `;
+
+  // Realtime update
+  sb.channel('os-cliente-'+os.id)
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'ordens_servico',filter:`id=eq.${os.id}`},
+      payload=>{ if(payload.new.status!==os.status){currentOS={...os,...payload.new};renderOS(currentOS,historico,comunicacoes);} })
+    .subscribe();
+}
+
+// ── BUSCAR OS ─────────────────────────────────────────────
+async function buscarOS(placaBusca) {
+  document.getElementById('app').innerHTML = `<div class="loading"><div class="spinner"></div><div class="loading-text">Buscando seu veículo...</div></div>`;
+
+  const { data: osList } = await sb.from('ordens_servico')
+    .select('*').eq('placa_veiculo', placaBusca)
+    .not('status','in','("CANCELADO")')
+    .order('created_at',{ascending:false}).limit(1);
+
+  if(!osList||!osList.length) {
+    const { data: hist } = await sb.from('ordens_servico')
+      .select('*').eq('placa_veiculo', placaBusca)
+      .order('created_at',{ascending:false}).limit(1);
+
+    if(hist&&hist.length) {
+      await buscarHistorico(hist[0]);
+    } else {
+      renderNotFound(placaBusca);
+    }
+    return;
+  }
+
+  const os = osList[0];
+  currentOS = os;
+
+  const [{ data: historico }, { data: comunicacoes }] = await Promise.all([
+    sb.from('ordens_servico').select('numero_os,relato_inicial,valor_total,status,created_at').eq('placa_veiculo',placaBusca).order('created_at',{ascending:false}).limit(10),
+    sb.from('comunicacoes').select('*').eq('os_id',os.id).order('created_at',{ascending:true})
+  ]);
+
+  renderOS(os, historico, comunicacoes);
+  history.pushState({}, '', '?placa='+placaBusca);
+}
+
+async function buscarHistorico(os) {
+  const { data: historico } = await sb.from('ordens_servico').select('*').eq('placa_veiculo',os.placa_veiculo).order('created_at',{ascending:false});
+  document.getElementById('app').innerHTML = `
+    <div class="hero">
+      <div class="hero-eyebrow">Histórico do veículo</div>
+      <h1 class="hero-title">Nenhuma OS<br>em andamento</h1>
+      <div class="hero-plate"><span class="flag">🇧🇷</span><span>${os.placa_veiculo}</span></div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Últimas visitas</div><span class="card-badge badge-blue">${historico?.length||0} registros</span></div>
+        ${historico?.map(h=>`
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--gray2)">
+            <div><div style="font-size:14px;font-weight:500">OS #${h.numero_os} — ${h.status}</div><div style="font-size:13px;color:var(--gray5)">${h.relato_inicial?.substring(0,80)||'—'}</div></div>
+            <div style="text-align:right"><div style="font-size:13px;color:var(--accent)">${moeda(h.valor_total)}</div><div style="font-size:11px;color:var(--gray5)">${tempoAgo(h.created_at)}</div></div>
+          </div>`).join('')||'<div style="color:var(--gray5);font-size:14px">Nenhum histórico encontrado.</div>'}
+      </div>
+      <div class="card">
+        <div style="font-size:14px;color:var(--gray5);margin-bottom:12px">Quer agendar uma manutenção?</div>
+        <button class="agendar-btn">📅 Agendar serviço</button>
+      </div>
+    </div>`;
+}
+
+function renderNotFound(p) {
+  document.getElementById('app').innerHTML = `
+    <div class="search-section">
+      <div style="font-size:48px;margin-bottom:16px">🔍</div>
+      <div class="search-title">Placa não encontrada</div>
+      <div class="search-sub">Não encontramos a placa <strong>${p}</strong>. Verifique e tente novamente.</div>
+      <div class="search-form" style="margin-top:24px">
+        <input class="search-input" id="s2" placeholder="ABC1234" maxlength="8" value="${p}">
+        <button class="search-btn" onclick="buscarOS(document.getElementById('s2').value.toUpperCase().replace(/[^A-Z0-9]/g,''))">Buscar</button>
+      </div>
+    </div>`;
+}
+
+function renderSearch() {
+  document.getElementById('app').innerHTML = `
+    <div class="search-section">
+      <div style="font-size:56px;margin-bottom:20px">🚗</div>
+      <div class="search-title">Acompanhe seu veículo</div>
+      <div class="search-sub">Digite a placa do seu carro para ver o status em tempo real</div>
+      <div class="search-form">
+        <input class="search-input" id="placa-input" placeholder="ABC1D23" maxlength="8" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')buscarOS(this.value.replace(/[^A-Z0-9]/g,''))">
+        <button class="search-btn" onclick="buscarOS(document.getElementById('placa-input').value.replace(/[^A-Z0-9]/g,''))">→</button>
+      </div>
+    </div>`;
+}
+
+// ── AÇÕES ─────────────────────────────────────────────────
+async function aprovar(osId) {
+  await sb.from('ordens_servico').update({aprovado_cliente:true}).eq('id',osId);
+  alert('✅ Serviço autorizado! Já estamos trabalhando no seu veículo.');
+  buscarOS(currentOS.placa_veiculo);
+}
+async function recusar(osId) {
+  if(confirm('Tem certeza? O serviço será cancelado.')) {
+    await sb.from('ordens_servico').update({status:'CANCELADO'}).eq('id',osId);
+    buscarOS(currentOS.placa_veiculo);
+  }
+}
+async function avaliar(nota, osId) {
+  document.querySelectorAll('.nps-btn').forEach(b=>b.classList.remove('selected'));
+  event.target.classList.add('selected');
+  await sb.from('avaliacoes_nps').upsert({os_id:osId,tenant_id:currentOS.tenant_id,nota,respondido:true},{onConflict:'os_id'});
+  setTimeout(()=>{ document.querySelector('.nps-stars').innerHTML = `<div style="font-size:15px;color:var(--accent)">✅ Obrigado pela avaliação! Nota ${nota}/10</div>`; },500);
+}
+function agendar(tel) {
+  const msg = `Olá! Gostaria de agendar um serviço para o veículo ${currentOS?.placa_veiculo||''}`;
+  window.open(`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// ── INIT ──────────────────────────────────────────────────
+if(placa) { buscarOS(placa); }
+else { renderSearch(); }
+</script>
+</body>
+</html>
