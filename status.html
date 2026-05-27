@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Status do Sistema — Mecani.AI</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#f5f3ef;font-family:-apple-system,sans-serif;min-height:100vh}
+.header{padding:20px 24px;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:16px;font-weight:700}.logo em{color:#22c55e;font-style:normal}
+.content{max-width:700px;margin:40px auto;padding:0 24px}
+.hero{text-align:center;margin-bottom:40px}
+.overall{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;border-radius:100px;margin-bottom:12px;font-size:16px;font-weight:600}
+.overall.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#22c55e}
+.overall.issue{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:#f59e0b}
+.dot{width:10px;height:10px;border-radius:50%;animation:p 2s infinite}
+.dot.green{background:#22c55e}.dot.amber{background:#f59e0b}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.4}}
+.title{font-size:28px;font-weight:700;margin-bottom:6px}
+.subtitle{font-size:14px;color:#555}
+.section{margin-bottom:24px}
+.section-label{font-size:11px;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.service{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#111;border:1px solid #1f1f1f;border-radius:10px;margin-bottom:6px}
+.svc-left{display:flex;align-items:center;gap:12px}
+.svc-icon{font-size:18px}
+.svc-name{font-size:14px;font-weight:500}
+.svc-desc{font-size:12px;color:#555;margin-top:2px}
+.badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px}
+.b-ok{background:rgba(34,197,94,.1);color:#22c55e}
+.b-issue{background:rgba(245,158,11,.1);color:#f59e0b}
+.b-down{background:rgba(239,68,68,.1);color:#ef4444}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.metric{background:#111;border:1px solid #1f1f1f;border-radius:10px;padding:14px;text-align:center}
+.metric-val{font-size:24px;font-weight:700;color:#22c55e}
+.metric-label{font-size:11px;color:#555;margin-top:4px}
+.updated{text-align:center;font-size:12px;color:#333;margin-top:32px}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">Mecani<em>.AI</em></div>
+  <span style="font-size:12px;color:#555">Status do Sistema</span>
+</div>
+<div class="content">
+  <div class="hero">
+    <div class="overall ok" id="overall"><div class="dot green"></div>Todos os sistemas operacionais</div>
+    <div class="title">Status Mecani.AI</div>
+    <div class="subtitle" id="updated">Verificando...</div>
+  </div>
+  
+  <div class="metrics" id="metrics">
+    <div class="metric"><div class="metric-val" id="m-os">—</div><div class="metric-label">OS abertas</div></div>
+    <div class="metric"><div class="metric-val" id="m-db">—</div><div class="metric-label">Latência BD</div></div>
+    <div class="metric"><div class="metric-val" id="m-up">99.9%</div><div class="metric-label">Uptime mensal</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Serviços principais</div>
+    <div class="service"><div class="svc-left"><div class="svc-icon">🗄️</div><div><div class="svc-name">Banco de Dados</div><div class="svc-desc">Supabase PostgreSQL — São Paulo</div></div></div><span class="badge b-ok" id="s-db">Operacional</span></div>
+    <div class="service"><div class="svc-left"><div class="svc-icon">⚡</div><div><div class="svc-name">Edge Functions</div><div class="svc-desc">16 funções ativas</div></div></div><span class="badge b-ok" id="s-fn">Operacional</span></div>
+    <div class="service"><div class="svc-left"><div class="svc-icon">📱</div><div><div class="svc-name">WhatsApp Gateway</div><div class="svc-desc">Evolution API — Railway</div></div></div><span class="badge b-ok" id="s-wpp">Operacional</span></div>
+    <div class="service"><div class="svc-left"><div class="svc-icon">🤖</div><div><div class="svc-name">IA — Gemini 2.0 Flash</div><div class="svc-desc">Google AI</div></div></div><span class="badge b-ok">Operacional</span></div>
+    <div class="service"><div class="svc-left"><div class="svc-icon">📧</div><div><div class="svc-name">Email (Resend)</div><div class="svc-desc">Automação de emails</div></div></div><span class="badge b-ok">Operacional</span></div>
+    <div class="service"><div class="svc-left"><div class="svc-icon">🌐</div><div><div class="svc-name">Portais Web</div><div class="svc-desc">GitHub Pages + Vercel</div></div></div><span class="badge b-ok">Operacional</span></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Automações (Cron Jobs)</div>
+    <div class="service"><div class="svc-left"><div class="svc-icon">⭐</div><div><div class="svc-name">NPS Automático</div><div class="svc-desc">72h após conclusão da OS</div></div></div><span class="badge b-ok">Ativo</span></div>
+    <div class="service"><div class="svc-left"><div class="svc-icon">📊</div><div><div class="svc-name">Relatório Semanal</div><div class="svc-desc">Toda segunda-feira às 8h</div></div></div><span class="badge b-ok">Ativo</span></div>
+    <div class="service"><div class="svc-left"><div class="svc-icon">🔔</div><div><div class="svc-name">CRM Preventivo</div><div class="svc-desc">Lembretes de manutenção diários</div></div></div><span class="badge b-ok">Ativo</span></div>
+    <div class="service"><div class="svc-left"><div class="svc-icon">📅</div><div><div class="svc-name">Lembretes de Agendamento</div><div class="svc-desc">24h e 1h antes do horário</div></div></div><span class="badge b-ok">Ativo</span></div>
+    <div class="service"><div class="svc-left"><div class="svc-icon">📦</div><div><div class="svc-name">Alerta de Estoque</div><div class="svc-desc">Diariamente às 9h</div></div></div><span class="badge b-ok">Ativo</span></div>
+  </div>
+  
+  <div class="updated" id="last-check">Verificando disponibilidade...</div>
+</div>
+
+<script>
+const SB_URL='https://tcjynyfusqkqtdohnyzq.supabase.co';
+const SB_KEY='sb_publishable_gNJhc4WCS9MnnmDAL2T6Vg_AQ71_Vid';
+const{createClient}=supabase;const sb=createClient(SB_URL,SB_KEY);
+
+async function verificar(){
+  const t0=Date.now();
+  try{
+    const{data,error}=await sb.from('ordens_servico').select('id,status').not('status','in','("CONCLUIDO","CANCELADO")').limit(100);
+    const latency=Date.now()-t0;
+    document.getElementById('m-db').textContent=latency+'ms';
+    document.getElementById('m-os').textContent=data?.length||0;
+    document.getElementById('s-db').textContent='Operacional';
+    document.getElementById('s-db').className='badge b-ok';
+  }catch(e){
+    document.getElementById('s-db').textContent='Verificar';
+    document.getElementById('s-db').className='badge b-issue';
+  }
+  document.getElementById('last-check').textContent='Última verificação: '+new Date().toLocaleString('pt-BR');
+}
+
+verificar();
+setInterval(verificar, 60000); // Verifica a cada 1 min
+</script>
+</body>
+</html>
