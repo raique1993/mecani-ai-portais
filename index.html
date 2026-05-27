@@ -2,34 +2,176 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mecani.AI — Portais</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mecani.AI — Sistema de Gestão para Oficinas</title>
+<meta name="description" content="Transforme sua oficina com IA. Check-in automático, diagnóstico assistido, cotação com fornecedores, NPS e muito mais.">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0a;color:#f5f3ef;font-family:-apple-system,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center}
-.wrap{max-width:480px;width:100%;padding:40px 24px;text-align:center}
-.logo{font-size:28px;font-weight:700;margin-bottom:8px}.logo em{color:#22c55e;font-style:normal}
-.sub{font-size:15px;color:#888;margin-bottom:40px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.card{background:#141414;border:1px solid #282828;border-radius:14px;padding:20px;text-decoration:none;color:#f5f3ef;transition:all .2s;display:block}
-.card:hover{border-color:#22c55e;transform:translateY(-2px)}
-.card-icon{font-size:28px;margin-bottom:10px}
-.card-title{font-size:15px;font-weight:600;margin-bottom:4px}
-.card-desc{font-size:12px;color:#666}
+body{background:#0a0a0a;color:#f5f3ef;font-family:-apple-system,'Segoe UI',sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.header{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1a1a;position:sticky;top:0;background:rgba(10,10,10,.9);backdrop-filter:blur(20px);z-index:50}
+.logo{font-size:20px;font-weight:800;letter-spacing:-.5px}.logo em{color:#22c55e;font-style:normal}
+.header-cta{padding:8px 20px;background:#22c55e;color:#000;border-radius:100px;font-size:13px;font-weight:700;transition:all .2s}
+.header-cta:hover{background:#16a34a}
+.hero{padding:80px 32px 60px;text-align:center;max-width:800px;margin:0 auto;position:relative}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(34,197,94,.08) 0%,transparent 70%);pointer-events:none}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#22c55e;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:6px 14px;border-radius:100px;margin-bottom:28px}
+.eyebrow::before{content:'●';font-size:8px;animation:p 2s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-size:clamp(40px,6vw,72px);font-weight:800;line-height:1;letter-spacing:-2px;margin-bottom:24px}
+h1 span{color:#22c55e}
+.hero-sub{font-size:18px;color:#888;line-height:1.6;margin-bottom:40px;max-width:520px;margin-left:auto;margin-right:auto}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:60px}
+.btn-g{padding:15px 32px;background:#22c55e;color:#000;border-radius:100px;font-size:15px;font-weight:700;transition:all .2s}
+.btn-g:hover{background:#16a34a;transform:translateY(-2px);box-shadow:0 8px 32px rgba(34,197,94,.3)}
+.btn-o{padding:15px 32px;background:transparent;color:#f5f3ef;border:1px solid #333;border-radius:100px;font-size:15px;font-weight:500;transition:all .2s}
+.btn-o:hover{border-color:#888}
+.stats{display:flex;gap:48px;justify-content:center;flex-wrap:wrap;padding-top:40px;border-top:1px solid #1a1a1a}
+.stat-num{font-size:36px;font-weight:800;color:#22c55e;letter-spacing:-1px}
+.stat-label{font-size:13px;color:#555;margin-top:2px}
+.section{padding:80px 32px;max-width:1100px;margin:0 auto}
+.section-label{font-size:12px;font-weight:600;color:#22c55e;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+h2{font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1.5px;margin-bottom:16px;line-height:1.1}
+.section-sub{font-size:16px;color:#666;margin-bottom:48px;max-width:480px}
+.portals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.portal-card{background:#111;border:1px solid #1f1f1f;border-radius:16px;padding:24px;transition:all .25s;cursor:pointer}
+.portal-card:hover{border-color:#22c55e;transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.pc-icon{font-size:36px;margin-bottom:16px}
+.pc-name{font-size:17px;font-weight:700;margin-bottom:6px}
+.pc-desc{font-size:14px;color:#555;line-height:1.5;margin-bottom:16px}
+.pc-tag{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px;background:rgba(34,197,94,.1);color:#22c55e}
+.flow-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2px}
+.flow-step{background:#111;padding:28px 22px;position:relative}
+.flow-step:first-child{border-radius:12px 0 0 12px}
+.flow-step:last-child{border-radius:0 12px 12px 0}
+.flow-num{font-size:11px;font-weight:800;color:#333;letter-spacing:2px;margin-bottom:12px}
+.flow-icon{font-size:28px;margin-bottom:12px}
+.flow-name{font-size:15px;font-weight:700;margin-bottom:6px}
+.flow-desc{font-size:13px;color:#555;line-height:1.5}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.feat{background:#111;border:1px solid #1f1f1f;border-radius:14px;padding:22px}
+.feat-icon{font-size:28px;margin-bottom:14px}
+.feat-name{font-size:15px;font-weight:700;margin-bottom:6px}
+.feat-desc{font-size:13px;color:#555;line-height:1.5}
+.cta-section{background:#111;border:1px solid #1f1f1f;border-radius:20px;padding:60px 40px;text-align:center;max-width:700px;margin:80px auto}
+.footer{padding:40px 32px;border-top:1px solid #1a1a1a;text-align:center;color:#333;font-size:13px}
+.footer span{color:#22c55e}
 </style>
 </head>
 <body>
-<div class="wrap">
+
+<div class="header">
   <div class="logo">Mecani<em>.AI</em></div>
-  <p class="sub">Sistema de Gestão para Oficinas Mecânicas</p>
-  <div class="grid">
-    <a href="portal-mecanico.html" class="card"><div class="card-icon">🔧</div><div class="card-title">Portal Mecânico</div><div class="card-desc">App do mecânico</div></a>
-    <a href="portal-cliente.html?placa=ABC1234" class="card"><div class="card-icon">🚗</div><div class="card-title">Portal Cliente</div><div class="card-desc">Acompanhe seu veículo</div></a>
-    <a href="portal-agendamento.html" class="card"><div class="card-icon">📅</div><div class="card-title">Agendamento</div><div class="card-desc">Agende online</div></a>
-    <a href="portal-fornecedor.html" class="card"><div class="card-icon">🏪</div><div class="card-title">Fornecedor</div><div class="card-desc">Portal de cotações</div></a>
-    <a href="portal-estoque.html" class="card"><div class="card-icon">📦</div><div class="card-title">Estoque</div><div class="card-desc">Controle de peças</div></a>
-    <a href="portal-admin.html" class="card"><div class="card-icon">👑</div><div class="card-title">Admin</div><div class="card-desc">Visão consolidada</div></a>
+  <a href="portal-agendamento.html" class="header-cta">Agendar serviço →</a>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">Sistema com IA para Oficinas</div>
+  <h1>Sua oficina no<br><span>piloto automático.</span></h1>
+  <p class="hero-sub">O agente de IA que substitui o gerente administrativo. Do check-in ao faturamento, tudo automático via WhatsApp.</p>
+  <div class="hero-btns">
+    <a href="portal-agendamento.html" class="btn-g">Agendar serviço</a>
+    <a href="portal-cliente.html" class="btn-o">Acompanhar meu carro</a>
+  </div>
+  <div class="stats">
+    <div><div class="stat-num">90%</div><div class="stat-label">menos trabalho admin</div></div>
+    <div><div class="stat-num">8 min</div><div class="stat-label">de check-in a orçamento</div></div>
+    <div><div class="stat-num">24/7</div><div class="stat-label">atendimento ao cliente</div></div>
+    <div><div class="stat-num">R$0</div><div class="stat-label">para começar</div></div>
   </div>
 </div>
+
+<div class="section">
+  <div class="section-label">Portais</div>
+  <h2>Acesso para todos</h2>
+  <p class="section-sub">Cada participante tem seu espaço personalizado</p>
+  <div class="portals-grid">
+    <a href="portal-mecanico.html" class="portal-card">
+      <div class="pc-icon">🔧</div>
+      <div class="pc-name">Portal do Mecânico</div>
+      <div class="pc-desc">Check-in de veículos, diagnóstico assistido por IA, fechar OS com 1 toque</div>
+      <span class="pc-tag">PWA instalável</span>
+    </a>
+    <a href="portal-cliente.html" class="portal-card">
+      <div class="pc-icon">🚗</div>
+      <div class="pc-name">Portal do Cliente</div>
+      <div class="pc-desc">Acompanhe seu veículo em tempo real, aprove orçamentos, veja histórico</div>
+      <span class="pc-tag">Tempo real</span>
+    </a>
+    <a href="portal-agendamento.html" class="portal-card">
+      <div class="pc-icon">📅</div>
+      <div class="pc-name">Agendamento Online</div>
+      <div class="pc-desc">Escolha serviço, data e horário disponíveis. Confirmação automática via WhatsApp</div>
+      <span class="pc-tag">Sem ligar</span>
+    </a>
+    <a href="portal-fornecedor.html" class="portal-card">
+      <div class="pc-icon">🏪</div>
+      <div class="pc-name">Portal do Fornecedor</div>
+      <div class="pc-desc">Receba cotações automáticas, responda preços, gerencie pedidos e seu score</div>
+      <span class="pc-tag">Cotação automática</span>
+    </a>
+    <a href="portal-estoque.html" class="portal-card">
+      <div class="pc-icon">📦</div>
+      <div class="pc-name">Controle de Estoque</div>
+      <div class="pc-desc">Gerencie peças, alertas de reposição automáticos, histórico de movimentações</div>
+      <span class="pc-tag">Alertas IA</span>
+    </a>
+    <a href="portal-admin.html" class="portal-card">
+      <div class="pc-icon">👑</div>
+      <div class="pc-name">Admin</div>
+      <div class="pc-desc">Visão consolidada de todas as oficinas, receita, uso da IA, saúde do sistema</div>
+      <span class="pc-tag">Multi-oficina</span>
+    </a>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Fluxo completo</div>
+  <h2>Do carro na porta<br>ao dinheiro na conta</h2>
+  <p class="section-sub">7 etapas totalmente automatizadas</p>
+  <div class="flow-grid">
+    <div class="flow-step"><div class="flow-num">01</div><div class="flow-icon">🚗</div><div class="flow-name">Check-in</div><div class="flow-desc">Mecânico fala no WhatsApp, IA abre a OS e avisa o cliente</div></div>
+    <div class="flow-step"><div class="flow-num">02</div><div class="flow-icon">🔍</div><div class="flow-name">Diagnóstico IA</div><div class="flow-desc">IA sugere causas prováveis e peças necessárias</div></div>
+    <div class="flow-step"><div class="flow-num">03</div><div class="flow-icon">💬</div><div class="flow-name">Cotação Auto</div><div class="flow-desc">IA contata fornecedores e compara preços sozinha</div></div>
+    <div class="flow-step"><div class="flow-num">04</div><div class="flow-icon">✅</div><div class="flow-name">Aprovação</div><div class="flow-desc">Dono e cliente aprovam com 1 toque cada</div></div>
+    <div class="flow-step"><div class="flow-num">05</div><div class="flow-icon">🔧</div><div class="flow-name">Execução</div><div class="flow-desc">IA monitora prazo e avisa o cliente quando as peças chegam</div></div>
+    <div class="flow-step"><div class="flow-num">06</div><div class="flow-icon">💰</div><div class="flow-name">Faturamento</div><div class="flow-desc">Caixa atualizado automaticamente ao fechar a OS</div></div>
+    <div class="flow-step"><div class="flow-num">07</div><div class="flow-icon">⭐</div><div class="flow-name">NPS + CRM</div><div class="flow-desc">Pesquisa automática e lembretes de manutenção preventiva</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Recursos</div>
+  <h2>Tudo incluído</h2>
+  <div class="features-grid">
+    <div class="feat"><div class="feat-icon">🎙️</div><div class="feat-name">Voz nativa</div><div class="feat-desc">Entende áudio do mecânico diretamente no WhatsApp</div></div>
+    <div class="feat"><div class="feat-icon">📱</div><div class="feat-name">Social Media IA</div><div class="feat-desc">Foto → legenda + hashtags → posta Instagram e Facebook</div></div>
+    <div class="feat"><div class="feat-icon">📧</div><div class="feat-name">Email automático</div><div class="feat-desc">Orçamento, recibo e relatório semanal por email</div></div>
+    <div class="feat"><div class="feat-icon">🛡️</div><div class="feat-name">Controle de garantia</div><div class="feat-desc">IA detecta retorno em garantia e aciona automaticamente</div></div>
+    <div class="feat"><div class="feat-icon">📊</div><div class="feat-name">Relatório semanal</div><div class="feat-desc">Toda segunda-feira: métricas + insight gerado pela IA</div></div>
+    <div class="feat"><div class="feat-icon">🔔</div><div class="feat-name">CRM preventivo</div><div class="feat-desc">Lembra clientes de manutenção no prazo certo para o veículo</div></div>
+    <div class="feat"><div class="feat-icon">🧠</div><div class="feat-name">Memória vetorial</div><div class="feat-desc">Aprende com cada OS — diagnósticos ficam mais precisos</div></div>
+    <div class="feat"><div class="feat-icon">🏢</div><div class="feat-name">Multi-oficina</div><div class="feat-desc">Uma plataforma para várias oficinas, dados isolados</div></div>
+    <div class="feat"><div class="feat-icon">💰</div><div class="feat-name">Custo R$55/mês</div><div class="feat-desc">Para qualquer volume de OS — 10 ou 500 por mês</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="cta-section">
+    <div class="eyebrow">Comece hoje</div>
+    <h2 style="margin-bottom:16px">Pronto para transformar sua oficina?</h2>
+    <p style="font-size:16px;color:#666;margin-bottom:32px">Sem instalação. Sem treinamento longo. Só resultado.</p>
+    <div class="hero-btns">
+      <a href="portal-agendamento.html" class="btn-g">Agendar serviço grátis</a>
+      <a href="portal-cliente.html" class="btn-o">Sou cliente</a>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Powered by <span>Mecani.AI</span> — Sistema de Gestão Inteligente para Oficinas Mecânicas<br>
+  <span style="margin-top:8px;display:block">© 2025 Mecani.AI — Todos os direitos reservados</span>
+</div>
+
 </body>
 </html>
