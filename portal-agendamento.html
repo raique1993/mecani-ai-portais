@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agendar serviço — Mecani.AI</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#0a0a0a;--bg1:#141414;--bg2:#1e1e1e;--bg3:#282828;--t1:#f5f3ef;--t2:#aaa;--t3:#666;--g:#22c55e;--b:#3b82f6;--a:#f59e0b;--r:14px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--t1);font-family:-apple-system,'SF Pro Display','Segoe UI',sans-serif;min-height:100vh}
+.header{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bg3)}
+.logo{font-size:18px;font-weight:700}.logo em{color:var(--g);font-style:normal}
+.oficina-badge{font-size:13px;color:var(--t3)}
+.wrap{max-width:560px;margin:0 auto;padding:32px 24px}
+.step-indicator{display:flex;align-items:center;gap:8px;margin-bottom:40px}
+.step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;border:1.5px solid var(--bg3);color:var(--t3);transition:all .3s;flex-shrink:0}
+.step-dot.active{background:var(--g);border-color:var(--g);color:#000}
+.step-dot.done{background:var(--bg3);border-color:var(--g);color:var(--g)}
+.step-line{flex:1;height:1px;background:var(--bg3)}
+.step-label{font-size:11px;color:var(--t3);text-align:center;margin-top:4px}
+.section-title{font-size:22px;font-weight:700;letter-spacing:-.5px;margin-bottom:6px}
+.section-sub{font-size:14px;color:var(--t2);margin-bottom:28px;line-height:1.5}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;color:var(--t3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;font-weight:500}
+.field input,.field select,.field textarea{width:100%;padding:13px 14px;background:var(--bg1);border:1px solid var(--bg3);border-radius:10px;color:var(--t1);font-size:15px;outline:none;transition:border-color .2s;font-family:inherit}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--g)}
+.field select option{background:var(--bg2)}
+.servicos-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.servico-card{padding:16px;background:var(--bg1);border:1.5px solid var(--bg3);border-radius:12px;cursor:pointer;transition:all .2s;text-align:left}
+.servico-card:hover{border-color:var(--t3)}
+.servico-card.selected{border-color:var(--g);background:rgba(34,197,94,.06)}
+.servico-icon{font-size:24px;margin-bottom:8px}
+.servico-name{font-size:14px;font-weight:600;margin-bottom:4px}
+.servico-desc{font-size:12px;color:var(--t3);line-height:1.4}
+.servico-prazo{font-size:11px;color:var(--g);margin-top:6px;font-weight:500}
+.horarios-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:24px}
+.horario-btn{padding:12px 8px;background:var(--bg1);border:1.5px solid var(--bg3);border-radius:8px;color:var(--t2);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;text-align:center}
+.horario-btn:hover{border-color:var(--t3);color:var(--t1)}
+.horario-btn.selected{border-color:var(--g);background:rgba(34,197,94,.08);color:var(--g)}
+.horario-btn.ocupado{opacity:.4;cursor:not-allowed;text-decoration:line-through}
+.datas-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;margin-bottom:24px;scrollbar-width:none}
+.datas-scroll::-webkit-scrollbar{display:none}
+.data-btn{flex-shrink:0;padding:12px 16px;background:var(--bg1);border:1.5px solid var(--bg3);border-radius:10px;cursor:pointer;transition:all .2s;text-align:center;min-width:72px}
+.data-btn:hover{border-color:var(--t3)}
+.data-btn.selected{border-color:var(--g);background:rgba(34,197,94,.08)}
+.data-dia{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
+.data-num{font-size:22px;font-weight:700;color:var(--t1);line-height:1.2}
+.data-mes{font-size:11px;color:var(--t3)}
+.data-btn.selected .data-dia,.data-btn.selected .data-mes{color:var(--g)}
+.btn-primary{width:100%;padding:16px;background:var(--g);color:#000;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:8px}
+.btn-primary:hover{background:#16a34a}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-secondary{width:100%;padding:14px;background:transparent;color:var(--t2);border:1px solid var(--bg3);border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;margin-top:8px;transition:all .2s}
+.btn-secondary:hover{border-color:var(--t2);color:var(--t1)}
+.resumo-card{background:var(--bg1);border:1px solid var(--bg3);border-radius:14px;padding:20px;margin-bottom:20px}
+.resumo-linha{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bg3);font-size:14px}
+.resumo-linha:last-child{border:none}
+.resumo-label{color:var(--t3)}
+.resumo-val{font-weight:500;color:var(--t1)}
+.sucesso-wrap{text-align:center;padding:40px 0}
+.sucesso-icon{font-size:64px;margin-bottom:20px}
+.sucesso-title{font-size:24px;font-weight:700;margin-bottom:8px}
+.sucesso-sub{font-size:15px;color:var(--t2);line-height:1.6;margin-bottom:32px}
+.sucesso-card{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:20px;margin-bottom:20px;text-align:left}
+.sucesso-num{font-size:32px;font-weight:700;color:var(--g);margin-bottom:4px}
+.sucesso-desc{font-size:13px;color:var(--t2)}
+.spinner{display:flex;align-items:center;justify-content:center;height:200px}
+.spin{width:32px;height:32px;border:2px solid var(--bg3);border-top-color:var(--g);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tag-prioridade{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:100px;margin-left:8px}
+.tag-urgente{background:rgba(239,68,68,.15);color:#f87171}
+.tag-normal{background:rgba(34,197,94,.1);color:var(--g)}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">Mecani<em>.AI</em></div>
+  <div class="oficina-badge" id="oficina-nome">Carregando...</div>
+</div>
+
+<div class="wrap">
+  <div class="step-indicator" id="steps">
+    <div>
+      <div class="step-dot active" id="s1">1</div>
+    </div>
+    <div class="step-line"></div>
+    <div>
+      <div class="step-dot" id="s2">2</div>
+    </div>
+    <div class="step-line"></div>
+    <div>
+      <div class="step-dot" id="s3">3</div>
+    </div>
+    <div class="step-line"></div>
+    <div>
+      <div class="step-dot" id="s4">4</div>
+    </div>
+  </div>
+  <div id="content"><div class="spinner"><div class="spin"></div></div></div>
+</div>
+
+<script>
+const SB_URL='https://tcjynyfusqkqtdohnyzq.supabase.co';
+const SB_KEY='sb_publishable_gNJhc4WCS9MnnmDAL2T6Vg_AQ71_Vid';
+const{createClient}=supabase;
+const sb=createClient(SB_URL,SB_KEY);
+
+const params=new URLSearchParams(location.search);
+const tenantSlug=params.get('oficina')||'teste';
+let tenantId='a1b2c3d4-0000-0000-0000-000000000001';
+let tenant=null;
+let estado={step:1,servico:null,data:null,horario:null,cliente:{nome:'',telefone:'',email:'',veiculo:'',placa:''}};
+
+const SERVICOS=[
+  {id:'revisao',icon:'🔧',nome:'Revisão geral',desc:'Verificação completa do veículo',prazo:'2-4h',prioridade:'normal'},
+  {id:'oleo',icon:'🛢️',nome:'Troca de óleo',desc:'Óleo + filtros inclusos',prazo:'30-60min',prioridade:'normal'},
+  {id:'freios',icon:'🔴',nome:'Sistema de freios',desc:'Pastilhas, discos e fluido',prazo:'2-3h',prioridade:'normal'},
+  {id:'eletrica',icon:'⚡',nome:'Elétrica',desc:'Diagnóstico computadorizado',prazo:'1-3h',prioridade:'normal'},
+  {id:'suspensao',icon:'🚗',nome:'Suspensão',desc:'Amortecedores e buchas',prazo:'3-5h',prioridade:'normal'},
+  {id:'diagnostico',icon:'🔍',nome:'Diagnóstico IA',desc:'IA identifica o problema',prazo:'30min',prioridade:'normal'},
+  {id:'alinhamento',icon:'🎯',nome:'Alinhamento',desc:'Alinhamento e balanceamento',prazo:'1-2h',prioridade:'normal'},
+  {id:'arCondicionado',icon:'❄️',nome:'Ar-condicionado',desc:'Recarga e manutenção',prazo:'1-2h',prioridade:'normal'},
+];
+
+function gerarDatas(){
+  const datas=[];const hoje=new Date();
+  const dias=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const meses=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  for(let i=1;i<=14;i++){
+    const d=new Date(hoje);d.setDate(d.getDate()+i);
+    if(d.getDay()!==0){// sem domingo
+      datas.push({obj:d,dia:dias[d.getDay()],num:d.getDate(),mes:meses[d.getMonth()],str:d.toISOString().split('T')[0]});
+    }
+  }
+  return datas;
+}
+
+const HORARIOS=['07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00'];
+
+function setStep(n){
+  for(let i=1;i<=4;i++){
+    const el=document.getElementById('s'+i);
+    if(i<n){el.className='step-dot done';el.textContent='✓';}
+    else if(i===n){el.className='step-dot active';el.textContent=i;}
+    else{el.className='step-dot';el.textContent=i;}
+  }
+  estado.step=n;
+}
+
+// STEP 1: Escolher serviço
+function renderStep1(){
+  setStep(1);
+  document.getElementById('content').innerHTML=`
+    <div class="section-title">Qual serviço precisa?</div>
+    <div class="section-sub">Selecione o tipo de serviço. Nossa IA ajuda a identificar o problema se não tiver certeza.</div>
+    <div class="servicos-grid">
+      ${SERVICOS.map(s=>`
+        <div class="servico-card ${estado.servico?.id===s.id?'selected':''}" onclick="selecionarServico('${s.id}')">
+          <div class="servico-icon">${s.icon}</div>
+          <div class="servico-name">${s.nome}</div>
+          <div class="servico-desc">${s.desc}</div>
+          <div class="servico-prazo">⏱ ${s.prazo}</div>
+        </div>`).join('')}
+    </div>
+    <button class="btn-primary" onclick="renderStep2()" ${!estado.servico?'disabled':''}>Próximo →</button>`;
+}
+
+function selecionarServico(id){
+  estado.servico=SERVICOS.find(s=>s.id===id);
+  renderStep1();
+}
+
+// STEP 2: Escolher data e horário
+async function renderStep2(){
+  if(!estado.servico)return;
+  setStep(2);
+  document.getElementById('content').innerHTML=`<div class="spinner"><div class="spin"></div></div>`;
+  
+  // Buscar horários já ocupados do banco
+  const hoje=new Date().toISOString().split('T')[0];
+  const{data:agendados}=await sb.from('agendamentos')
+    .select('data_agendamento')
+    .eq('tenant_id',tenantId)
+    .gte('data_agendamento',hoje+'T00:00:00')
+    .in('status',['CONFIRMADO','PENDENTE']);
+  
+  const ocupados=new Set((agendados||[]).map(a=>a.data_agendamento?.substring(0,16)));
+  const datas=gerarDatas();
+  
+  document.getElementById('content').innerHTML=`
+    <div class="section-title">Quando prefere?</div>
+    <div class="section-sub">Escolha a data e horário disponíveis. Os slots em cinza já estão reservados.</div>
+    
+    <div style="font-size:12px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Data</div>
+    <div class="datas-scroll">
+      ${datas.map(d=>`
+        <div class="data-btn ${estado.data===d.str?'selected':''}" onclick="selecionarData('${d.str}')">
+          <div class="data-dia">${d.dia}</div>
+          <div class="data-num">${d.num}</div>
+          <div class="data-mes">${d.mes}</div>
+        </div>`).join('')}
+    </div>
+    
+    <div style="font-size:12px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Horário</div>
+    <div class="horarios-grid" id="horarios-grid">
+      ${estado.data?renderHorarios(ocupados,estado.data):'<div style="color:var(--t3);font-size:13px;grid-column:1/-1">Selecione uma data primeiro</div>'}
+    </div>
+    
+    <button class="btn-primary" onclick="renderStep3()" ${!estado.data||!estado.horario?'disabled':''}>Próximo →</button>
+    <button class="btn-secondary" onclick="renderStep1()">← Voltar</button>`;
+  
+  window._ocupados=ocupados;
+}
+
+function renderHorarios(ocupados,data){
+  return HORARIOS.map(h=>{
+    const key=data+'T'+h;
+    const ocup=ocupados&&ocupados.has(key);
+    return`<div class="horario-btn ${ocup?'ocupado':''} ${estado.horario===h&&!ocup?'selected':''}" 
+      onclick="${ocup?'':'selecionarHorario(\''+h+'\')'}">${h}</div>`;
+  }).join('');
+}
+
+function selecionarData(d){
+  estado.data=d;estado.horario=null;
+  document.querySelector('.datas-scroll .selected')?.classList.remove('selected');
+  document.querySelectorAll('.data-btn').forEach(el=>{if(el.onclick?.toString().includes(d))el.classList.add('selected');});
+  document.getElementById('horarios-grid').innerHTML=renderHorarios(window._ocupados,d);
+  document.querySelector('.btn-primary').disabled=true;
+}
+
+function selecionarHorario(h){
+  estado.horario=h;
+  document.querySelectorAll('.horario-btn').forEach(b=>b.classList.remove('selected'));
+  event.target.classList.add('selected');
+  document.querySelector('.btn-primary').disabled=false;
+}
+
+// STEP 3: Dados do cliente
+function renderStep3(){
+  if(!estado.data||!estado.horario)return;
+  setStep(3);
+  document.getElementById('content').innerHTML=`
+    <div class="section-title">Seus dados</div>
+    <div class="section-sub">Precisamos de algumas informações para confirmar o agendamento.</div>
+    <div class="field"><label>Nome completo</label><input id="f-nome" placeholder="João Silva" value="${estado.cliente.nome}"></div>
+    <div class="field"><label>WhatsApp (com DDD)</label><input id="f-tel" placeholder="61999990000" type="tel" value="${estado.cliente.telefone}"></div>
+    <div class="field"><label>E-mail (opcional)</label><input id="f-email" placeholder="joao@email.com" type="email" value="${estado.cliente.email}"></div>
+    <div class="field"><label>Placa do veículo</label><input id="f-placa" placeholder="ABC1D23" style="text-transform:uppercase" maxlength="8" value="${estado.cliente.placa}" oninput="this.value=this.value.toUpperCase()"></div>
+    <div class="field"><label>Modelo (opcional)</label><input id="f-veiculo" placeholder="Ex: Toyota Corolla 2020" value="${estado.cliente.veiculo}"></div>
+    <div class="field"><label>Descreva o problema (opcional)</label><textarea id="f-obs" rows="3" placeholder="Ex: barulho ao frear, carro puxando para o lado...">${estado.cliente.obs||''}</textarea></div>
+    <button class="btn-primary" onclick="salvarDados()">Revisar agendamento →</button>
+    <button class="btn-secondary" onclick="renderStep2()">← Voltar</button>`;
+}
+
+function salvarDados(){
+  const nome=document.getElementById('f-nome').value.trim();
+  const tel=document.getElementById('f-tel').value.replace(/\D/g,'');
+  const placa=document.getElementById('f-placa').value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(!nome){alert('Por favor informe seu nome.');return;}
+  if(!tel||tel.length<10){alert('Por favor informe seu WhatsApp com DDD.');return;}
+  if(!placa){alert('Por favor informe a placa do veículo.');return;}
+  estado.cliente={
+    nome,telefone:tel,
+    email:document.getElementById('f-email').value.trim(),
+    placa,
+    veiculo:document.getElementById('f-veiculo').value.trim(),
+    obs:document.getElementById('f-obs').value.trim(),
+  };
+  renderStep4();
+}
+
+// STEP 4: Confirmação
+function renderStep4(){
+  setStep(4);
+  const dataFmt=new Date(estado.data+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
+  document.getElementById('content').innerHTML=`
+    <div class="section-title">Confirmar agendamento</div>
+    <div class="section-sub">Revise os dados abaixo antes de confirmar.</div>
+    <div class="resumo-card">
+      <div class="resumo-linha"><span class="resumo-label">Serviço</span><span class="resumo-val">${estado.servico.icon} ${estado.servico.nome}</span></div>
+      <div class="resumo-linha"><span class="resumo-label">Data</span><span class="resumo-val">${dataFmt}</span></div>
+      <div class="resumo-linha"><span class="resumo-label">Horário</span><span class="resumo-val">${estado.horario}</span></div>
+      <div class="resumo-linha"><span class="resumo-label">Nome</span><span class="resumo-val">${estado.cliente.nome}</span></div>
+      <div class="resumo-linha"><span class="resumo-label">Placa</span><span class="resumo-val">${estado.cliente.placa}</span></div>
+      ${estado.cliente.veiculo?`<div class="resumo-linha"><span class="resumo-label">Veículo</span><span class="resumo-val">${estado.cliente.veiculo}</span></div>`:''}
+      ${estado.cliente.obs?`<div class="resumo-linha"><span class="resumo-label">Problema</span><span class="resumo-val" style="max-width:200px;text-align:right;font-size:13px">${estado.cliente.obs}</span></div>`:''}
+      <div class="resumo-linha"><span class="resumo-label">Tempo estimado</span><span class="resumo-val" style="color:var(--g)">${estado.servico.prazo}</span></div>
+    </div>
+    <div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:14px;margin-bottom:20px;font-size:13px;color:var(--t2);line-height:1.6">
+      ✅ Ao confirmar, você receberá uma mensagem de confirmação no WhatsApp <strong style="color:var(--t1)">(${estado.cliente.telefone})</strong>.
+    </div>
+    <button class="btn-primary" onclick="confirmarAgendamento()">✅ Confirmar agendamento</button>
+    <button class="btn-secondary" onclick="renderStep3()">← Voltar</button>`;
+}
+
+async function confirmarAgendamento(){
+  const btn=document.querySelector('.btn-primary');
+  btn.disabled=true;btn.textContent='Agendando...';
+  
+  try{
+    // Upsert cliente
+    const{data:cliente}=await sb.from('clientes').upsert({
+      tenant_id:tenantId,nome:estado.cliente.nome,
+      telefone:estado.cliente.telefone,email:estado.cliente.email||null
+    },{onConflict:'tenant_id,telefone'}).select('id').single();
+    
+    // Upsert veículo
+    let veiculoId=null;
+    if(estado.cliente.placa){
+      const{data:v}=await sb.from('veiculos').upsert({
+        tenant_id:tenantId,placa:estado.cliente.placa,
+        modelo:estado.cliente.veiculo?.split(' ').slice(1).join(' ')||null,
+        marca:estado.cliente.veiculo?.split(' ')[0]||null,
+      },{onConflict:'tenant_id,placa'}).select('id').single();
+      veiculoId=v?.id;
+    }
+    
+    // Criar agendamento
+    const dataHora=estado.data+'T'+estado.horario+':00';
+    const{data:ag}=await sb.from('agendamentos').insert({
+      tenant_id:tenantId,
+      cliente_id:cliente?.id||null,
+      veiculo_id:veiculoId,
+      tipo_servico:estado.servico.nome,
+      data_agendamento:dataHora,
+      status:'CONFIRMADO',
+      observacoes:estado.cliente.obs||null,
+      nome_cliente:estado.cliente.nome,
+      telefone_cliente:estado.cliente.telefone,
+      placa_veiculo:estado.cliente.placa,
+      modelo_veiculo:estado.cliente.veiculo||null,
+    }).select('id').single();
+    
+    // Confirmar via WhatsApp (chamada para Edge Function)
+    const dataFmt=new Date(estado.data+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
+    await fetch(`${SB_URL}/functions/v1/agendamento`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        modo:'confirmar_online',
+        agendamento_id:ag?.id,
+        tenant_id:tenantId,
+        cliente:{nome:estado.cliente.nome,telefone:estado.cliente.telefone},
+        servico:estado.servico.nome,
+        data:dataFmt,
+        horario:estado.horario,
+        placa:estado.cliente.placa,
+      })
+    });
+    
+    renderSucesso(ag?.id);
+  }catch(err){
+    console.error(err);
+    btn.disabled=false;btn.textContent='✅ Confirmar agendamento';
+    alert('Erro ao agendar. Tente novamente ou entre em contato direto com a oficina.');
+  }
+}
+
+function renderSucesso(agId){
+  document.getElementById('content').innerHTML=`
+    <div class="sucesso-wrap">
+      <div class="sucesso-icon">🎉</div>
+      <div class="sucesso-title">Agendamento confirmado!</div>
+      <div class="sucesso-sub">Você receberá uma confirmação no WhatsApp em instantes. Nossa equipe aguarda você!</div>
+      <div class="sucesso-card">
+        <div class="sucesso-num">${estado.servico.icon} ${estado.servico.nome}</div>
+        <div class="sucesso-desc">${new Date(estado.data+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'})} às ${estado.horario}</div>
+        <div class="sucesso-desc" style="margin-top:4px">Placa: ${estado.cliente.placa} ${estado.cliente.veiculo?'— '+estado.cliente.veiculo:''}</div>
+      </div>
+      <div style="font-size:13px;color:var(--t3);line-height:1.6">
+        📍 Chegue 5 minutos antes do horário.<br>
+        📞 Qualquer dúvida, envie mensagem pelo WhatsApp.<br>
+        🔔 Você receberá lembretes automáticos.
+      </div>
+    </div>`;
+  // Limpar step indicator
+  document.getElementById('steps').style.display='none';
+}
+
+// Inicializar
+async function init(){
+  const{data:t}=await sb.from('tenants').select('id,nome_oficina,vagas_simultaneas').eq('ativo',true).limit(1).single();
+  if(t){tenant=t;tenantId=t.id;document.getElementById('oficina-nome').textContent=t.nome_oficina;}
+  renderStep1();
+}
+
+init();
+</script>
+</body>
+</html>
