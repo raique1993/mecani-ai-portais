@@ -114,6 +114,12 @@ body{background:var(--bg);color:var(--t1);font-family:-apple-system,'SF Pro Disp
 .install-btn{padding:8px 14px;background:var(--g);color:#000;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
 .install-close{color:var(--t3);cursor:pointer;font-size:18px;padding:4px}
 </style>
+  <!-- Security Headers via meta -->
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 </head>
 <body>
 
