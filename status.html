@@ -63,6 +63,12 @@ body{background:#0a0a0a;color:#f5f3ef;font-family:-apple-system,sans-serif;min-h
 </style>
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#22c55e">
+  <!-- Security Headers via meta -->
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 </head>
 <body>
 <div class="header">
