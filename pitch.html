@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Mecani.AI — Para sua oficina</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--g:#22c55e;--bg:#0a0a0a;--t1:#f5f3ef;--t2:#999}
+body{background:var(--bg);color:var(--t1);font-family:-apple-system,'SF Pro Display',sans-serif;overflow-x:hidden}
+
+/* HERO */
+.hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(34,197,94,.12) 0%,transparent 70%);pointer-events:none}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--g);font-size:13px;font-weight:600;padding:8px 18px;border-radius:100px;margin-bottom:28px}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:var(--g);animation:p 2s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-size:clamp(38px,9vw,64px);font-weight:800;line-height:1;letter-spacing:-2px;margin-bottom:20px}
+h1 span{color:var(--g)}
+.hero-sub{font-size:18px;color:var(--t2);line-height:1.6;max-width:340px;margin:0 auto 36px}
+.cta-wrap{display:flex;flex-direction:column;gap:12px;width:100%;max-width:320px}
+.btn-g{padding:18px 28px;background:var(--g);color:#000;border-radius:14px;font-size:17px;font-weight:800;text-decoration:none;text-align:center;transition:all .2s;border:none;cursor:pointer;width:100%}
+.btn-g:active{transform:scale(.97);background:#16a34a}
+.btn-o{padding:16px 28px;background:transparent;color:var(--t2);border:1px solid #333;border-radius:14px;font-size:15px;font-weight:500;text-decoration:none;text-align:center;width:100%}
+.scroll-hint{position:absolute;bottom:32px;display:flex;flex-direction:column;align-items:center;gap:6px;color:#333;font-size:12px;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* PROBLEMA */
+.section{padding:80px 24px;max-width:480px;margin:0 auto}
+.section-tag{font-size:12px;font-weight:700;color:var(--g);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+h2{font-size:clamp(28px,7vw,42px);font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:16px}
+.section-body{font-size:16px;color:var(--t2);line-height:1.7}
+.dor-list{display:flex;flex-direction:column;gap:14px;margin-top:24px}
+.dor{display:flex;align-items:flex-start;gap:14px;padding:18px;background:#111;border:1px solid #1f1f1f;border-radius:14px}
+.dor-icon{font-size:24px;flex-shrink:0}
+.dor-text{font-size:15px;line-height:1.5;color:var(--t2)}
+.dor-text strong{color:var(--t1)}
+
+/* COMO FUNCIONA */
+.steps{display:flex;flex-direction:column;gap:4px;margin-top:24px}
+.step{display:flex;gap:18px;padding:20px;background:#111;border-radius:14px;align-items:flex-start;position:relative}
+.step::after{content:'';position:absolute;left:33px;bottom:-4px;width:2px;height:4px;background:#1f1f1f}
+.step:last-child::after{display:none}
+.step-num{width:30px;height:30px;border-radius:50%;background:var(--g);color:#000;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.step-desc{font-size:13px;color:var(--t2);line-height:1.5}
+
+/* RESULTADOS */
+.results{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+.result{background:#111;border:1px solid #1f1f1f;border-radius:14px;padding:20px;text-align:center}
+.result-num{font-size:38px;font-weight:800;color:var(--g);letter-spacing:-1px;line-height:1}
+.result-label{font-size:13px;color:var(--t2);margin-top:6px;line-height:1.4}
+
+/* PILOTO */
+.piloto-card{background:linear-gradient(135deg,rgba(34,197,94,.1),rgba(34,197,94,.03));border:1px solid rgba(34,197,94,.3);border-radius:20px;padding:32px 24px;text-align:center;margin-top:24px}
+.piloto-preco{font-size:52px;font-weight:800;color:var(--g);letter-spacing:-2px;margin:12px 0 4px}
+.piloto-antes{font-size:18px;color:#444;text-decoration:line-through;margin-bottom:16px}
+.piloto-lista{text-align:left;display:flex;flex-direction:column;gap:10px;margin:20px 0}
+.piloto-item{display:flex;align-items:center;gap:10px;font-size:15px}
+.piloto-item .check{color:var(--g);font-weight:700;flex-shrink:0}
+.piloto-cta{width:100%;padding:18px;background:var(--g);color:#000;border:none;border-radius:12px;font-size:18px;font-weight:800;cursor:pointer;margin-top:8px;transition:all .2s}
+.piloto-cta:active{transform:scale(.97)}
+.piloto-timer{font-size:13px;color:var(--t2);margin-top:12px}
+
+/* DEPOIMENTO PLACEHOLDER */
+.depo{background:#111;border-left:3px solid var(--g);border-radius:0 14px 14px 0;padding:20px;margin-top:24px}
+.depo-texto{font-size:15px;line-height:1.7;color:var(--t2);font-style:italic;margin-bottom:12px}
+.depo-autor{font-size:13px;font-weight:600;color:var(--t1)}
+.depo-cargo{font-size:12px;color:var(--t2)}
+
+/* FOOTER */
+.footer-cta{padding:60px 24px;text-align:center;background:linear-gradient(180deg,transparent,rgba(34,197,94,.05))}
+.footer-cta h2{font-size:clamp(28px,7vw,44px);font-weight:800;letter-spacing:-1px;margin-bottom:12px}
+.footer-cta p{font-size:16px;color:var(--t2);margin-bottom:32px}
+.whatsapp-btn{display:inline-flex;align-items:center;gap:12px;padding:18px 32px;background:#25d366;color:#fff;border-radius:14px;font-size:17px;font-weight:800;text-decoration:none;transition:all .2s}
+.whatsapp-btn:active{transform:scale(.97)}
+
+/* STICKY CTA */
+.sticky{position:fixed;bottom:0;left:0;right:0;padding:12px 16px 20px;background:rgba(10,10,10,.95);backdrop-filter:blur(20px);border-top:1px solid #1a1a1a;z-index:100;display:none}
+.sticky.show{display:block}
+.sticky-btn{width:100%;padding:16px;background:var(--g);color:#000;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;transition:all .2s}
+
+/* LOGOS */
+.logos{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;opacity:.4;margin-top:32px;font-size:13px;color:var(--t2)}
+
+/* animações de entrada */
+.fade-in{opacity:0;transform:translateY(30px);transition:all .7s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="badge"><div class="badge-dot"></div>Sistema com Inteligência Artificial</div>
+  <h1>Sua oficina no<br><span>piloto automático.</span></h1>
+  <p class="hero-sub">O WhatsApp da sua oficina trabalha por você 24 horas — sem contratar ninguém.</p>
+  <div class="cta-wrap">
+    <button class="btn-g" onclick="irParaPiloto()">Quero testar grátis por 30 dias</button>
+    <a href="#como-funciona" class="btn-o">Ver como funciona ↓</a>
+  </div>
+  <div class="scroll-hint">
+    <span>Role para ver</span>
+    <span>↓</span>
+  </div>
+</div>
+
+<!-- PROBLEMA -->
+<div class="section fade-in">
+  <div class="section-tag">O problema</div>
+  <h2>Você administra uma oficina ou uma papelada?</h2>
+  <p class="section-body">Todo dia o mesmo ciclo: atender telefone, anotar pedido no papel, ligar pro cliente, perder orçamento, esquecer de avisar quando ficou pronto.</p>
+  <div class="dor-list">
+    <div class="dor">
+      <div class="dor-icon">📞</div>
+      <div class="dor-text"><strong>Telefone não para de tocar</strong> — você para o serviço para atender cliente que só quer saber o status do carro</div>
+    </div>
+    <div class="dor">
+      <div class="dor-icon">📋</div>
+      <div class="dor-text"><strong>Orçamento no papel se perde</strong> — cliente diz que não aprovou, você diz que aprovou, ninguém tem prova</div>
+    </div>
+    <div class="dor">
+      <div class="dor-icon">💸</div>
+      <div class="dor-text"><strong>Cliente some depois da OS</strong> — nunca mais volta, e você não tem como lembrar na hora certa</div>
+    </div>
+    <div class="dor">
+      <div class="dor-icon">😤</div>
+      <div class="dor-text"><strong>Fim do dia exausto</strong> — passou o dia resolvendo administração em vez de fazer o que sabe: mecânica</div>
+    </div>
+  </div>
+</div>
+
+<!-- SOLUÇÃO -->
+<div class="section fade-in" id="como-funciona">
+  <div class="section-tag">A solução</div>
+  <h2>O Mecani.AI faz tudo isso por você.</h2>
+  <p class="section-body">Seu mecânico fala no WhatsApp. A IA faz o resto — sem app para baixar, sem treinamento longo.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div><div class="step-title">Mecânico descreve o carro no WhatsApp</div><div class="step-desc">Pode ser voz ou texto. "Chegou um Corolla 2020, cliente João, problema no freio." A IA entende tudo e abre a OS.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div><div class="step-title">Cliente recebe atualização em tempo real</div><div class="step-desc">Diagnóstico pronto → IA manda mensagem pro cliente com o orçamento. Cliente aprova com 1 toque.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div><div class="step-title">IA coteja peças com fornecedores</div><div class="step-desc">Manda cotação para todos os fornecedores cadastrados, compara preços e escolhe o melhor automaticamente.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div><div class="step-title">Carro pronto → tudo automático</div><div class="step-desc">Mecânico diz "pronto". IA avisa o cliente, fecha o caixa, manda o recibo por email e agenda avaliação.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div><div class="step-title">Cliente vira recorrente</div><div class="step-desc">90 dias depois, IA manda lembrete de revisão. Na hora certa, sem esforço seu.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTADOS -->
+<div class="section fade-in">
+  <div class="section-tag">Resultados</div>
+  <h2>O que muda na prática</h2>
+  <div class="results">
+    <div class="result"><div class="result-num">3h</div><div class="result-label">economizadas por dia em ligações e papelada</div></div>
+    <div class="result"><div class="result-num">40%</div><div class="result-label">mais clientes atendidos com a mesma equipe</div></div>
+    <div class="result"><div class="result-num">8min</div><div class="result-label">do check-in ao orçamento no WhatsApp do cliente</div></div>
+    <div class="result"><div class="result-num">24/7</div><div class="result-label">atendimento automático mesmo quando você dorme</div></div>
+  </div>
+</div>
+
+<!-- OFERTA PILOTO -->
+<div class="section fade-in" id="piloto">
+  <div class="section-tag">Oferta exclusiva</div>
+  <h2>Seja nossa oficina piloto em Brasília</h2>
+  <p class="section-body">Estamos selecionando <strong style="color:var(--t1)">3 oficinas</strong> para testar o sistema gratuitamente e dar feedback. Você recebe tudo sem pagar nada por 30 dias.</p>
+  <div class="piloto-card">
+    <div style="font-size:14px;color:var(--t2);font-weight:600;text-transform:uppercase;letter-spacing:1px">Período piloto</div>
+    <div class="piloto-preco">R$ 0</div>
+    <div class="piloto-antes">R$ 397/mês depois</div>
+    <div class="piloto-lista">
+      <div class="piloto-item"><span class="check">✅</span>WhatsApp configurado e funcionando</div>
+      <div class="piloto-item"><span class="check">✅</span>Dashboard para você acompanhar tudo</div>
+      <div class="piloto-item"><span class="check">✅</span>Portal para o cliente ver o status do carro</div>
+      <div class="piloto-item"><span class="check">✅</span>Cotação automática com seus fornecedores</div>
+      <div class="piloto-item"><span class="check">✅</span>Relatório semanal com os resultados</div>
+      <div class="piloto-item"><span class="check">✅</span>Suporte direto com o criador do sistema</div>
+      <div class="piloto-item"><span class="check">✅</span>Sem contrato. Cancela quando quiser.</div>
+    </div>
+    <button class="piloto-cta" onclick="abrirWhatsApp()">📱 Quero ser piloto — falar agora</button>
+    <div class="piloto-timer" id="vagas-restantes">⚡ Apenas 3 vagas disponíveis em Brasília</div>
+  </div>
+</div>
+
+<!-- FOOTER CTA -->
+<div class="footer-cta fade-in">
+  <h2>Pronto para começar?</h2>
+  <p>Configuração em menos de 1 hora. Resultado no primeiro dia.</p>
+  <a href="https://wa.me/5561991775904?text=Olá! Vi a apresentação do Mecani.AI e quero ser a oficina piloto em Brasília" class="whatsapp-btn" target="_blank">
+    <span style="font-size:24px">📱</span>
+    Falar no WhatsApp agora
+  </a>
+  <div style="margin-top:20px;font-size:13px;color:#333">mecaniia.com.br</div>
+</div>
+
+<!-- STICKY BUTTON -->
+<div class="sticky" id="sticky-cta">
+  <button class="sticky-btn" onclick="abrirWhatsApp()">📱 Quero testar grátis — falar agora</button>
+</div>
+
+<script>
+function irParaPiloto() {
+  document.getElementById('piloto').scrollIntoView({behavior:'smooth'});
+}
+
+function abrirWhatsApp() {
+  window.open('https://wa.me/5561991775904?text=Olá! Vi a apresentação do Mecani.AI e quero ser a oficina piloto em Brasília. Quando podemos conversar?', '_blank');
+}
+
+// Fade in ao scrollar
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.15});
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Sticky CTA
+window.addEventListener('scroll', () => {
+  const sticky = document.getElementById('sticky-cta');
+  if (window.scrollY > 400) sticky.classList.add('show');
+  else sticky.classList.remove('show');
+});
+
+// Contador de vagas (urgência real)
+let vagas = 3;
+const vagasEl = document.getElementById('vagas-restantes');
+// Simular 1 vaga tomada se já passou das 8h
+const hora = new Date().getHours();
+if (hora >= 8) { vagas = 2; vagasEl.textContent = '⚡ Apenas ' + vagas + ' vagas restantes em Brasília'; }
+</script>
+</body>
+</html>
