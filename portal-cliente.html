@@ -157,6 +157,8 @@ body { background:var(--black); color:var(--white); font-family:-apple-system,'S
 .footer { text-align:center; padding:40px 24px; color:var(--gray5); font-size:12px; border-top:1px solid var(--gray2); margin-top:40px; }
 .footer strong { color:var(--accent); }
 </style>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#22c55e">
 </head>
 <body>
 
@@ -540,6 +542,13 @@ function mostrarNotif(txt, icon='✅') {
   setTimeout(() => { toast.style.opacity = '0'; }, 3500);
 }
 
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
