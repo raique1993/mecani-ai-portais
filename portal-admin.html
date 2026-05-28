@@ -165,7 +165,8 @@ async function renderOverview(){
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px">
-      <div class="section">
+      <div id="grafico-receita" style="background:#111;border:1px solid #1f1f1f;border-radius:14px;padding:20px;margin-bottom:24px;min-height:120px"></div>
+<div class="section">
         <div class="section-header"><div class="section-title">Receita — últimos 7 dias</div></div>
         <div style="background:var(--bg1);border:1px solid var(--bg3);border-radius:var(--r);padding:16px">
           <div class="revenue-chart">
@@ -320,6 +321,54 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
   });
 }
+
+// Gráfico de receita — Chart.js
+async function renderGraficoReceita() {
+  const { data: caixa } = await sb.from('fluxo_caixa')
+    .select('tipo,valor,data_competencia')
+    .order('data_competencia', { ascending: true });
+  
+  const hoje = new Date();
+  const dias = Array.from({length: 30}, (_, i) => {
+    const d = new Date(hoje);
+    d.setDate(d.getDate() - 29 + i);
+    return d.toISOString().split('T')[0];
+  });
+  
+  const receitaDia = dias.map(d => 
+    (caixa||[]).filter(c => c.tipo === 'ENTRADA' && c.data_competencia === d)
+      .reduce((a, c) => a + c.valor, 0)
+  );
+  
+  const wrap = document.getElementById('grafico-receita');
+  if (!wrap) return;
+  
+  const max = Math.max(...receitaDia, 1);
+  const bars = dias.map((d, i) => {
+    const h = Math.max(4, Math.round((receitaDia[i] / max) * 80));
+    const isHoje = d === hoje.toISOString().split('T')[0];
+    const label = new Date(d + 'T12:00').toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' });
+    const valor = receitaDia[i] > 0 ? 'R$ ' + receitaDia[i].toFixed(0) : '';
+    return `<div title="${label}\n${valor || 'Sem receita'}" style="display:flex;flex-direction:column;align-items:center;flex:1;gap:2px;cursor:default">
+      <div style="width:100%;height:${h}px;background:${isHoje ? '#22c55e' : 'rgba(34,197,94,0.25)'};border-radius:3px 3px 0 0;transition:background .2s"></div>
+      ${i % 5 === 0 ? `<div style="font-size:9px;color:#555;white-space:nowrap">${label}</div>` : '<div style="height:14px"></div>'}
+    </div>`;
+  }).join('');
+  
+  const totalMes = receitaDia.reduce((a, v) => a + v, 0);
+  
+  wrap.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:600;color:var(--t2,#999)">Receita — últimos 30 dias</div>
+      <div style="font-size:16px;font-weight:700;color:#22c55e">R$ ${totalMes.toFixed(2).replace('.',',')}</div>
+    </div>
+    <div style="display:flex;align-items:flex-end;gap:2px;height:100px;padding-bottom:4px">
+      ${bars}
+    </div>`;
+}
+
+// Chamar gráfico
+renderGraficoReceita();
 </script>
 </body>
 </html>
