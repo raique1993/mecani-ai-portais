@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Obrigado! — Mecani.AI</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#060606;color:#f8f6f1;font-family:'DM Sans',sans-serif;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+.wrap{max-width:480px}
+.icon{font-size:72px;margin-bottom:24px;animation:pop .6s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+h1{font-family:'Syne',sans-serif;font-size:40px;font-weight:800;letter-spacing:-2px;margin-bottom:12px}
+h1 em{color:#22c55e;font-style:normal}
+p{font-size:16px;color:#777;line-height:1.7;margin-bottom:32px}
+.steps{display:flex;flex-direction:column;gap:12px;margin-bottom:36px;text-align:left}
+.step{display:flex;gap:14px;align-items:center;background:#111;border:1px solid #222;
+  border-radius:12px;padding:14px 18px}
+.sn{width:28px;height:28px;border-radius:50%;background:rgba(34,197,94,.15);
+  color:#22c55e;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.st{font-size:14px}
+.st strong{color:#f8f6f1;display:block;margin-bottom:2px}
+.st span{color:#666;font-size:13px}
+.btns{display:flex;flex-direction:column;gap:10px}
+.btn-g{padding:15px 28px;background:#22c55e;color:#000;border-radius:12px;
+  font-size:15px;font-weight:800;text-decoration:none;transition:all .2s}
+.btn-g:hover{background:#16a34a}
+.btn-o{padding:14px 28px;background:transparent;border:1px solid #333;color:#888;
+  border-radius:12px;font-size:14px;font-weight:500;text-decoration:none;transition:all .2s}
+.btn-o:hover{border-color:#666;color:#f8f6f1}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="icon">🎉</div>
+  <h1>Mensagem <em>recebida!</em></h1>
+  <p>Entraremos em contato em poucos minutos pelo WhatsApp.<br>Enquanto isso, veja o que vai acontecer:</p>
+  <div class="steps">
+    <div class="step"><div class="sn">1</div><div class="st"><strong>Entraremos em contato</strong><span>Raíque vai te chamar no WhatsApp em até 1 hora</span></div></div>
+    <div class="step"><div class="sn">2</div><div class="st"><strong>Configuração em 1 hora</strong><span>Configuramos o sistema na sua oficina ao vivo</span></div></div>
+    <div class="step"><div class="sn">3</div><div class="st"><strong>Resultado no primeiro dia</strong><span>Seu mecânico já usa no mesmo dia da configuração</span></div></div>
+  </div>
+  <div class="btns">
+    <a href="https://wa.me/5561991775904?text=Oi! Acabei de preencher o formulário do Mecani.AI" target="_blank" class="btn-g">📱 Ir para o WhatsApp agora</a>
+    <a href="/" class="btn-o">← Voltar ao início</a>
+  </div>
+</div>
+<script>
+// Confetti simples
+(function(){
+  const colors=['#22c55e','#16a34a','#f8f6f1','#fbbf24'];
+  for(let i=0;i<60;i++){
+    const d=document.createElement('div');
+    d.style.cssText=`position:fixed;width:8px;height:8px;border-radius:2px;
+      background:${colors[i%4]};top:-10px;left:${Math.random()*100}vw;
+      animation:fall ${1.5+Math.random()*2}s ${Math.random()*1}s ease-in forwards;
+      transform:rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(d);
+  }
+  const s=document.createElement('style');
+  s.textContent='@keyframes fall{to{top:110vh;transform:rotate(720deg);opacity:0}}';
+  document.head.appendChild(s);
+})();
+</script>
+</body>
+</html>
