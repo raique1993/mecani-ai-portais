@@ -232,7 +232,7 @@ async function abrirOSModal(osId){
       <div class="action-btn" onclick="abrirDiagnosticoModal('${osModal.id}')"><span class="ab-icon">📝</span>Registrar diagnóstico</div>
       <div class="action-btn" onclick="abrirNotasModal('${osModal.id}')"><span class="ab-icon">💬</span>Adicionar observação</div>
       ${osModal.status==='EM_EXECUCAO'||osModal.status==='AGUARDANDO_PECA'?`<div class="action-btn success" onclick="marcarProntoModal('${osModal.id}')"><span class="ab-icon">✅</span>Marcar como pronto</div>`:''}
-      <div class="action-btn" onclick="window.open('https://raique1993.github.io/mecani-ai-portais/portal-cliente.html?placa=${osModal.placa_veiculo}','_blank')"><span class="ab-icon">👤</span>Ver portal do cliente</div>
+      <div class="action-btn" onclick="window.open('https://mecaniia.com.br/portal-cliente.html?placa=${osModal.placa_veiculo}','_blank')"><span class="ab-icon">👤</span>Ver portal do cliente</div>
     </div>`;
   abrirModal();
 }
