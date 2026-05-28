@@ -83,6 +83,8 @@ body{background:var(--bg);color:var(--t1);font-family:-apple-system,'SF Pro Disp
 .bar.today{background:var(--accent)}
 .bar-label{font-size:10px;color:var(--t3)}
 </style>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#22c55e">
 </head>
 <body>
 
@@ -311,6 +313,13 @@ async function renderIA(){
 }
 
 renderAba('overview');
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
