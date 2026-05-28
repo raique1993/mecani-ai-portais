@@ -29,7 +29,18 @@
   
   <!-- PWA -->
   <meta name="mobile-web-app-capable" content="yes">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+// Share melhorado
+function shareStatus(placa, oficina, status) {
+  const url = `https://mecaniia.com.br/portal-cliente.html?placa=${placa}`;
+  const msg = `Acompanhe meu ${placa} na ${oficina}: ${status}\n${url}`;
+  if (navigator.share) {
+    navigator.share({ title: 'Status do meu veículo', text: msg, url });
+  } else {
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+}
+</script>
 <style>
 :root {
   --black: #0f0f0f;
