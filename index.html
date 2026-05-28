@@ -82,6 +82,8 @@ h2{font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1.5px;margin-b
 .footer{padding:40px 32px;border-top:1px solid #1a1a1a;text-align:center;color:#333;font-size:13px}
 .footer span{color:#22c55e}
 </style>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#22c55e">
 </head>
 <body>
 
@@ -198,5 +200,12 @@ h2{font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1.5px;margin-b
   <span style="margin-top:8px;display:block">© 2025 Mecani.AI — Todos os direitos reservados</span>
 </div>
 
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+</script>
 </body>
 </html>
