@@ -84,6 +84,7 @@ h2{font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1.5px;margin-b
 </style>
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#22c55e">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -206,6 +207,26 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
   });
 }
+</script>
+
+<script>
+// Contador de visitas simples via localStorage + Supabase
+(async () => {
+  try {
+    const SB_URL = 'https://tcjynyfusqkqtdohnyzq.supabase.co';
+    const SB_KEY = 'sb_publishable_gNJhc4WCS9MnnmDAL2T6Vg_AQ71_Vid';
+    const { createClient } = window.supabase || {};
+    if (!createClient) return;
+    const sb = createClient(SB_URL, SB_KEY);
+    
+    // Registrar visita (anônima) na tabela de comunicações
+    await sb.from('comunicacoes').insert({
+      tipo: 'VISITA_SITE',
+      mensagem: window.location.href,
+      tenant_id: 'a1b2c3d4-0000-0000-0000-000000000001'
+    }).catch(() => {});
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>
