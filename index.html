@@ -85,6 +85,12 @@ h2{font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1.5px;margin-b
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#22c55e">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Security Headers via meta -->
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 </head>
 <body>
 
