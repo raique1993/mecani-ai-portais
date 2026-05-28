@@ -428,5 +428,43 @@ if('serviceWorker' in navigator){
 
 renderHome();
 </script>
+
+<!-- PWA Install Banner -->
+<div id="pwa-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:999;
+  background:#111;border-top:1px solid #22c55e;padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px">
+  <div style="display:flex;align-items:center;gap:12px">
+    <span style="font-size:28px">🔧</span>
+    <div>
+      <div style="font-size:14px;font-weight:700;color:#f5f3ef">Instalar Mecani.AI</div>
+      <div style="font-size:12px;color:#666">Acesso rápido na tela inicial do celular</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button onclick="dismissPWA()" style="padding:8px 14px;background:transparent;border:1px solid #333;color:#888;border-radius:8px;font-size:13px;cursor:pointer">Depois</button>
+    <button id="pwa-install-btn" style="padding:8px 16px;background:#22c55e;color:#000;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">Instalar</button>
+  </div>
+</div>
+<script>
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!localStorage.getItem('pwa-dismissed')) {
+    document.getElementById('pwa-banner').style.display = 'flex';
+  }
+});
+document.getElementById('pwa-install-btn')?.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById('pwa-banner').style.display = 'none';
+});
+function dismissPWA() {
+  localStorage.setItem('pwa-dismissed', '1');
+  document.getElementById('pwa-banner').style.display = 'none';
+}
+</script>
 </body>
 </html>
