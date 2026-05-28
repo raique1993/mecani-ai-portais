@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /portal-admin.html
+Disallow: /portal-estoque.html
+
+Sitemap: https://mecaniia.com.br/sitemap.xml
+
+# Mecani.AI - Sistema de Gestão para Oficinas
+# mecaniia.com.br
