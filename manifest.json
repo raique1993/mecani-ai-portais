@@ -1,0 +1,37 @@
+{
+  "name": "Mecani.AI",
+  "short_name": "Mecani",
+  "description": "Sistema de Gestão Inteligente para Oficinas Mecânicas",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0a",
+  "theme_color": "#22c55e",
+  "lang": "pt-BR",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%230a0a0a'/><text y='.85em' font-size='400' x='56'>🔧</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Agendar serviço",
+      "short_name": "Agendar",
+      "description": "Agendar um novo serviço",
+      "url": "/portal-agendamento.html",
+      "icons": [{"src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>", "sizes": "96x96"}]
+    },
+    {
+      "name": "Meu veículo",
+      "short_name": "Veículo",
+      "description": "Ver status do veículo",
+      "url": "/portal-cliente.html",
+      "icons": [{"src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>", "sizes": "96x96"}]
+    }
+  ]
+}
