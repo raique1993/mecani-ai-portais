@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Planos e Preços — Mecani.AI</title>
+<meta name="description" content="Planos acessíveis para transformar sua oficina com IA. Comece grátis por 14 dias.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text y='.9em' font-size='80' x='10'>🔧</text></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#f5f3ef;font-family:-apple-system,'Segoe UI',sans-serif;min-height:100vh}
+.header{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1a1a}
+.logo{font-size:18px;font-weight:800}.logo em{color:#22c55e;font-style:normal}
+.hero{text-align:center;padding:60px 24px 48px;max-width:600px;margin:0 auto}
+.eyebrow{display:inline-block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#22c55e;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:20px}
+h1{font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-1.5px;margin-bottom:12px;line-height:1.1}
+.sub{font-size:16px;color:#888;line-height:1.6}
+.toggle{display:flex;align-items:center;justify-content:center;gap:12px;margin:32px 0}
+.toggle-label{font-size:14px;color:#888}
+.toggle-label.active{color:#f5f3ef;font-weight:600}
+.toggle-btn{width:44px;height:24px;background:#333;border-radius:12px;position:relative;cursor:pointer;transition:background .3s}
+.toggle-btn.anual{background:#22c55e}
+.toggle-dot{width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:left .3s}
+.toggle-btn.anual .toggle-dot{left:23px}
+.desconto{background:#22c55e;color:#000;font-size:11px;font-weight:700;padding:2px 8px;border-radius:100px;margin-left:6px}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;max-width:900px;margin:0 auto;padding:0 24px 80px}
+.plan{background:#111;border:1px solid #1f1f1f;border-radius:18px;padding:28px;position:relative;transition:all .3s}
+.plan.popular{border-color:#22c55e;background:linear-gradient(135deg,rgba(34,197,94,.06),#111)}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#22c55e;color:#000;font-size:11px;font-weight:700;padding:4px 14px;border-radius:100px;white-space:nowrap}
+.plan-name{font-size:14px;font-weight:600;color:#888;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.plan-price{font-size:42px;font-weight:800;letter-spacing:-1.5px;margin-bottom:4px;line-height:1}
+.plan-price sup{font-size:18px;font-weight:600;vertical-align:top;margin-top:8px;color:#888}
+.plan-price span{font-size:14px;font-weight:400;color:#888}
+.plan-desc{font-size:14px;color:#666;margin:12px 0 24px;line-height:1.5}
+.plan-btn{width:100%;padding:14px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;border:none;margin-bottom:24px}
+.plan-btn.primary{background:#22c55e;color:#000}
+.plan-btn.primary:hover{background:#16a34a}
+.plan-btn.secondary{background:transparent;color:#f5f3ef;border:1px solid #333}
+.plan-btn.secondary:hover{border-color:#888}
+.features{display:flex;flex-direction:column;gap:10px}
+.feat{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#888}
+.feat .check{color:#22c55e;flex-shrink:0;font-weight:700}
+.feat .x{color:#333;flex-shrink:0}
+.faq{max-width:700px;margin:0 auto;padding:0 24px 80px}
+.faq h2{font-size:28px;font-weight:700;text-align:center;margin-bottom:32px;letter-spacing:-.5px}
+.faq-item{border-bottom:1px solid #1a1a1a;padding:20px 0;cursor:pointer}
+.faq-q{font-size:15px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.faq-a{font-size:14px;color:#888;line-height:1.7;margin-top:12px;display:none}
+.faq-item.open .faq-a{display:block}
+.faq-item.open .faq-q::after{transform:rotate(180deg)}
+.faq-q::after{content:'↓';transition:transform .2s}
+.footer{text-align:center;padding:32px;border-top:1px solid #1a1a1a;font-size:13px;color:#333}
+.footer a{color:#22c55e;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo"><a href="https://mecaniia.com.br" style="text-decoration:none;color:inherit">Mecani<em>.AI</em></a></div>
+  <a href="https://mecaniia.com.br/portal-agendamento.html" style="padding:8px 20px;background:#22c55e;color:#000;border-radius:100px;font-size:13px;font-weight:700;text-decoration:none">Agendar →</a>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">Preços simples</div>
+  <h1>Sem surpresas.<br>Cresça no seu ritmo.</h1>
+  <p class="sub">Comece grátis por 14 dias. Sem cartão de crédito.<br>Cancele quando quiser.</p>
+  <div class="toggle">
+    <span class="toggle-label active" id="lbl-mensal">Mensal</span>
+    <div class="toggle-btn" id="toggle-periodo" onclick="trocarPeriodo()">
+      <div class="toggle-dot"></div>
+    </div>
+    <span class="toggle-label" id="lbl-anual">Anual <span class="desconto">-20%</span></span>
+  </div>
+</div>
+
+<div class="plans">
+  <div class="plan">
+    <div class="plan-name">Starter</div>
+    <div class="plan-price"><sup>R$</sup><span id="p1">197</span><span>/mês</span></div>
+    <div class="plan-desc">Para oficinas que estão começando a automatizar</div>
+    <button class="plan-btn secondary" onclick="window.open('https://wa.me/5561991775904?text=Quero+contratar+o+plano+Starter+do+Mecani.AI')">Começar grátis →</button>
+    <div class="features">
+      <div class="feat"><span class="check">✓</span> Até 50 OS/mês</div>
+      <div class="feat"><span class="check">✓</span> Check-in por WhatsApp</div>
+      <div class="feat"><span class="check">✓</span> Diagnóstico assistido por IA</div>
+      <div class="feat"><span class="check">✓</span> Aprovação cliente + dono</div>
+      <div class="feat"><span class="check">✓</span> Dashboard kanban</div>
+      <div class="feat"><span class="check">✓</span> Portal do cliente</div>
+      <div class="feat"><span class="check">✓</span> Email automático</div>
+      <div class="feat"><span class="x">✗</span> Cotação com fornecedores</div>
+      <div class="feat"><span class="x">✗</span> Social media IA</div>
+      <div class="feat"><span class="x">✗</span> Relatório semanal</div>
+    </div>
+  </div>
+  
+  <div class="plan popular">
+    <div class="plan-badge">⭐ Mais popular</div>
+    <div class="plan-name">Pro</div>
+    <div class="plan-price"><sup>R$</sup><span id="p2">397</span><span>/mês</span></div>
+    <div class="plan-desc">Para oficinas que querem automatização completa</div>
+    <button class="plan-btn primary" onclick="window.open('https://wa.me/5561991775904?text=Quero+contratar+o+plano+Pro+do+Mecani.AI')">Começar grátis →</button>
+    <div class="features">
+      <div class="feat"><span class="check">✓</span> OS ilimitadas</div>
+      <div class="feat"><span class="check">✓</span> Tudo do Starter</div>
+      <div class="feat"><span class="check">✓</span> Cotação automática fornecedores</div>
+      <div class="feat"><span class="check">✓</span> Social media com IA</div>
+      <div class="feat"><span class="check">✓</span> Relatório semanal + insights</div>
+      <div class="feat"><span class="check">✓</span> CRM preventivo automático</div>
+      <div class="feat"><span class="check">✓</span> Controle de estoque</div>
+      <div class="feat"><span class="check">✓</span> Agendamento online</div>
+      <div class="feat"><span class="check">✓</span> Garantia automática</div>
+      <div class="feat"><span class="check">✓</span> App Android + iOS</div>
+    </div>
+  </div>
+  
+  <div class="plan">
+    <div class="plan-name">Enterprise</div>
+    <div class="plan-price" style="font-size:28px;padding-top:7px">Sob consulta</div>
+    <div class="plan-desc">Para redes de oficinas ou grupos com múltiplas unidades</div>
+    <button class="plan-btn secondary" onclick="window.open('https://wa.me/5561991775904?text=Quero+conhecer+o+plano+Enterprise+do+Mecani.AI')">Falar com consultor →</button>
+    <div class="features">
+      <div class="feat"><span class="check">✓</span> Multi-unidades</div>
+      <div class="feat"><span class="check">✓</span> Tudo do Pro</div>
+      <div class="feat"><span class="check">✓</span> Dashboard consolidado</div>
+      <div class="feat"><span class="check">✓</span> API dedicada</div>
+      <div class="feat"><span class="check">✓</span> Onboarding personalizado</div>
+      <div class="feat"><span class="check">✓</span> SLA garantido</div>
+      <div class="feat"><span class="check">✓</span> Suporte prioritário</div>
+      <div class="feat"><span class="check">✓</span> White-label disponível</div>
+    </div>
+  </div>
+</div>
+
+<div class="faq">
+  <h2>Perguntas frequentes</h2>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Preciso instalar algum software?</div>
+    <div class="faq-a">Não. Tudo funciona pelo WhatsApp e pelo navegador. Nenhuma instalação necessária. O mecânico já usa o WhatsApp que tem — sem precisar aprender nada novo.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Como funciona o período de teste?</div>
+    <div class="faq-a">14 dias grátis com acesso completo ao plano Pro. Sem cartão de crédito. Se gostar, você escolhe o plano. Se não gostar, cancele sem custo.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">O que acontece com meus dados se eu cancelar?</div>
+    <div class="faq-a">Seus dados ficam disponíveis por 30 dias após o cancelamento para exportação. Depois são excluídos permanentemente. Você não perde nada abruptamente.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Funciona em qualquer WhatsApp?</div>
+    <div class="faq-a">Sim. O sistema usa um número de WhatsApp da oficina — pode ser um número novo ou o número que a oficina já usa. Configuramos em menos de 10 minutos.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Posso mudar de plano depois?</div>
+    <div class="faq-a">Sim. Você pode fazer upgrade ou downgrade a qualquer momento. O ajuste é proporcional ao período restante do mês.</div>
+  </div>
+</div>
+
+<div class="footer">
+  <a href="https://mecaniia.com.br">Mecani.AI</a> · 
+  <a href="https://mecaniia.com.br/privacidade.html">Privacidade</a> · 
+  <a href="https://mecaniia.com.br/termos.html">Termos</a> · 
+  Dúvidas? <a href="https://wa.me/5561991775904">WhatsApp</a>
+</div>
+
+<script>
+let anual = false;
+const precos = {mensal:[197,397],anual:[158,318]};
+
+function trocarPeriodo() {
+  anual = !anual;
+  document.getElementById('toggle-periodo').classList.toggle('anual', anual);
+  document.getElementById('lbl-mensal').classList.toggle('active', !anual);
+  document.getElementById('lbl-anual').classList.toggle('active', anual);
+  const p = anual ? precos.anual : precos.mensal;
+  document.getElementById('p1').textContent = p[0];
+  document.getElementById('p2').textContent = p[1];
+}
+</script>
+</body>
+</html>
