@@ -93,6 +93,8 @@ body{background:var(--bg);color:var(--t1);font-family:-apple-system,'SF Pro Disp
 .spinner{width:32px;height:32px;border:2px solid var(--bg3);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:60px auto}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#22c55e">
 </head>
 <body>
 
@@ -366,6 +368,13 @@ function logout(){localStorage.removeItem('forn_id');localStorage.removeItem('fo
 // ── INIT ────────────────────────────────────────────────────
 const savedId=localStorage.getItem('forn_id');
 if(savedId)renderPortal();else renderLogin();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
