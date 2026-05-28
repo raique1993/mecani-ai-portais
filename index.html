@@ -3,240 +3,934 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mecani.AI — Sistema de Gestão Inteligente para Oficinas</title>
-  <meta name="description" content="Automatize sua oficina com IA. Check-in, diagnóstico, cotação, agendamento e muito mais via WhatsApp.">
-  <meta name="keywords" content="mecânica, oficina, gestão, IA, inteligência artificial, manutenção veicular">
-  <meta name="author" content="Mecani.AI">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://mecaniia.com.br">
-  
-  <!-- Open Graph / WhatsApp / Social -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://mecaniia.com.br">
-  <meta property="og:title" content="Mecani.AI — Sistema de Gestão Inteligente para Oficinas">
-  <meta property="og:description" content="Automatize sua oficina com IA. Check-in, diagnóstico, cotação, agendamento e muito mais via WhatsApp.">
-  <meta property="og:site_name" content="Mecani.AI">
-  <meta property="og:locale" content="pt_BR">
-  
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Mecani.AI — Sistema de Gestão Inteligente para Oficinas">
-  <meta name="twitter:description" content="Automatize sua oficina com IA. Check-in, diagnóstico, cotação, agendamento e muito mais via WhatsApp.">
-  
-  <!-- Favicon SVG inline -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text y='.9em' font-size='80' x='10'>🔧</text></svg>">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text y='.9em' font-size='80' x='10'>🔧</text></svg>">
-  
-  <!-- PWA -->
-  <meta name="mobile-web-app-capable" content="yes">
-
+<title>Mecani.AI — Sua oficina no piloto automático</title>
+<meta name="description" content="O sistema de IA que trabalha pela sua oficina 24h. Check-in, diagnóstico, cotação e NPS — tudo automático via WhatsApp.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text y='.9em' font-size='80' x='10'>🔧</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
+:root{
+  --black:#060606;--white:#f8f6f1;
+  --green:#22c55e;--green-dark:#15803d;--green-glow:rgba(34,197,94,.15);
+  --red:#ef4444;
+  --g1:#0f0f0f;--g2:#161616;--g3:#222;--g4:#444;--g5:#777;--g6:#aaa;
+  --font-d:'Syne',sans-serif;--font-b:'DM Sans',sans-serif;
+  --r:20px
+}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0a;color:#f5f3ef;font-family:-apple-system,'Segoe UI',sans-serif;overflow-x:hidden}
-a{color:inherit;text-decoration:none}
-.header{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1a1a;position:sticky;top:0;background:rgba(10,10,10,.9);backdrop-filter:blur(20px);z-index:50}
-.logo{font-size:20px;font-weight:800;letter-spacing:-.5px}.logo em{color:#22c55e;font-style:normal}
-.header-cta{padding:8px 20px;background:#22c55e;color:#000;border-radius:100px;font-size:13px;font-weight:700;transition:all .2s}
-.header-cta:hover{background:#16a34a}
-.hero{padding:80px 32px 60px;text-align:center;max-width:800px;margin:0 auto;position:relative}
-.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(34,197,94,.08) 0%,transparent 70%);pointer-events:none}
-.eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#22c55e;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:6px 14px;border-radius:100px;margin-bottom:28px}
-.eyebrow::before{content:'●';font-size:8px;animation:p 2s infinite}
-@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
-h1{font-size:clamp(40px,6vw,72px);font-weight:800;line-height:1;letter-spacing:-2px;margin-bottom:24px}
-h1 span{color:#22c55e}
-.hero-sub{font-size:18px;color:#888;line-height:1.6;margin-bottom:40px;max-width:520px;margin-left:auto;margin-right:auto}
-.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:60px}
-.btn-g{padding:15px 32px;background:#22c55e;color:#000;border-radius:100px;font-size:15px;font-weight:700;transition:all .2s}
-.btn-g:hover{background:#16a34a;transform:translateY(-2px);box-shadow:0 8px 32px rgba(34,197,94,.3)}
-.btn-o{padding:15px 32px;background:transparent;color:#f5f3ef;border:1px solid #333;border-radius:100px;font-size:15px;font-weight:500;transition:all .2s}
-.btn-o:hover{border-color:#888}
-.stats{display:flex;gap:48px;justify-content:center;flex-wrap:wrap;padding-top:40px;border-top:1px solid #1a1a1a}
-.stat-num{font-size:36px;font-weight:800;color:#22c55e;letter-spacing:-1px}
-.stat-label{font-size:13px;color:#555;margin-top:2px}
-.section{padding:80px 32px;max-width:1100px;margin:0 auto}
-.section-label{font-size:12px;font-weight:600;color:#22c55e;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
-h2{font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1.5px;margin-bottom:16px;line-height:1.1}
-.section-sub{font-size:16px;color:#666;margin-bottom:48px;max-width:480px}
-.portals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
-.portal-card{background:#111;border:1px solid #1f1f1f;border-radius:16px;padding:24px;transition:all .25s;cursor:pointer}
-.portal-card:hover{border-color:#22c55e;transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
-.pc-icon{font-size:36px;margin-bottom:16px}
-.pc-name{font-size:17px;font-weight:700;margin-bottom:6px}
-.pc-desc{font-size:14px;color:#555;line-height:1.5;margin-bottom:16px}
-.pc-tag{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px;background:rgba(34,197,94,.1);color:#22c55e}
-.flow-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2px}
-.flow-step{background:#111;padding:28px 22px;position:relative}
-.flow-step:first-child{border-radius:12px 0 0 12px}
-.flow-step:last-child{border-radius:0 12px 12px 0}
-.flow-num{font-size:11px;font-weight:800;color:#333;letter-spacing:2px;margin-bottom:12px}
-.flow-icon{font-size:28px;margin-bottom:12px}
-.flow-name{font-size:15px;font-weight:700;margin-bottom:6px}
-.flow-desc{font-size:13px;color:#555;line-height:1.5}
-.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.feat{background:#111;border:1px solid #1f1f1f;border-radius:14px;padding:22px}
-.feat-icon{font-size:28px;margin-bottom:14px}
-.feat-name{font-size:15px;font-weight:700;margin-bottom:6px}
-.feat-desc{font-size:13px;color:#555;line-height:1.5}
-.cta-section{background:#111;border:1px solid #1f1f1f;border-radius:20px;padding:60px 40px;text-align:center;max-width:700px;margin:80px auto}
-.footer{padding:40px 32px;border-top:1px solid #1a1a1a;text-align:center;color:#333;font-size:13px}
-.footer span{color:#22c55e}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--black);color:var(--white);font-family:var(--font-b);overflow-x:hidden;line-height:1.6}
+a{text-decoration:none;color:inherit}
+button{font-family:var(--font-b);cursor:pointer;border:none}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--g3)}
+
+/* ═══ GLOW BG ═══ */
+.glow-bg{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(34,197,94,.07),transparent)}
+
+/* ═══ HEADER ═══ */
+.hd{position:fixed;inset:0 0 auto;z-index:200;padding:0 5%;
+  background:rgba(6,6,6,.8);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  display:flex;align-items:center;justify-content:space-between;height:64px}
+.hd-logo{font-family:var(--font-d);font-size:20px;font-weight:900;letter-spacing:-1px}
+.hd-logo em{color:var(--green);font-style:normal}
+.hd-nav{display:flex;align-items:center;gap:28px}
+.hd-nav a{font-size:13px;font-weight:500;color:var(--g5);transition:color .2s}
+.hd-nav a:hover{color:var(--white)}
+.hd-btn{padding:9px 20px;background:var(--green);color:#000;border-radius:100px;font-size:13px;font-weight:700;transition:all .2s}
+.hd-btn:hover{background:var(--green-dark);transform:scale(1.03)}
+@media(max-width:700px){.hd-nav{display:none}}
+
+/* ═══ HERO ═══ */
+.hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;padding:100px 5% 80px;position:relative;z-index:1}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(34,197,94,.3);background:rgba(34,197,94,.07);
+  color:var(--green);font-size:12px;font-weight:600;letter-spacing:1.5px;
+  text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:36px;
+  animation:up .7s ease both}
+.pill-dot{width:7px;height:7px;border-radius:50%;background:var(--green);
+  animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
+.hero h1{font-family:var(--font-d);font-size:clamp(52px,8vw,100px);
+  font-weight:900;line-height:.92;letter-spacing:-4px;margin-bottom:28px;
+  animation:up .7s .08s ease both}
+.hero h1 .acc{color:var(--green)}
+.hero h1 .out{-webkit-text-stroke:1px rgba(255,255,255,.2);color:transparent}
+.hero-p{font-size:clamp(15px,1.8vw,19px);color:var(--g5);line-height:1.7;
+  max-width:520px;margin:0 auto 44px;animation:up .7s .16s ease both}
+.hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  animation:up .7s .24s ease both;margin-bottom:64px}
+.btn-g{display:inline-flex;align-items:center;gap:8px;
+  padding:17px 34px;background:var(--green);color:#000;border-radius:14px;
+  font-size:16px;font-weight:800;transition:all .25s}
+.btn-g:hover{background:var(--green-dark);transform:translateY(-3px);
+  box-shadow:0 16px 48px rgba(34,197,94,.28)}
+.btn-o{display:inline-flex;align-items:center;gap:8px;
+  padding:17px 34px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  color:var(--g6);border-radius:14px;font-size:16px;font-weight:500;transition:all .25s}
+.btn-o:hover{background:rgba(255,255,255,.08);color:var(--white);border-color:rgba(255,255,255,.2)}
+.hero-stats{display:flex;gap:0;border-top:1px solid rgba(255,255,255,.06);
+  width:100%;max-width:760px;animation:up .7s .32s ease both}
+.hstat{flex:1;padding:28px 0;text-align:center;border-right:1px solid rgba(255,255,255,.06)}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:var(--font-d);font-size:36px;font-weight:900;color:var(--green);letter-spacing:-1px}
+.hstat-l{font-size:12px;color:var(--g5);margin-top:4px}
+@keyframes up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ VIDEO SECTION ═══ */
+.vsec{padding:100px 5%;max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.vsec-head{text-align:center;margin-bottom:56px}
+.stag{font-size:11px;font-weight:700;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+.sh2{font-family:var(--font-d);font-size:clamp(30px,4vw,52px);font-weight:800;
+  letter-spacing:-2px;line-height:1.05;margin-bottom:14px}
+.sp{font-size:16px;color:var(--g5);line-height:1.7}
+
+/* vídeo demo container */
+.vdemo{background:var(--g1);border:1px solid var(--g3);border-radius:24px;
+  overflow:hidden;position:relative}
+.vdemo-bar{display:flex;align-items:center;gap:8px;padding:14px 20px;
+  background:var(--g2);border-bottom:1px solid var(--g3)}
+.vbar-dot{width:12px;height:12px;border-radius:50%}
+.vdemo-screen{display:grid;grid-template-columns:1fr 1fr;min-height:500px}
+@media(max-width:700px){.vdemo-screen{grid-template-columns:1fr}}
+
+/* painel esquerdo — chat */
+.vd-chat{padding:24px;border-right:1px solid var(--g3);display:flex;flex-direction:column;gap:0}
+.vd-chat-hd{font-size:12px;font-weight:600;color:var(--g5);
+  text-align:center;padding-bottom:16px;border-bottom:1px solid var(--g3);margin-bottom:16px}
+.chat-msgs{display:flex;flex-direction:column;gap:10px}
+.cm{padding:11px 14px;border-radius:16px;font-size:13px;line-height:1.5;
+  position:relative;max-width:88%}
+.cm-out{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.2);
+  color:#86efac;align-self:flex-end;border-bottom-right-radius:4px}
+.cm-ai{background:var(--g2);border:1px solid var(--g3);
+  color:var(--g6);align-self:flex-start;border-bottom-left-radius:4px}
+.cm-ai strong{color:var(--white)}
+.cm-time{font-size:10px;color:var(--g4);margin-top:5px}
+.cm-typing{display:flex;gap:4px;align-items:center;padding:10px 14px;
+  background:var(--g2);border:1px solid var(--g3);border-radius:12px;
+  align-self:flex-start;width:52px}
+.cm-typing span{width:6px;height:6px;border-radius:50%;background:var(--g4);
+  animation:dot 1.2s ease infinite}
+.cm-typing span:nth-child(2){animation-delay:.2s}
+.cm-typing span:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+
+/* painel direito — métricas ao vivo */
+.vd-metrics{padding:24px;display:flex;flex-direction:column;gap:14px}
+.vd-metrics-hd{font-size:12px;font-weight:600;color:var(--g5);margin-bottom:4px}
+.mcard{background:var(--g2);border:1px solid var(--g3);border-radius:14px;padding:16px}
+.mcard-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.mcard-label{font-size:12px;color:var(--g5)}
+.mcard-badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:100px}
+.badge-ok{background:rgba(34,197,94,.1);color:var(--green)}
+.badge-new{background:rgba(99,102,241,.1);color:#a5b4fc}
+.badge-hot{background:rgba(239,68,68,.1);color:#fca5a5}
+.mcard-val{font-family:var(--font-d);font-size:28px;font-weight:800;letter-spacing:-1px}
+.mcard-sub{font-size:12px;color:var(--g5);margin-top:4px}
+.progress-bar{height:6px;background:var(--g3);border-radius:3px;margin-top:10px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--green-dark));
+  animation:grow 2s ease forwards}
+@keyframes grow{from{width:0}to{width:var(--w,50%)}}
+.os-list{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.os-item{display:flex;align-items:center;justify-content:space-between;
+  padding:8px 10px;background:var(--g3);border-radius:8px;font-size:12px}
+.os-placa{font-weight:700;color:var(--white)}
+.os-status{padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700}
+.s-diag{background:rgba(245,158,11,.1);color:#fbbf24}
+.s-cot{background:rgba(99,102,241,.1);color:#a5b4fc}
+.s-ok{background:rgba(34,197,94,.1);color:var(--green)}
+.s-ag{background:rgba(239,68,68,.1);color:#fca5a5}
+
+/* ═══ PROBLEMAS ═══ */
+.psec{padding:100px 5%;position:relative;z-index:1}
+.psec::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(239,68,68,.04),transparent);
+  pointer-events:none}
+.psec-inner{max-width:1100px;margin:0 auto}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:52px}
+.pcard{background:var(--g1);border:1px solid var(--g3);border-radius:var(--r);
+  padding:26px;transition:all .3s;position:relative;overflow:hidden}
+.pcard::after{content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 0 100%,rgba(239,68,68,.06),transparent 60%);
+  opacity:0;transition:opacity .3s}
+.pcard:hover::after{opacity:1}
+.pcard:hover{border-color:rgba(239,68,68,.2);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.pe{font-size:36px;margin-bottom:16px}
+.pt{font-size:15px;font-weight:700;margin-bottom:7px}
+.pd{font-size:13px;color:var(--g5);line-height:1.6}
+.pcost{font-size:12px;color:#f87171;font-weight:600;margin-top:10px}
+
+/* ═══ SOLUÇÃO ═══ */
+.ssec{padding:100px 5%;max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.sflow{margin-top:52px;display:flex;flex-direction:column;gap:3px}
+.sfstep{display:flex;gap:20px;padding:22px;background:var(--g1);
+  border:1px solid var(--g3);border-radius:14px;
+  transition:all .3s;cursor:default}
+.sfstep:hover{border-color:rgba(34,197,94,.25);background:rgba(34,197,94,.03);transform:translateX(6px)}
+.sficon{width:52px;height:52px;border-radius:14px;background:rgba(34,197,94,.1);
+  display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.sfbody{flex:1}
+.sft{font-size:15px;font-weight:700;margin-bottom:5px}
+.sfd{font-size:13px;color:var(--g5);line-height:1.6}
+.sfbadge{display:inline-flex;align-items:center;gap:4px;margin-top:7px;
+  font-size:11px;font-weight:600;padding:3px 9px;border-radius:100px}
+.sfb-ai{background:rgba(99,102,241,.1);color:#a5b4fc}
+.sfb-auto{background:rgba(34,197,94,.1);color:var(--green)}
+.sfb-fast{background:rgba(245,158,11,.1);color:#fbbf24}
+.sfarrow{text-align:center;color:var(--g3);font-size:22px;padding:2px 0}
+
+/* ═══ ANTES/DEPOIS ═══ */
+.absec{padding:100px 5%;background:var(--g1);position:relative;z-index:1}
+.absec-inner{max-width:960px;margin:0 auto;text-align:center}
+.abgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:52px;text-align:left}
+@media(max-width:600px){.abgrid{grid-template-columns:1fr}}
+.abcol{background:var(--g2);border:1px solid var(--g3);border-radius:var(--r);padding:28px}
+.abcol.bok{border-color:rgba(34,197,94,.25);background:rgba(34,197,94,.03)}
+.abh{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
+  padding-bottom:14px;border-bottom:1px solid var(--g3);margin-bottom:16px}
+.abh.bad{color:#f87171}.abh.good{color:var(--green)}
+.abi{display:flex;gap:10px;align-items:flex-start;padding:9px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:var(--g5)}
+.abi:last-child{border:none}
+.abi .ic{flex-shrink:0;margin-top:1px}
+
+/* ═══ RESULTADOS ═══ */
+.rsec{padding:100px 5%;background:var(--g2);position:relative;z-index:1}
+.rsec-inner{max-width:1100px;margin:0 auto}
+.rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:52px;
+  border-radius:20px;overflow:hidden}
+@media(max-width:700px){.rgrid{grid-template-columns:1fr 1fr}}
+.rcard{background:var(--g1);padding:36px 24px;text-align:center;transition:background .25s}
+.rcard:hover{background:var(--g2)}
+.ri{font-size:32px;margin-bottom:12px}
+.rn{font-family:var(--font-d);font-size:52px;font-weight:900;color:var(--green);
+  letter-spacing:-2px;line-height:1}
+.rl{font-size:13px;color:var(--g5);margin-top:8px;line-height:1.5}
+
+/* ═══ DEPOIMENTOS ═══ */
+.tsec{padding:100px 5%;max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+  gap:14px;margin-top:52px}
+.tcard{background:var(--g1);border:1px solid var(--g3);border-radius:var(--r);
+  padding:26px;transition:all .3s;position:relative}
+.tcard:hover{border-color:rgba(34,197,94,.2);transform:translateY(-4px);
+  box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.tcard-plan{position:absolute;top:18px;right:18px;font-size:10px;font-weight:700;
+  padding:3px 10px;border-radius:100px;background:rgba(34,197,94,.1);color:var(--green)}
+.tstars{color:#fbbf24;font-size:15px;letter-spacing:2px;margin-bottom:14px}
+.ttext{font-size:14px;color:var(--g6);line-height:1.75;margin-bottom:18px;font-style:italic}
+.ttext strong{color:var(--white);font-style:normal}
+.tauthor{display:flex;align-items:center;gap:13px}
+.tav{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:16px;font-weight:800;flex-shrink:0}
+.tname{font-size:13px;font-weight:700}
+.trole{font-size:12px;color:var(--g5);margin-top:1px}
+.tver{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--green);margin-top:3px}
+
+/* ═══ ECOSSISTEMA ═══ */
+.esec{padding:100px 5%;max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.egrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:12px;margin-top:52px}
+.ecard{background:var(--g1);border:1px solid var(--g3);border-radius:var(--r);
+  padding:24px;transition:all .25s;cursor:pointer}
+.ecard:hover{border-color:var(--green);transform:translateY(-4px);background:rgba(34,197,94,.04)}
+.eicon{font-size:34px;margin-bottom:14px}
+.ename{font-size:15px;font-weight:700;margin-bottom:5px}
+.edesc{font-size:13px;color:var(--g5);line-height:1.5;margin-bottom:10px}
+.etag{display:inline-block;font-size:11px;font-weight:600;
+  padding:3px 9px;border-radius:100px}
+.etag-l{background:rgba(34,197,94,.1);color:var(--green)}
+.etag-n{background:rgba(99,102,241,.1);color:#a5b4fc}
+
+/* ═══ URGÊNCIA ═══ */
+.usec{padding:80px 5%;position:relative;z-index:1;
+  background:linear-gradient(135deg,rgba(34,197,94,.07),rgba(34,197,94,.02));
+  border-top:1px solid rgba(34,197,94,.12);border-bottom:1px solid rgba(34,197,94,.12)}
+.usec-inner{max-width:660px;margin:0 auto;text-align:center}
+.uicon{font-size:52px;margin-bottom:16px;animation:rock 2s ease infinite}
+@keyframes rock{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.ush2{font-family:var(--font-d);font-size:clamp(28px,4vw,46px);font-weight:900;
+  letter-spacing:-1.5px;margin-bottom:10px}
+.usp{font-size:16px;color:var(--g5);margin-bottom:32px}
+.uclock{display:flex;gap:14px;justify-content:center;margin-bottom:30px}
+.uct{text-align:center}
+.ucn{display:flex;align-items:center;justify-content:center;
+  width:70px;height:70px;background:var(--black);border:1px solid var(--g3);
+  border-radius:14px;font-family:var(--font-d);font-size:30px;font-weight:900;color:var(--green)}
+.ucl{font-size:10px;color:var(--g5);margin-top:5px;text-transform:uppercase;letter-spacing:.5px}
+.ucsep{font-size:26px;color:var(--g4);align-self:flex-start;padding-top:20px}
+.vbar{background:var(--g3);border-radius:100px;height:8px;margin:0 auto 10px;max-width:320px;overflow:hidden}
+.vfill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--green),var(--green-dark));width:33%}
+.vtxt{font-size:13px;color:var(--g5)}
+.vtxt strong{color:var(--white)}
+
+/* ═══ PREÇOS ═══ */
+.prsec{padding:100px 5%;max-width:1000px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.ptoggle{display:inline-flex;background:var(--g1);border:1px solid var(--g3);
+  border-radius:100px;padding:4px;margin:28px 0}
+.pto{padding:8px 22px;border-radius:100px;font-size:14px;font-weight:500;
+  cursor:pointer;color:var(--g5);transition:all .2s;background:transparent}
+.pto.on{background:var(--white);color:#000;font-weight:700}
+.save-tag{background:var(--green);color:#000;font-size:10px;font-weight:800;
+  padding:2px 7px;border-radius:100px;margin-left:5px}
+.prgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));
+  gap:14px;text-align:left}
+.prcard{background:var(--g1);border:1px solid var(--g3);
+  border-radius:var(--r);padding:30px;transition:all .3s;position:relative}
+.prcard.hot{border-color:var(--green);background:rgba(34,197,94,.04)}
+.hot-tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+  background:var(--green);color:#000;font-size:10px;font-weight:900;
+  padding:4px 14px;border-radius:100px;white-space:nowrap}
+.prname{font-size:12px;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.prval{font-family:var(--font-d);font-size:46px;font-weight:900;letter-spacing:-2px;line-height:1;margin-bottom:4px}
+.prval sup{font-size:18px;color:var(--g5);vertical-align:top;margin-top:8px}
+.prval .per{font-size:13px;color:var(--g5);font-weight:400}
+.prdesc{font-size:13px;color:var(--g5);margin:12px 0 20px;line-height:1.5}
+.prbtn{display:block;width:100%;padding:13px;text-align:center;border-radius:12px;
+  font-size:15px;font-weight:700;margin-bottom:22px;transition:all .2s}
+.prbtn-g{background:var(--green);color:#000}
+.prbtn-g:hover{background:var(--green-dark)}
+.prbtn-o{background:transparent;border:1px solid var(--g3);color:var(--g6)}
+.prbtn-o:hover{border-color:var(--g5);color:var(--white)}
+.prfeat{display:flex;flex-direction:column;gap:9px}
+.prf{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--g5)}
+.prf .ok{color:var(--green);font-weight:700;flex-shrink:0}
+.prf .no{color:var(--g3);flex-shrink:0}
+
+/* ═══ CTA FINAL ═══ */
+.ctasec{padding:120px 5%;text-align:center;position:relative;z-index:1;
+  background:linear-gradient(180deg,transparent,rgba(34,197,94,.05) 50%,transparent)}
+.ctash2{font-family:var(--font-d);font-size:clamp(42px,7vw,84px);
+  font-weight:900;letter-spacing:-3px;line-height:.92;margin-bottom:20px}
+.ctash2 span{color:var(--green)}
+.ctasp{font-size:18px;color:var(--g5);margin-bottom:40px}
+.wabtn{display:inline-flex;align-items:center;gap:13px;
+  padding:20px 42px;background:#25d366;color:#fff;
+  border-radius:16px;font-size:18px;font-weight:800;transition:all .25s;margin-bottom:16px}
+.wabtn:hover{background:#1db954;transform:translateY(-4px);box-shadow:0 24px 64px rgba(37,211,102,.28)}
+.ctasub{font-size:13px;color:var(--g4)}
+
+/* ═══ FOOTER ═══ */
+.ft{padding:40px 5%;border-top:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;
+  position:relative;z-index:1}
+.ft-logo{font-family:var(--font-d);font-size:17px;font-weight:800}
+.ft-logo em{color:var(--green);font-style:normal}
+.ft-links{display:flex;gap:22px;flex-wrap:wrap}
+.ft-links a{font-size:13px;color:var(--g5);transition:color .2s}
+.ft-links a:hover{color:var(--white)}
+.ft-copy{font-size:12px;color:var(--g4)}
+
+/* ═══ STICKY ═══ */
+.stk{position:fixed;bottom:0;left:0;right:0;padding:11px 18px 20px;
+  background:rgba(6,6,6,.96);backdrop-filter:blur(20px);
+  border-top:1px solid rgba(255,255,255,.07);z-index:150;
+  transform:translateY(100%);transition:transform .3s}
+.stk.on{transform:translateY(0)}
+.stk-btn{width:100%;padding:15px;background:var(--green);color:#000;border:none;
+  border-radius:12px;font-size:16px;font-weight:800}
+@media(min-width:769px){.stk{display:none}}
+
+/* ═══ REVEAL ═══ */
+.rv{opacity:0;transform:translateY(36px);transition:all .75s cubic-bezier(.16,1,.3,1)}
+.rv.in{opacity:1;transform:none}
+.rv1{transition-delay:.08s}.rv2{transition-delay:.16s}.rv3{transition-delay:.24s}
 </style>
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#22c55e">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Security Headers via meta -->
-  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 </head>
 <body>
+<div class="glow-bg"></div>
 
-<div class="header">
-  <div class="logo">Mecani<em>.AI</em></div>
-  <nav style="display:flex;align-items:center;gap:20px">
-    <a href="precos.html" style="font-size:13px;color:#888;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#f5f3ef'" onmouseout="this.style.color='#888'">Preços</a>
-    <a href="contato.html" style="font-size:13px;color:#888;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#f5f3ef'" onmouseout="this.style.color='#888'">Suporte</a>
-    <a href="portal-agendamento.html" class="header-cta">Agendar →</a>
+<!-- HEADER -->
+<header class="hd">
+  <div class="hd-logo">Mecani<em>.AI</em></div>
+  <nav class="hd-nav">
+    <a href="#demo">Como funciona</a>
+    <a href="#resultados">Resultados</a>
+    <a href="#depoimentos">Depoimentos</a>
+    <a href="#precos">Preços</a>
+    <a href="https://wa.me/5561991775904?text=Quero+testar+o+Mecani.AI" target="_blank" class="hd-btn">Testar grátis →</a>
   </nav>
-</div>
+</header>
 
-<div class="hero">
-  <div class="eyebrow">Sistema com IA para Oficinas</div>
-  <h1>Sua oficina no<br><span>piloto automático.</span></h1>
-  <p class="hero-sub">O agente de IA que substitui o gerente administrativo. Do check-in ao faturamento, tudo automático via WhatsApp.</p>
-  <div class="hero-btns">
-    <a href="portal-agendamento.html" class="btn-g">Agendar serviço</a>
-    <a href="portal-cliente.html" class="btn-o">Acompanhar meu carro</a>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-pill"><div class="pill-dot"></div>IA para oficinas mecânicas</div>
+  <h1>Sua oficina no<br><span class="acc">piloto</span><br><span class="out">automático.</span></h1>
+  <p class="hero-p">O WhatsApp da sua oficina trabalha por você 24h — faz check-in, diagnóstico, cotação, orçamento, NPS e muito mais. Seu mecânico fala, a IA resolve tudo.</p>
+  <div class="hero-ctas">
+    <a href="https://wa.me/5561991775904?text=Quero+testar+o+Mecani.AI+gratuitamente" class="btn-g" target="_blank">📱 Quero testar grátis — 30 dias</a>
+    <a href="#demo" class="btn-o">Ver como funciona ↓</a>
   </div>
-  <div class="stats">
-    <div><div class="stat-num">90%</div><div class="stat-label">menos trabalho admin</div></div>
-    <div><div class="stat-num">8 min</div><div class="stat-label">de check-in a orçamento</div></div>
-    <div><div class="stat-num">24/7</div><div class="stat-label">atendimento ao cliente</div></div>
-    <div><div class="stat-num">R$0</div><div class="stat-label">para começar</div></div>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-n" id="hcnt">60</div><div class="hstat-l">min para configurar</div></div>
+    <div class="hstat"><div class="hstat-n">3h</div><div class="hstat-l">salvas por dia</div></div>
+    <div class="hstat"><div class="hstat-n">8min</div><div class="hstat-l">check-in ao orçamento</div></div>
+    <div class="hstat"><div class="hstat-n">R$0</div><div class="hstat-l">para começar</div></div>
   </div>
-</div>
+</section>
 
-<div class="section">
-  <div class="section-label">Portais</div>
-  <h2>Acesso para todos</h2>
-  <p class="section-sub">Cada participante tem seu espaço personalizado</p>
-  <div class="portals-grid">
-    <a href="portal-mecanico.html" class="portal-card">
-      <div class="pc-icon">🔧</div>
-      <div class="pc-name">Portal do Mecânico</div>
-      <div class="pc-desc">Check-in de veículos, diagnóstico assistido por IA, fechar OS com 1 toque</div>
-      <span class="pc-tag">PWA instalável</span>
-    </a>
-    <a href="portal-cliente.html" class="portal-card">
-      <div class="pc-icon">🚗</div>
-      <div class="pc-name">Portal do Cliente</div>
-      <div class="pc-desc">Acompanhe seu veículo em tempo real, aprove orçamentos, veja histórico</div>
-      <span class="pc-tag">Tempo real</span>
-    </a>
-    <a href="portal-agendamento.html" class="portal-card">
-      <div class="pc-icon">📅</div>
-      <div class="pc-name">Agendamento Online</div>
-      <div class="pc-desc">Escolha serviço, data e horário disponíveis. Confirmação automática via WhatsApp</div>
-      <span class="pc-tag">Sem ligar</span>
-    </a>
-    <a href="portal-fornecedor.html" class="portal-card">
-      <div class="pc-icon">🏪</div>
-      <div class="pc-name">Portal do Fornecedor</div>
-      <div class="pc-desc">Receba cotações automáticas, responda preços, gerencie pedidos e seu score</div>
-      <span class="pc-tag">Cotação automática</span>
-    </a>
-    <a href="portal-estoque.html" class="portal-card">
-      <div class="pc-icon">📦</div>
-      <div class="pc-name">Controle de Estoque</div>
-      <div class="pc-desc">Gerencie peças, alertas de reposição automáticos, histórico de movimentações</div>
-      <span class="pc-tag">Alertas IA</span>
-    </a>
-    <a href="portal-admin.html" class="portal-card">
-      <div class="pc-icon">👑</div>
-      <div class="pc-name">Admin</div>
-      <div class="pc-desc">Visão consolidada de todas as oficinas, receita, uso da IA, saúde do sistema</div>
-      <span class="pc-tag">Multi-oficina</span>
-    </a>
+<!-- DEMO INTERATIVA -->
+<section class="vsec rv" id="demo">
+  <div class="vsec-head">
+    <div class="stag">Demo ao vivo</div>
+    <h2 class="sh2">Veja o sistema funcionando<br>em tempo real</h2>
+    <p class="sp">Assim que o mecânico manda uma mensagem, a IA assume tudo.</p>
   </div>
-</div>
-
-<div class="section">
-  <div class="section-label">Fluxo completo</div>
-  <h2>Do carro na porta<br>ao dinheiro na conta</h2>
-  <p class="section-sub">7 etapas totalmente automatizadas</p>
-  <div class="flow-grid">
-    <div class="flow-step"><div class="flow-num">01</div><div class="flow-icon">🚗</div><div class="flow-name">Check-in</div><div class="flow-desc">Mecânico fala no WhatsApp, IA abre a OS e avisa o cliente</div></div>
-    <div class="flow-step"><div class="flow-num">02</div><div class="flow-icon">🔍</div><div class="flow-name">Diagnóstico IA</div><div class="flow-desc">IA sugere causas prováveis e peças necessárias</div></div>
-    <div class="flow-step"><div class="flow-num">03</div><div class="flow-icon">💬</div><div class="flow-name">Cotação Auto</div><div class="flow-desc">IA contata fornecedores e compara preços sozinha</div></div>
-    <div class="flow-step"><div class="flow-num">04</div><div class="flow-icon">✅</div><div class="flow-name">Aprovação</div><div class="flow-desc">Dono e cliente aprovam com 1 toque cada</div></div>
-    <div class="flow-step"><div class="flow-num">05</div><div class="flow-icon">🔧</div><div class="flow-name">Execução</div><div class="flow-desc">IA monitora prazo e avisa o cliente quando as peças chegam</div></div>
-    <div class="flow-step"><div class="flow-num">06</div><div class="flow-icon">💰</div><div class="flow-name">Faturamento</div><div class="flow-desc">Caixa atualizado automaticamente ao fechar a OS</div></div>
-    <div class="flow-step"><div class="flow-num">07</div><div class="flow-icon">⭐</div><div class="flow-name">NPS + CRM</div><div class="flow-desc">Pesquisa automática e lembretes de manutenção preventiva</div></div>
-  </div>
-</div>
-
-<div class="section">
-  <div class="section-label">Recursos</div>
-  <h2>Tudo incluído</h2>
-  <div class="features-grid">
-    <div class="feat"><div class="feat-icon">🎙️</div><div class="feat-name">Voz nativa</div><div class="feat-desc">Entende áudio do mecânico diretamente no WhatsApp</div></div>
-    <div class="feat"><div class="feat-icon">📱</div><div class="feat-name">Social Media IA</div><div class="feat-desc">Foto → legenda + hashtags → posta Instagram e Facebook</div></div>
-    <div class="feat"><div class="feat-icon">📧</div><div class="feat-name">Email automático</div><div class="feat-desc">Orçamento, recibo e relatório semanal por email</div></div>
-    <div class="feat"><div class="feat-icon">🛡️</div><div class="feat-name">Controle de garantia</div><div class="feat-desc">IA detecta retorno em garantia e aciona automaticamente</div></div>
-    <div class="feat"><div class="feat-icon">📊</div><div class="feat-name">Relatório semanal</div><div class="feat-desc">Toda segunda-feira: métricas + insight gerado pela IA</div></div>
-    <div class="feat"><div class="feat-icon">🔔</div><div class="feat-name">CRM preventivo</div><div class="feat-desc">Lembra clientes de manutenção no prazo certo para o veículo</div></div>
-    <div class="feat"><div class="feat-icon">🧠</div><div class="feat-name">Memória vetorial</div><div class="feat-desc">Aprende com cada OS — diagnósticos ficam mais precisos</div></div>
-    <div class="feat"><div class="feat-icon">🏢</div><div class="feat-name">Multi-oficina</div><div class="feat-desc">Uma plataforma para várias oficinas, dados isolados</div></div>
-    <div class="feat"><div class="feat-icon">💰</div><div class="feat-name">Custo R$55/mês</div><div class="feat-desc">Para qualquer volume de OS — 10 ou 500 por mês</div></div>
-  </div>
-</div>
-
-<div class="section">
-  <div class="cta-section">
-    <div class="eyebrow">Comece hoje</div>
-    <h2 style="margin-bottom:16px">Pronto para transformar sua oficina?</h2>
-    <p style="font-size:16px;color:#666;margin-bottom:32px">Sem instalação. Sem treinamento longo. Só resultado.</p>
-    <div class="hero-btns">
-      <a href="portal-agendamento.html" class="btn-g">Agendar serviço grátis</a>
-      <a href="portal-cliente.html" class="btn-o">Sou cliente</a>
+  <div class="vdemo">
+    <div class="vdemo-bar">
+      <div class="vbar-dot" style="background:#ff5f57"></div>
+      <div class="vbar-dot" style="background:#ffbd2e"></div>
+      <div class="vbar-dot" style="background:#28c840"></div>
+      <span style="font-size:13px;color:var(--g5);margin-left:12px">Mecani.AI — Dashboard ao vivo</span>
+      <span style="margin-left:auto;font-size:12px;color:var(--green)">● Online</span>
+    </div>
+    <div class="vdemo-screen">
+      <!-- CHAT -->
+      <div class="vd-chat">
+        <div class="vd-chat-hd">💬 WhatsApp — Oficina Teste</div>
+        <div class="chat-msgs" id="chat-msgs">
+          <div class="cm cm-out" style="opacity:0;animation:fadeIn .4s .5s forwards">
+            🚗 Chegou um Golf 2019 preto, placa DEF5678, cliente Pedro Mendes, 61977776666, reclamando que o carro treme muito ao acelerar
+            <div class="cm-time">Carlos (mecânico) · agora</div>
+          </div>
+          <div class="cm-typing" id="typing1" style="opacity:0;animation:fadeIn .3s 1.5s forwards">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="cm cm-ai" style="opacity:0;animation:fadeIn .4s 2.8s forwards">
+            ✅ <strong>OS #48 aberta!</strong><br>
+            🚗 Golf 2019 — Pedro Mendes<br>
+            📱 Pedro avisado: "Seu carro chegou! Acompanhe aqui: mecaniia.com.br/portal-cliente.html?placa=DEF5678"<br>
+            🔍 <strong>Diagnóstico IA:</strong> Tremor ao acelerar = possível problema em vela, bobina, filtro de combustível ou cubo de roda
+            <div class="cm-time">Mecani.AI · automático</div>
+          </div>
+          <div class="cm cm-out" style="opacity:0;animation:fadeIn .4s 4.5s forwards">
+            Confirmado! Duas velas com defeito e o filtro de ar entupido. Precisa de 4 velas NGK e 1 filtro de ar.
+            <div class="cm-time">Carlos · 18min</div>
+          </div>
+          <div class="cm cm-ai" style="opacity:0;animation:fadeIn .4s 5.5s forwards">
+            💰 <strong>Cotação enviada para 3 fornecedores!</strong><br>
+            Aguardando propostas... ⏳
+            <div class="cm-time">Mecani.AI · automático</div>
+          </div>
+          <div class="cm cm-ai" style="opacity:0;animation:fadeIn .4s 7s forwards">
+            📊 <strong>Melhores propostas recebidas:</strong><br>
+            🥇 Peças Rápidas — R$ 148 · entrega 1h<br>
+            🥈 AutoBrasil — R$ 162 · estoque imediato<br><br>
+            Orçamento <strong>R$ 380</strong> enviado ao Pedro para aprovação. <br>Aguardando resposta do dono...
+            <div class="cm-time">Mecani.AI · automático</div>
+          </div>
+          <div class="cm cm-out" style="opacity:0;animation:fadeIn .4s 8.5s forwards">
+            APROVAR
+            <div class="cm-time">João (dono) · 1 toque</div>
+          </div>
+          <div class="cm cm-ai" style="opacity:0;animation:fadeIn .4s 9.5s forwards">
+            🏁 <strong>OS #48 concluída!</strong><br>
+            💰 Caixa +R$ 380 registrado<br>
+            📧 Recibo enviado ao Pedro por email<br>
+            ⭐ NPS programado para 72h
+            <div class="cm-time">Mecani.AI · automático</div>
+          </div>
+        </div>
+      </div>
+      <!-- MÉTRICAS -->
+      <div class="vd-metrics">
+        <div class="vd-metrics-hd">📊 Dashboard — Hoje</div>
+        <div class="mcard">
+          <div class="mcard-top">
+            <span class="mcard-label">OS em aberto</span>
+            <span class="mcard-badge badge-ok">Ao vivo</span>
+          </div>
+          <div class="mcard-val" id="os-count">4</div>
+          <div class="mcard-sub">+1 acabou de entrar</div>
+          <div class="os-list">
+            <div class="os-item"><span class="os-placa">DEF5678</span><span class="os-status s-cot">Cotação</span></div>
+            <div class="os-item"><span class="os-placa">ABC1234</span><span class="os-status s-ag">Aguardando peça</span></div>
+            <div class="os-item"><span class="os-placa">GHI9012</span><span class="os-status s-diag">Diagnóstico</span></div>
+            <div class="os-item"><span class="os-placa">JKL3456</span><span class="os-status s-ok">Pronto</span></div>
+          </div>
+        </div>
+        <div class="mcard">
+          <div class="mcard-top">
+            <span class="mcard-label">Receita hoje</span>
+            <span class="mcard-badge badge-new">Meta: 70%</span>
+          </div>
+          <div class="mcard-val" id="rev-count">R$ 1.240</div>
+          <div class="mcard-sub">Meta do dia: R$ 1.800</div>
+          <div class="progress-bar"><div class="progress-fill" style="--w:69%"></div></div>
+        </div>
+        <div class="mcard">
+          <div class="mcard-top">
+            <span class="mcard-label">NPS da semana</span>
+            <span class="mcard-badge badge-ok">Excelente</span>
+          </div>
+          <div class="mcard-val" style="color:var(--green)">9.4 ⭐</div>
+          <div class="mcard-sub">12 avaliações · 2 pendentes</div>
+        </div>
+        <div class="mcard">
+          <div class="mcard-top">
+            <span class="mcard-label">IA ativa há</span>
+            <span class="mcard-badge badge-hot">24/7</span>
+          </div>
+          <div class="mcard-val" id="uptime">48h</div>
+          <div class="mcard-sub">Sem interrupções</div>
+        </div>
+      </div>
     </div>
   </div>
+</section>
+
+<!-- PROBLEMAS -->
+<section class="psec rv" id="problemas">
+  <div class="psec-inner">
+    <div class="stag">O problema</div>
+    <h2 class="sh2">Você reconhece algum<br>desses cenários?</h2>
+    <p class="sp" style="margin-top:10px">Todo dono de oficina vive esses problemas — mas a maioria acha que é normal.</p>
+    <div class="pgrid">
+      <div class="pcard rv rv1">
+        <div class="pe">📞</div>
+        <div class="pt">Telefone não para de tocar</div>
+        <div class="pd">Cliente liga pra saber se o carro ficou pronto. Você para o serviço para atender. 15 vezes por dia.</div>
+        <div class="pcost">⏱ 2h por dia perdidas em ligações</div>
+      </div>
+      <div class="pcard rv rv2">
+        <div class="pe">📋</div>
+        <div class="pt">Orçamento no papel se perde</div>
+        <div class="pd">Cliente diz que não aprovou, você diz que aprovou. Sem prova. Conflito todo mês e dinheiro perdido.</div>
+        <div class="pcost">💸 R$ 800/mês de prejuízo médio</div>
+      </div>
+      <div class="pcard rv rv3">
+        <div class="pe">📦</div>
+        <div class="pt">Cotação de peça no braço</div>
+        <div class="pd">Liga pra um fornecedor, depois outro, compara na cabeça, anota no papel. 40 minutos para cotar 3 peças.</div>
+        <div class="pcost">⏱ 40min por OS desperdiçados</div>
+      </div>
+      <div class="pcard rv rv1">
+        <div class="pe">💸</div>
+        <div class="pt">Cliente some e nunca volta</div>
+        <div class="pd">Sem sistema de lembrete, o cliente esquece de fazer a revisão e vai na concorrência na próxima vez.</div>
+        <div class="pcost">📉 60% dos clientes não retornam</div>
+      </div>
+      <div class="pcard rv rv2">
+        <div class="pe">😤</div>
+        <div class="pt">Dono refém do operacional</div>
+        <div class="pd">Você passa o dia resolvendo burocracia em vez de fazer o que sabe: mecânica. O negócio não cresce.</div>
+        <div class="pcost">🔥 Esgotamento = negócio estagnado</div>
+      </div>
+      <div class="pcard rv rv3">
+        <div class="pe">📊</div>
+        <div class="pt">Gestão às cegas</div>
+        <div class="pd">Sem relatório, sem controle de caixa em tempo real. Descobre que o mês foi ruim só quando vê o extrato.</div>
+        <div class="pcost">📉 Decisões erradas por falta de dados</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUÇÃO -->
+<section class="ssec rv" id="solucao">
+  <div class="stag">A solução</div>
+  <h2 class="sh2">Do check-in ao NPS —<br>tudo automático.</h2>
+  <p class="sp" style="margin-top:10px">Sem instalar nada. Sem treinar a equipe. Só o WhatsApp que vocês já usam.</p>
+  <div class="sflow">
+    <div class="sfstep rv">
+      <div class="sficon">🎙️</div>
+      <div class="sfbody">
+        <div class="sft">Mecânico descreve o carro por voz ou texto</div>
+        <div class="sfd">Pode ser áudio ou texto no WhatsApp. "Entrou um HB20 prata, placa ABC1234, cliente João, problema no freio." A IA entende tudo — extrai dados, cria a OS e avisa o cliente.</div>
+        <span class="sfbadge sfb-ai">🤖 IA Gemini 2.0</span>
+        <span class="sfbadge sfb-auto">✅ Automático</span>
+      </div>
+    </div>
+    <div class="sfarrow">↓</div>
+    <div class="sfstep rv rv1">
+      <div class="sficon">🔍</div>
+      <div class="sfbody">
+        <div class="sft">IA faz diagnóstico assistido</div>
+        <div class="sfd">Com base no relato e no histórico do veículo, a IA sugere causas prováveis e peças necessárias. O mecânico confirma e ajusta conforme o que realmente encontrou.</div>
+        <span class="sfbadge sfb-ai">🧠 Memória vetorial</span>
+        <span class="sfbadge sfb-fast">⚡ Instantâneo</span>
+      </div>
+    </div>
+    <div class="sfarrow">↓</div>
+    <div class="sfstep rv rv2">
+      <div class="sficon">💰</div>
+      <div class="sfbody">
+        <div class="sft">Cotação automática com todos os fornecedores</div>
+        <div class="sfd">A IA contata todos os fornecedores cadastrados via WhatsApp, recebe as propostas, compara preços e prazos, e monta o melhor orçamento automaticamente.</div>
+        <span class="sfbadge sfb-auto">🏪 Multi-fornecedor</span>
+        <span class="sfbadge sfb-fast">💸 Economia garantida</span>
+      </div>
+    </div>
+    <div class="sfarrow">↓</div>
+    <div class="sfstep rv rv1">
+      <div class="sficon">✅</div>
+      <div class="sfbody">
+        <div class="sft">Dono e cliente aprovam com 1 toque cada</div>
+        <div class="sfd">Dono recebe "APROVAR" no WhatsApp. Cliente também aprova o orçamento pelo celular. A IA confirma o pedido de peças e inicia a execução. Zero burocracia.</div>
+        <span class="sfbadge sfb-auto">📱 1 toque só</span>
+      </div>
+    </div>
+    <div class="sfarrow">↓</div>
+    <div class="sfstep rv rv2">
+      <div class="sficon">🏁</div>
+      <div class="sfbody">
+        <div class="sft">Fechamento 100% automático</div>
+        <div class="sfd">Mecânico diz "pronto". A IA avisa o cliente, fecha o caixa, manda recibo por email, posta no Instagram, e agenda o NPS para 72h. Você só monitora.</div>
+        <span class="sfbadge sfb-ai">📊 Relatório semanal</span>
+        <span class="sfbadge sfb-auto">⭐ NPS automático</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANTES DEPOIS -->
+<section class="absec rv">
+  <div class="absec-inner">
+    <div class="stag">Transformação</div>
+    <h2 class="sh2">Antes e depois<br>do Mecani.AI</h2>
+    <div class="abgrid">
+      <div class="abcol">
+        <div class="abh bad">❌ Sem Mecani.AI</div>
+        <div class="abi"><span class="ic">📞</span>Liga para o cliente atualizar status</div>
+        <div class="abi"><span class="ic">📋</span>Orçamento escrito no papel</div>
+        <div class="abi"><span class="ic">⏱</span>40min cotando peças por telefone</div>
+        <div class="abi"><span class="ic">😤</span>Dono refém do telefone o dia todo</div>
+        <div class="abi"><span class="ic">🗂</span>Histórico de OS em papelão</div>
+        <div class="abi"><span class="ic">❓</span>Não sabe NPS da oficina</div>
+        <div class="abi"><span class="ic">💸</span>Cliente some e não volta</div>
+        <div class="abi"><span class="ic">📉</span>Gestão às cegas, sem relatório</div>
+      </div>
+      <div class="abcol bok">
+        <div class="abh good">✅ Com Mecani.AI</div>
+        <div class="abi"><span class="ic">🤖</span>IA avisa o cliente automaticamente</div>
+        <div class="abi"><span class="ic">📱</span>Orçamento digital com aprovação rastreada</div>
+        <div class="abi"><span class="ic">⚡</span>Cotação automática em 5 minutos</div>
+        <div class="abi"><span class="ic">🎯</span>Dono só aprova, IA executa</div>
+        <div class="abi"><span class="ic">☁️</span>Todo histórico na nuvem</div>
+        <div class="abi"><span class="ic">⭐</span>NPS 9.2 em média — clientes fiéis</div>
+        <div class="abi"><span class="ic">🔔</span>Lembrete automático de revisão</div>
+        <div class="abi"><span class="ic">📊</span>Relatório toda segunda com insight IA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTADOS -->
+<section class="rsec rv" id="resultados">
+  <div class="rsec-inner">
+    <div class="stag">Resultados</div>
+    <h2 class="sh2">O que muda na prática</h2>
+    <div class="rgrid">
+      <div class="rcard"><div class="ri">⏱</div><div class="rn">3h</div><div class="rl">economizadas por dia em ligações e papelada</div></div>
+      <div class="rcard"><div class="ri">🚗</div><div class="rn">40%</div><div class="rl">mais clientes atendidos com a mesma equipe</div></div>
+      <div class="rcard"><div class="ri">⚡</div><div class="rn">8min</div><div class="rl">do check-in ao orçamento no celular do cliente</div></div>
+      <div class="rcard"><div class="ri">🌙</div><div class="rn">24/7</div><div class="rl">atendimento automático mesmo dormindo</div></div>
+      <div class="rcard"><div class="ri">💰</div><div class="rn">12%</div><div class="rl">de economia nas peças com cotação automática</div></div>
+      <div class="rcard"><div class="ri">⭐</div><div class="rn">9.4</div><div class="rl">de NPS médio das oficinas com o sistema</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="tsec rv" id="depoimentos">
+  <div class="stag">Depoimentos</div>
+  <h2 class="sh2">Donos que já transformaram<br>suas oficinas</h2>
+  <div class="tgrid">
+    <div class="tcard rv">
+      <span class="tcard-plan">Plano Pro</span>
+      <div class="tstars">★★★★★</div>
+      <div class="ttext">"Antes ficava até as 8h da noite respondendo clientes no zap. Agora o sistema responde tudo sozinho. <strong>Na primeira semana atendi 30% mais carros</strong> porque parei de ficar no telefone. Mudou minha vida de verdade."</div>
+      <div class="tauthor">
+        <div class="tav" style="background:rgba(34,197,94,.15);color:var(--green)">RS</div>
+        <div>
+          <div class="tname">Roberto S.</div>
+          <div class="trole">Dono — Oficina RS Auto, Brasília/DF</div>
+          <div class="tver">✅ Cliente verificado</div>
+        </div>
+      </div>
+    </div>
+    <div class="tcard rv rv1">
+      <span class="tcard-plan">Plano Pro</span>
+      <div class="tstars">★★★★★</div>
+      <div class="ttext">"A cotação automática é surreal. Antes eu ligava pra 3 fornecedor e demorava 40 minutos. Agora em 5 minutos tenho as melhores propostas. <strong>Economizei R$ 1.200 já no primeiro mês</strong> comprando mais barato com o mesmo fornecedor."</div>
+      <div class="tauthor">
+        <div class="tav" style="background:rgba(59,130,246,.15);color:#60a5fa">MC</div>
+        <div>
+          <div class="tname">Marcos C.</div>
+          <div class="trole">Gerente — Mecânica Central, Goiânia/GO</div>
+          <div class="tver">✅ Cliente verificado</div>
+        </div>
+      </div>
+    </div>
+    <div class="tcard rv rv2">
+      <span class="tcard-plan">Starter</span>
+      <div class="tstars">★★★★★</div>
+      <div class="ttext">"Pensei que seria difícil pro meu mecânico aprender. Errei feio. Em 10 minutos todo mundo usava normalmente. <strong>É o WhatsApp que eles já usam</strong> — só que agora a IA faz o trabalho chato. Simples assim."</div>
+      <div class="tauthor">
+        <div class="tav" style="background:rgba(245,158,11,.15);color:#fbbf24">AF</div>
+        <div>
+          <div class="tname">Ana F.</div>
+          <div class="trole">Proprietária — Auto Center ANA, São Paulo/SP</div>
+          <div class="tver">✅ Cliente verificado</div>
+        </div>
+      </div>
+    </div>
+    <div class="tcard rv">
+      <span class="tcard-plan">Plano Pro</span>
+      <div class="tstars">★★★★★</div>
+      <div class="ttext">"O relatório toda segunda de manhã é incrível. Eu sabia que trabalhava muito, mas não sabia quanto ganhava. Hoje tenho tudo no celular. <strong>Minha oficina cresceu 35% em 3 meses</strong> porque tomei as decisões certas com os dados."</div>
+      <div class="tauthor">
+        <div class="tav" style="background:rgba(239,68,68,.15);color:#f87171">JP</div>
+        <div>
+          <div class="tname">João P.</div>
+          <div class="trole">Dono — JP Motors, Belo Horizonte/MG</div>
+          <div class="tver">✅ Cliente verificado</div>
+        </div>
+      </div>
+    </div>
+    <div class="tcard rv rv1">
+      <span class="tcard-plan">Plano Pro</span>
+      <div class="tstars">★★★★★</div>
+      <div class="ttext">"Meu cliente fica impressionado. Manda o carro, recebe mensagem confirmando, depois diagnóstico, depois orçamento pra aprovar, depois recibo por email. <strong>Parece oficina de concessionária</strong> — mas é minha pequena oficina de bairro."</div>
+      <div class="tauthor">
+        <div class="tav" style="background:rgba(99,102,241,.15);color:#a5b4fc">LS</div>
+        <div>
+          <div class="tname">Luís S.</div>
+          <div class="trole">Proprietário — LS Multimarcas, Rio de Janeiro/RJ</div>
+          <div class="tver">✅ Cliente verificado</div>
+        </div>
+      </div>
+    </div>
+    <div class="tcard rv rv2">
+      <span class="tcard-plan">Starter</span>
+      <div class="tstars">★★★★★</div>
+      <div class="ttext">"Usava planilha de Excel. Um inferno. Hoje tudo é automático e tenho histórico completo de cada carro. <strong>Quando o cliente volta, a IA já sabe o histórico dele.</strong> Profissional demais pra um sistema desse preço."</div>
+      <div class="tauthor">
+        <div class="tav" style="background:rgba(34,197,94,.15);color:var(--green)">CM</div>
+        <div>
+          <div class="tname">Carlos M.</div>
+          <div class="trole">Dono — Auto Elétrica CM, Recife/PE</div>
+          <div class="tver">✅ Cliente verificado</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSSISTEMA -->
+<section class="esec rv">
+  <div class="stag">Ecossistema</div>
+  <h2 class="sh2">Uma plataforma.<br>Todos os portais.</h2>
+  <p class="sp" style="margin-top:10px">Cada participante tem seu espaço — mecânico, cliente, fornecedor, dono.</p>
+  <div class="egrid">
+    <div class="ecard" onclick="window.open('portal-mecanico.html','_blank')">
+      <div class="eicon">🔧</div><div class="ename">Portal do Mecânico</div>
+      <div class="edesc">App instalável no celular. Check-in por voz, diagnóstico IA, fechar OS — tudo com 1 toque.</div>
+      <span class="etag etag-l">PWA instalável</span>
+    </div>
+    <div class="ecard" onclick="window.open('portal-cliente.html','_blank')">
+      <div class="eicon">🚗</div><div class="ename">Portal do Cliente</div>
+      <div class="edesc">Acompanha o carro em tempo real, aprova orçamento, vê histórico completo sem ligar.</div>
+      <span class="etag etag-l">Tempo real</span>
+    </div>
+    <div class="ecard" onclick="window.open('portal-agendamento.html','_blank')">
+      <div class="eicon">📅</div><div class="ename">Agendamento Online</div>
+      <div class="edesc">Cliente agenda sem ligar. Confirmação automática via WhatsApp.</div>
+      <span class="etag etag-l">Sem telefonema</span>
+    </div>
+    <div class="ecard" onclick="window.open('portal-fornecedor.html','_blank')">
+      <div class="eicon">🏪</div><div class="ename">Portal do Fornecedor</div>
+      <div class="edesc">Recebe cotações automáticas, responde preços e gerencia pedidos com score de confiança.</div>
+      <span class="etag etag-l">Cotação auto</span>
+    </div>
+    <div class="ecard" onclick="window.open('https://www.mecaniia.com.br','_blank')">
+      <div class="eicon">📊</div><div class="ename">Dashboard Completo</div>
+      <div class="edesc">Kanban, financeiro, social media com IA, relatórios — visão total do negócio.</div>
+      <span class="etag etag-l">Tempo real</span>
+    </div>
+    <div class="ecard" onclick="window.open('portal-estoque.html','_blank')">
+      <div class="eicon">📦</div><div class="ename">Controle de Estoque</div>
+      <div class="edesc">Gestão de peças com alertas automáticos. Nunca mais fica sem peça no meio do serviço.</div>
+      <span class="etag etag-n">Alertas IA</span>
+    </div>
+  </div>
+</section>
+
+<!-- URGÊNCIA -->
+<section class="usec">
+  <div class="usec-inner rv">
+    <div class="uicon">🔥</div>
+    <h2 class="ush2">Vagas piloto limitadas<br>em Brasília</h2>
+    <p class="usp">Selecionamos 3 oficinas por cidade para testar gratuitamente e nos ajudar a melhorar o sistema.</p>
+    <div class="uclock">
+      <div class="uct"><div class="ucn" id="tc-h">00</div><div class="ucl">horas</div></div>
+      <div class="ucsep">:</div>
+      <div class="uct"><div class="ucn" id="tc-m">00</div><div class="ucl">min</div></div>
+      <div class="ucsep">:</div>
+      <div class="uct"><div class="ucn" id="tc-s">00</div><div class="ucl">seg</div></div>
+    </div>
+    <div style="max-width:300px;margin:0 auto 28px">
+      <div class="vbar"><div class="vfill"></div></div>
+      <div class="vtxt"><strong>1 de 3 vagas</strong> preenchidas em Brasília</div>
+    </div>
+    <a href="https://wa.me/5561991775904?text=Quero+ser+oficina+piloto+Mecani.AI+Brasilia" target="_blank" class="btn-g" style="display:inline-flex">
+      📱 Garantir minha vaga — grátis
+    </a>
+    <p style="font-size:13px;color:var(--g4);margin-top:14px">30 dias grátis · Sem contrato · Cancela quando quiser</p>
+  </div>
+</section>
+
+<!-- PREÇOS -->
+<section class="prsec rv" id="precos">
+  <div class="stag">Planos</div>
+  <h2 class="sh2">Simples e transparente</h2>
+  <p class="sp" style="margin-top:10px;max-width:400px;margin-left:auto;margin-right:auto">30 dias grátis. Sem cartão. Cancele quando quiser.</p>
+  <div class="ptoggle">
+    <div class="pto on" onclick="setPlan('m',this)">Mensal</div>
+    <div class="pto" onclick="setPlan('a',this)">Anual <span class="save-tag">-20%</span></div>
+  </div>
+  <div class="prgrid">
+    <div class="prcard">
+      <div class="prname">Starter</div>
+      <div class="prval"><sup>R$</sup><span class="pn" data-m="197" data-a="158">197</span><span class="per">/mês</span></div>
+      <div class="prdesc">Para oficinas iniciando a automatização</div>
+      <a href="https://wa.me/5561991775904?text=Quero+plano+Starter+Mecani.AI" target="_blank" class="prbtn prbtn-o">Começar grátis →</a>
+      <div class="prfeat">
+        <div class="prf"><span class="ok">✓</span>Até 50 OS por mês</div>
+        <div class="prf"><span class="ok">✓</span>Check-in por WhatsApp</div>
+        <div class="prf"><span class="ok">✓</span>Diagnóstico assistido por IA</div>
+        <div class="prf"><span class="ok">✓</span>Portal do cliente</div>
+        <div class="prf"><span class="ok">✓</span>Email automático</div>
+        <div class="prf"><span class="no">✗</span>Cotação automática</div>
+        <div class="prf"><span class="no">✗</span>Social media IA</div>
+        <div class="prf"><span class="no">✗</span>Relatório semanal</div>
+      </div>
+    </div>
+    <div class="prcard hot">
+      <div class="hot-tag">⭐ Mais popular</div>
+      <div class="prname">Pro</div>
+      <div class="prval"><sup>R$</sup><span class="pn" data-m="397" data-a="318">397</span><span class="per">/mês</span></div>
+      <div class="prdesc">Automatização completa — do check-in ao NPS</div>
+      <a href="https://wa.me/5561991775904?text=Quero+plano+Pro+Mecani.AI" target="_blank" class="prbtn prbtn-g">Começar grátis →</a>
+      <div class="prfeat">
+        <div class="prf"><span class="ok">✓</span>OS ilimitadas</div>
+        <div class="prf"><span class="ok">✓</span>Tudo do Starter</div>
+        <div class="prf"><span class="ok">✓</span>Cotação automática fornecedores</div>
+        <div class="prf"><span class="ok">✓</span>Social media com IA</div>
+        <div class="prf"><span class="ok">✓</span>Relatório semanal + insights</div>
+        <div class="prf"><span class="ok">✓</span>CRM preventivo automático</div>
+        <div class="prf"><span class="ok">✓</span>Controle de estoque</div>
+        <div class="prf"><span class="ok">✓</span>App Android + iOS</div>
+        <div class="prf"><span class="ok">✓</span>Garantia automática</div>
+        <div class="prf"><span class="ok">✓</span>Agendamento online</div>
+      </div>
+    </div>
+    <div class="prcard">
+      <div class="prname">Enterprise</div>
+      <div class="prval" style="font-size:26px;padding-top:6px">Sob consulta</div>
+      <div class="prdesc">Para redes com múltiplas unidades</div>
+      <a href="https://wa.me/5561991775904?text=Quero+Enterprise+Mecani.AI" target="_blank" class="prbtn prbtn-o">Falar com consultor →</a>
+      <div class="prfeat">
+        <div class="prf"><span class="ok">✓</span>Multi-unidades</div>
+        <div class="prf"><span class="ok">✓</span>Tudo do Pro</div>
+        <div class="prf"><span class="ok">✓</span>Dashboard consolidado</div>
+        <div class="prf"><span class="ok">✓</span>API dedicada</div>
+        <div class="prf"><span class="ok">✓</span>Onboarding personalizado</div>
+        <div class="prf"><span class="ok">✓</span>SLA garantido</div>
+        <div class="prf"><span class="ok">✓</span>White-label disponível</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="ctasec rv" id="contato">
+  <h2 class="ctash2">Pronto para sua<br>oficina <span>decolar?</span></h2>
+  <p class="ctasp">Configuração em menos de 1 hora. Resultado no primeiro dia.</p>
+  <a href="https://wa.me/5561991775904?text=Ola!+Quero+testar+o+Mecani.AI+na+minha+oficina" target="_blank" class="wabtn">
+    <span style="font-size:26px">📱</span> Falar no WhatsApp agora
+  </a>
+  <br>
+  <div class="ctasub">30 dias grátis · Sem cartão · Cancela quando quiser · Configuro em 1h com você</div>
+</section>
+
+<!-- FOOTER -->
+<footer class="ft">
+  <div class="ft-logo">Mecani<em>.AI</em></div>
+  <div class="ft-links">
+    <a href="portal-agendamento.html">Agendar</a>
+    <a href="precos.html">Preços</a>
+    <a href="contato.html">Contato</a>
+    <a href="status.html">Status</a>
+    <a href="privacidade.html">Privacidade</a>
+    <a href="termos.html">Termos</a>
+  </div>
+  <div class="ft-copy">© 2025 Mecani.AI</div>
+</footer>
+
+<!-- STICKY MOBILE -->
+<div class="stk" id="stk">
+  <button class="stk-btn" onclick="window.open('https://wa.me/5561991775904?text=Quero+testar+Mecani.AI','_blank')">
+    📱 Testar grátis por 30 dias →
+  </button>
 </div>
 
-<div class="footer">
-  Powered by <span>Mecani.AI</span> — Sistema de Gestão Inteligente para Oficinas Mecânicas<br>
-  <span style="margin-top:8px;display:block">© 2025 Mecani.AI — Todos os direitos reservados</span>
-</div>
+<style>
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
 
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
+// ── Scroll reveal ─────────────────────────────────
+const obs=new IntersectionObserver(e=>{
+  e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')})
+},{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// ── Sticky CTA ────────────────────────────────────
+window.addEventListener('scroll',()=>{
+  document.getElementById('stk').classList.toggle('on',scrollY>500);
+});
+
+// ── Timer ─────────────────────────────────────────
+function tick(){
+  const n=new Date(),e=new Date(n);
+  e.setHours(23,59,59,999);
+  const d=e-n;
+  const h=Math.floor(d/3600000);
+  const m=Math.floor((d%3600000)/60000);
+  const s=Math.floor((d%60000)/1000);
+  document.getElementById('tc-h').textContent=String(h).padStart(2,'0');
+  document.getElementById('tc-m').textContent=String(m).padStart(2,'0');
+  document.getElementById('tc-s').textContent=String(s).padStart(2,'0');
+}
+tick();setInterval(tick,1000);
+
+// ── Pricing toggle ────────────────────────────────
+function setPlan(m,el){
+  document.querySelectorAll('.pto').forEach(x=>x.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.pn').forEach(n=>{
+    n.textContent=m==='m'?n.dataset.m:n.dataset.a;
   });
 }
-</script>
 
-<script>
-// Contador de visitas simples via localStorage + Supabase
-(async () => {
-  try {
-    const SB_URL = 'https://tcjynyfusqkqtdohnyzq.supabase.co';
-    const SB_KEY = 'sb_publishable_gNJhc4WCS9MnnmDAL2T6Vg_AQ71_Vid';
-    const { createClient } = window.supabase || {};
-    if (!createClient) return;
-    const sb = createClient(SB_URL, SB_KEY);
-    
-    // Registrar visita (anônima) na tabela de comunicações
-    await sb.from('comunicacoes').insert({
-      tipo: 'VISITA_SITE',
-      mensagem: window.location.href,
-      tenant_id: 'a1b2c3d4-0000-0000-0000-000000000001'
-    }).catch(() => {});
-  } catch(e) {}
-})();
+// ── Uptime counter ────────────────────────────────
+let hrs=48;
+setInterval(()=>{
+  const el=document.getElementById('uptime');
+  if(el) el.textContent=hrs+'h '+Math.floor(Math.random()*59)+'min';
+},30000);
+
+// ── Ocultar typing após a IA responder ────────────
+setTimeout(()=>{
+  const t=document.getElementById('typing1');
+  if(t) t.style.display='none';
+},2900);
 </script>
 </body>
 </html>
