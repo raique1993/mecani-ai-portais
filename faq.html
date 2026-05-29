@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#060606;color:#f8f6f1;font-family:'DM Sans',sans-serif;min-height:100vh}
+body{background:#060606;color:#f8f6f1;font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
 .hd{padding:20px 5%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1a1a}
 .logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800}.logo em{color:#22c55e;font-style:normal}
 .hero{padding:60px 5% 40px;text-align:center;max-width:700px;margin:0 auto}
@@ -36,6 +36,32 @@ h1{font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;
 .btn-g{display:inline-block;padding:14px 28px;background:#22c55e;color:#000;
   border-radius:100px;font-size:15px;font-weight:800;text-decoration:none;transition:all .2s}
 .btn-g:hover{background:#16a34a}
+
+/* ─── Fixes responsivos universais ─── */
+*{box-sizing:border-box}
+img,video,iframe{max-width:100%}
+table{max-width:100%;overflow-x:auto;display:block}
+pre,code{overflow-x:auto;max-width:100%}
+
+/* Container padrão */
+.wrap,.container,.content{max-width:1100px;margin:0 auto;padding:0 16px;width:100%}
+
+/* Mobile: ajustes gerais */
+@media(max-width:768px){
+  h1{font-size:clamp(24px,6vw,36px)!important;letter-spacing:-1px!important}
+  h2{font-size:clamp(20px,5vw,28px)!important;letter-spacing:-.5px!important}
+  .section,.sec{padding:48px 16px!important}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr!important}
+  .btn-group{flex-direction:column}
+  .card,.item{padding:16px!important}
+  .hide-mobile{display:none!important}
+}
+
+/* Desktop: não deixar conteúdo esticar demais */
+@media(min-width:1400px){
+  body{font-size:17px}
+  .wrap,.container,.content{max-width:1200px}
+}
 </style>
 </head>
 <body>
