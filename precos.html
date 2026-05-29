@@ -8,7 +8,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text y='.9em' font-size='80' x='10'>🔧</text></svg>">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0a;color:#f5f3ef;font-family:-apple-system,'Segoe UI',sans-serif;min-height:100vh}
+body{background:#0a0a0a;color:#f5f3ef;font-family:-apple-system,'Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden}
 .header{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1a1a}
 .logo{font-size:18px;font-weight:800}.logo em{color:#22c55e;font-style:normal}
 .hero{text-align:center;padding:60px 24px 48px;max-width:600px;margin:0 auto}
@@ -51,6 +51,32 @@ h1{font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-1.5px;margin-b
 .faq-q::after{content:'↓';transition:transform .2s}
 .footer{text-align:center;padding:32px;border-top:1px solid #1a1a1a;font-size:13px;color:#333}
 .footer a{color:#22c55e;text-decoration:none}
+
+/* ─── Fixes responsivos universais ─── */
+*{box-sizing:border-box}
+img,video,iframe{max-width:100%}
+table{max-width:100%;overflow-x:auto;display:block}
+pre,code{overflow-x:auto;max-width:100%}
+
+/* Container padrão */
+.wrap,.container,.content{max-width:1100px;margin:0 auto;padding:0 16px;width:100%}
+
+/* Mobile: ajustes gerais */
+@media(max-width:768px){
+  h1{font-size:clamp(24px,6vw,36px)!important;letter-spacing:-1px!important}
+  h2{font-size:clamp(20px,5vw,28px)!important;letter-spacing:-.5px!important}
+  .section,.sec{padding:48px 16px!important}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr!important}
+  .btn-group{flex-direction:column}
+  .card,.item{padding:16px!important}
+  .hide-mobile{display:none!important}
+}
+
+/* Desktop: não deixar conteúdo esticar demais */
+@media(min-width:1400px){
+  body{font-size:17px}
+  .wrap,.container,.content{max-width:1200px}
+}
 </style>
   <!-- Security Headers via meta -->
   <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
