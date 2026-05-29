@@ -39,7 +39,7 @@
 <style>
 :root{--bg:#050505;--bg1:#111;--bg2:#1a1a1a;--bg3:#252525;--t1:#f0ede8;--t2:#999;--t3:#555;--accent:#e8ff47;--blue:#60a5fa;--green:#4ade80;--red:#f87171;--amber:#fbbf24;--r:12px}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--t1);font-family:-apple-system,'SF Pro Display','Segoe UI',sans-serif;min-height:100vh}
+body{background:var(--bg);color:var(--t1);font-family:-apple-system,'SF Pro Display','Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden}
 .header{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;border-bottom:1px solid #1a1a1a}
 .logo{font-family:'SF Pro Display',sans-serif;font-size:18px;font-weight:800;letter-spacing:-0.5px}.logo em{color:var(--accent);font-style:normal}
 .admin-badge{background:rgba(232,255,71,.1);border:1px solid rgba(232,255,71,.3);color:var(--accent);font-size:11px;font-weight:700;padding:4px 12px;border-radius:100px;letter-spacing:1px;text-transform:uppercase}
@@ -88,6 +88,32 @@ body{background:var(--bg);color:var(--t1);font-family:-apple-system,'SF Pro Disp
 .bar{width:100%;background:rgba(232,255,71,.3);border-radius:4px 4px 0 0;min-height:4px;transition:height .5s}
 .bar.today{background:var(--accent)}
 .bar-label{font-size:10px;color:var(--t3)}
+
+/* ─── Fixes responsivos universais ─── */
+*{box-sizing:border-box}
+img,video,iframe{max-width:100%}
+table{max-width:100%;overflow-x:auto;display:block}
+pre,code{overflow-x:auto;max-width:100%}
+
+/* Container padrão */
+.wrap,.container,.content{max-width:1100px;margin:0 auto;padding:0 16px;width:100%}
+
+/* Mobile: ajustes gerais */
+@media(max-width:768px){
+  h1{font-size:clamp(24px,6vw,36px)!important;letter-spacing:-1px!important}
+  h2{font-size:clamp(20px,5vw,28px)!important;letter-spacing:-.5px!important}
+  .section,.sec{padding:48px 16px!important}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr!important}
+  .btn-group{flex-direction:column}
+  .card,.item{padding:16px!important}
+  .hide-mobile{display:none!important}
+}
+
+/* Desktop: não deixar conteúdo esticar demais */
+@media(min-width:1400px){
+  body{font-size:17px}
+  .wrap,.container,.content{max-width:1200px}
+}
 </style>
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#22c55e">
