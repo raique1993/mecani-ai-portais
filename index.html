@@ -2,611 +2,681 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>Mecani.AI — Sistema de Gestão para Oficinas com Inteligência Artificial</title>
-<meta name="description" content="A IA que trabalha pela sua oficina 24h. Mecânico descreve o problema no WhatsApp, a IA diagnostica, cota peças, avisa o cliente e fecha o caixa — tudo automático.">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0">
+<title>Mecani.AI — A IA que cuida da sua oficina enquanto você cuida dos carros</title>
+<meta name="description" content="Seu mecânico fala no WhatsApp, a IA abre OS, diagnostica, cota peças, avisa o cliente, fecha o caixa e ainda posta no Instagram. Tudo automático. Teste 7 dias grátis.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text y='.9em' font-size='80' x='10'>🔧</text></svg>">
 <style>
-/* ═══════════════════ RESET + BASE ═══════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; scroll-behavior: smooth; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #0a0a0a;
-  color: #f0ede8;
-  line-height: 1.6;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-a { text-decoration: none; color: inherit; }
-img { max-width: 100%; display: block; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#09090b;color:#fafaf9;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+:root{--g:#22c55e;--gd:#16a34a;--bg1:#09090b;--bg2:#111113;--bg3:#1c1c1f;--bg4:#27272a;--t1:#fafaf9;--t2:#a1a1aa;--t3:#52525b;--max:1120px;--r:14px}
+.c{max-width:var(--max);margin:0 auto;padding:0 20px;width:100%}
 
-/* ═══════════════════ TOKENS ═══════════════════ */
-:root {
-  --green: #22c55e;
-  --green-d: #16a34a;
-  --bg: #0a0a0a;
-  --bg2: #111111;
-  --bg3: #1a1a1a;
-  --bg4: #252525;
-  --t1: #f0ede8;
-  --t2: #a0a0a0;
-  --t3: #555555;
-  --radius: 14px;
-  --max: 1100px;
-}
+/* ══ HEADER ══ */
+.hd{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;background:rgba(9,9,11,.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center}
+.hd .c{display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:19px;font-weight:800;letter-spacing:-.5px}.logo b{color:var(--g)}
+.hdnav{display:flex;align-items:center;gap:24px}
+.hdnav a{font-size:13px;color:var(--t2);font-weight:500;transition:color .2s}.hdnav a:hover{color:var(--t1)}
+.hdbtn{padding:8px 18px;background:var(--g);color:#000;border:none;border-radius:100px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.hdbtn:hover{background:var(--gd);transform:scale(1.04)}
+@media(max-width:640px){.hdnav{display:none}}
 
-/* ═══════════════════ CONTAINER ═══════════════════ */
-.container {
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 0 24px;
-  width: 100%;
-}
+/* ══ HERO ══ */
+.hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(34,197,94,.1) 0%,transparent 65%);pointer-events:none}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(34,197,94,.3);background:rgba(34,197,94,.07);color:var(--g);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:28px}
+.dot{width:7px;height:7px;background:var(--g);border-radius:50%;animation:bl 2s infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.25}}
+.hero h1{font-size:clamp(38px,5.5vw,72px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:22px;max-width:760px}
+.hero h1 em{color:var(--g);font-style:normal}
+.hero-p{font-size:clamp(16px,1.8vw,20px);color:var(--t2);line-height:1.7;max-width:560px;margin:0 auto 36px}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:56px}
+.btn-g{display:inline-flex;align-items:center;gap:8px;padding:15px 28px;background:var(--g);color:#000;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-g:hover{background:var(--gd);transform:translateY(-2px);box-shadow:0 12px 40px rgba(34,197,94,.25)}
+.btn-o{display:inline-flex;align-items:center;gap:8px;padding:15px 28px;background:transparent;color:var(--t2);border:1px solid var(--bg4);border-radius:12px;font-size:16px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-o:hover{border-color:var(--t2);color:var(--t1)}
+.hero-trust{display:flex;gap:0;max-width:620px;margin:0 auto;border-top:1px solid rgba(255,255,255,.07)}
+.ht{flex:1;padding:20px 12px;text-align:center;border-right:1px solid rgba(255,255,255,.07)}
+.ht:last-child{border-right:none}
+.ht-n{font-size:26px;font-weight:800;color:var(--g);letter-spacing:-.5px;line-height:1}
+.ht-l{font-size:11px;color:var(--t3);margin-top:3px}
+@media(max-width:600px){.hero h1{font-size:34px;letter-spacing:-1px}.hero-p{font-size:15px}.hero-btns{flex-direction:column;align-items:center}.btn-g,.btn-o{width:100%;max-width:300px;justify-content:center}.ht-n{font-size:20px}}
 
-/* ═══════════════════ HEADER ═══════════════════ */
-.header {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  height: 64px;
-  background: rgba(10,10,10,0.9);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--bg3);
-  display: flex; align-items: center;
-}
-.header .container { display: flex; align-items: center; justify-content: space-between; height: 100%; }
-.logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
-.logo span { color: var(--green); }
-.nav { display: flex; align-items: center; gap: 28px; }
-.nav a { font-size: 14px; color: var(--t2); font-weight: 500; transition: color 0.2s; }
-.nav a:hover { color: var(--t1); }
-.nav-btn {
-  padding: 9px 20px;
-  background: var(--green);
-  color: #000;
-  border-radius: 100px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  border: none;
-  transition: background 0.2s, transform 0.15s;
-}
-.nav-btn:hover { background: var(--green-d); transform: scale(1.03); }
-@media (max-width: 640px) { .nav { display: none; } }
+/* ══ VÍDEO EXPLICATIVO ══ */
+.video-sec{padding:80px 0;background:var(--bg2)}
+.video-sec .c{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+@media(max-width:900px){.video-sec .c{grid-template-columns:1fr}}
+.vsec-txt{}
+.stag{font-size:11px;font-weight:700;color:var(--g);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.stit{font-size:clamp(26px,3vw,40px);font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:14px}
+.sdesc{font-size:15px;color:var(--t2);line-height:1.7;margin-bottom:24px}
+.check-list{display:flex;flex-direction:column;gap:10px}
+.cli{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--t2)}
+.cli .ck{color:var(--g);font-weight:700;flex-shrink:0;margin-top:1px}
+.cli strong{color:var(--t1)}
 
-/* ═══════════════════ HERO ═══════════════════ */
-.hero {
-  padding: 120px 0 80px;
-  text-align: center;
-}
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 7px 16px;
-  border: 1px solid rgba(34,197,94,0.3);
-  background: rgba(34,197,94,0.07);
-  border-radius: 100px;
-  color: var(--green);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 28px;
-}
-.badge-dot {
-  width: 7px; height: 7px;
-  background: var(--green);
-  border-radius: 50%;
-  animation: blink 2s infinite;
-}
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-.hero h1 {
-  font-size: 52px;
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -2px;
-  margin-bottom: 20px;
-  max-width: 680px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.hero h1 .green { color: var(--green); }
-.hero-sub {
-  font-size: 18px;
-  color: var(--t2);
-  line-height: 1.7;
-  max-width: 520px;
-  margin: 0 auto 36px;
-}
-.hero-btns {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 56px;
-}
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 15px 28px;
-  background: var(--green);
-  color: #000;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-}
-.btn-primary:hover { background: var(--green-d); transform: translateY(-2px); box-shadow: 0 12px 36px rgba(34,197,94,0.25); }
-.btn-outline {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 15px 28px;
-  background: transparent;
-  color: var(--t2);
-  border: 1px solid var(--bg4);
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: border-color 0.2s, color 0.2s;
-}
-.btn-outline:hover { border-color: var(--t2); color: var(--t1); }
-.hero-stats {
-  display: flex;
-  border-top: 1px solid var(--bg3);
-  max-width: 600px;
-  margin: 0 auto;
-}
-.hstat { flex: 1; padding: 24px 12px; text-align: center; border-right: 1px solid var(--bg3); }
-.hstat:last-child { border-right: none; }
-.hstat-n { font-size: 30px; font-weight: 800; color: var(--green); letter-spacing: -1px; line-height: 1; }
-.hstat-l { font-size: 12px; color: var(--t3); margin-top: 4px; }
+/* Vídeo animado */
+.video-player{background:var(--bg3);border:1px solid var(--bg4);border-radius:20px;overflow:hidden;position:relative}
+.vp-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:var(--bg4);border-bottom:1px solid rgba(255,255,255,.06)}
+.vp-dot{width:11px;height:11px;border-radius:50%}
+.vp-title{font-size:12px;color:var(--t2);margin-left:6px;flex:1}
+.vp-live{font-size:10px;font-weight:700;color:var(--g);display:flex;align-items:center;gap:4px}
+.vp-content{padding:20px;min-height:340px;display:flex;flex-direction:column;gap:0}
+.scene{display:none;flex-direction:column;gap:12px;animation:fadeIn .5s ease}
+.scene.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.scene-title{font-size:11px;font-weight:700;color:var(--g);letter-spacing:1px;text-transform:uppercase}
+.bubble{padding:11px 14px;border-radius:14px;font-size:13px;line-height:1.55;max-width:90%}
+.bm{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.18);color:#86efac;align-self:flex-end;border-bottom-right-radius:4px}
+.bai{background:var(--bg4);border:1px solid rgba(255,255,255,.08);color:var(--t2);align-self:flex-start;border-bottom-left-radius:4px}
+.bai strong{color:var(--t1)}
+.bsi{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);color:#c4b5fd;align-self:flex-start;border-bottom-left-radius:4px;font-size:12px}
+.btime{font-size:10px;opacity:.4;margin-top:3px}
+.scene-stat{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.ss-icon{font-size:22px;flex-shrink:0}
+.ss-text{font-size:13px;color:var(--t2)}.ss-text strong{color:var(--t1)}
+/* Barra de progresso */
+.vp-progress{height:3px;background:var(--bg4);position:relative;overflow:hidden}
+.vp-fill{height:100%;background:var(--g);width:0;transition:width 0.1s linear}
+/* Controles */
+.vp-controls{display:flex;align-items:center;gap:8px;padding:10px 16px;border-top:1px solid rgba(255,255,255,.06)}
+.vp-btn{background:none;border:none;color:var(--t2);cursor:pointer;font-size:14px;padding:4px 8px;border-radius:6px;transition:all .2s}
+.vp-btn:hover{color:var(--t1);background:var(--bg4)}
+.vp-scene-dots{display:flex;gap:6px;margin-left:auto}
+.vp-sdot{width:7px;height:7px;border-radius:50%;background:var(--bg4);cursor:pointer;transition:background .2s}
+.vp-sdot.on{background:var(--g)}
 
-/* Mobile hero */
-@media (max-width: 640px) {
-  .hero { padding: 100px 0 60px; }
-  .hero h1 { font-size: 34px; letter-spacing: -1px; }
-  .hero-sub { font-size: 15px; }
-  .hero-btns { flex-direction: column; align-items: center; }
-  .btn-primary, .btn-outline { width: 100%; max-width: 320px; justify-content: center; }
-  .hstat-n { font-size: 22px; }
-  .hstat-l { font-size: 11px; }
-}
+/* ══ FUNCIONALIDADES ══ */
+.features{padding:80px 0}
+.feat-intro{text-align:center;margin-bottom:56px}
+.feat-intro .sdesc{margin:12px auto 0;max-width:500px}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:900px){.feat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){.feat-grid{grid-template-columns:1fr}}
+.feat-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--r);padding:22px;transition:all .25s;position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 80%,rgba(34,197,94,.05),transparent 60%);opacity:0;transition:opacity .3s}
+.feat-card:hover::before{opacity:1}
+.feat-card:hover{border-color:rgba(34,197,94,.25);transform:translateY(-3px)}
+.fc-icon{font-size:28px;margin-bottom:14px}
+.fc-title{font-size:15px;font-weight:700;margin-bottom:6px}
+.fc-desc{font-size:13px;color:var(--t2);line-height:1.6}
+.fc-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(34,197,94,.1);color:var(--g);margin-top:10px}
+.fc-tag-purple{background:rgba(139,92,246,.1);color:#c4b5fd}
+.fc-tag-blue{background:rgba(59,130,246,.1);color:#93c5fd}
+.fc-tag-amber{background:rgba(245,158,11,.1);color:#fcd34d}
 
-/* ═══════════════════ SECTIONS ═══════════════════ */
-section { padding: 80px 0; }
-.section-tag { font-size: 11px; font-weight: 700; color: var(--green); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
-.section-title { font-size: 36px; font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin-bottom: 12px; }
-.section-sub { font-size: 16px; color: var(--t2); max-width: 480px; }
-@media (max-width: 640px) {
-  section { padding: 56px 0; }
-  .section-title { font-size: 26px; letter-spacing: -0.5px; }
-  .section-sub { font-size: 14px; }
-}
+/* ══ FLUXO COMPLETO ══ */
+.flow-sec{padding:80px 0;background:var(--bg2)}
+.flow-sec .c{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+@media(max-width:900px){.flow-sec .c{grid-template-columns:1fr}}
+.flow-steps{display:flex;flex-direction:column;gap:3px}
+.fl{display:flex;gap:16px;background:var(--bg3);border:1px solid var(--bg4);border-radius:12px;padding:18px;transition:all .25s;cursor:default}
+.fl:hover{border-color:rgba(34,197,94,.25);background:rgba(34,197,94,.03);transform:translateX(6px)}
+.fl-num{width:34px;height:34px;border-radius:10px;background:rgba(34,197,94,.1);color:var(--g);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fl-t{font-size:14px;font-weight:700;margin-bottom:4px}
+.fl-d{font-size:12px;color:var(--t2);line-height:1.5}
+.fl-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;margin-top:6px}
+.fb-g{background:rgba(34,197,94,.1);color:var(--g)}
+.fb-p{background:rgba(139,92,246,.1);color:#c4b5fd}
+.fb-b{background:rgba(59,130,246,.1);color:#93c5fd}
+.fl-arr{text-align:center;color:var(--bg4);font-size:18px;padding:2px 0}
 
-/* ═══════════════════ DEMO ═══════════════════ */
-.demo-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 48px; align-items: start; }
-@media (max-width: 768px) { .demo-wrap { grid-template-columns: 1fr; } }
+/* Lado direito — dashboard preview */
+.dash-preview{background:var(--bg3);border:1px solid var(--bg4);border-radius:16px;overflow:hidden}
+.dp-bar{background:var(--bg4);padding:12px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.06)}
+.dp-dot{width:10px;height:10px;border-radius:50%}
+.dp-title{font-size:12px;color:var(--t2);margin-left:4px}
+.dp-live{margin-left:auto;font-size:10px;color:var(--g);font-weight:700}
+.dp-body{padding:16px}
+.dp-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.dm{background:var(--bg4);border-radius:10px;padding:12px;text-align:center}
+.dm-n{font-size:22px;font-weight:800;color:var(--g);line-height:1;letter-spacing:-.5px}
+.dm-l{font-size:10px;color:var(--t3);margin-top:3px}
+.dp-os-title{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.os-list{display:flex;flex-direction:column;gap:5px}
+.os-item{display:flex;align-items:center;justify-content:space-between;background:var(--bg4);border-radius:8px;padding:9px 12px;font-size:12px}
+.os-placa{font-weight:700;color:var(--t1)}
+.os-st{padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700}
+.st-diag{background:rgba(245,158,11,.1);color:#fcd34d}
+.st-cot{background:rgba(99,102,241,.1);color:#c4b5fd}
+.st-ok{background:rgba(34,197,94,.1);color:var(--g)}
+.st-wait{background:rgba(239,68,68,.1);color:#fca5a5}
 
-/* Telefone */
-.phone {
-  background: var(--bg2);
-  border: 1px solid var(--bg3);
-  border-radius: 28px;
-  padding: 10px;
-  max-width: 320px;
-  margin: 0 auto;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
-}
-.phone-notch { width: 70px; height: 7px; background: var(--bg4); border-radius: 4px; margin: 0 auto 10px; }
-.phone-screen {
-  background: var(--bg3);
-  border-radius: 20px;
-  padding: 16px;
-  min-height: 440px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.chat-header { font-size: 11px; color: var(--t3); text-align: center; padding-bottom: 10px; border-bottom: 1px solid var(--bg4); }
-.msg { padding: 10px 13px; border-radius: 14px; font-size: 12.5px; line-height: 1.5; max-width: 87%; }
-.msg-time { font-size: 10px; opacity: 0.45; margin-top: 4px; }
-.msg-mec { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.18); color: #86efac; align-self: flex-end; border-bottom-right-radius: 4px; }
-.msg-ai { background: var(--bg4); border: 1px solid #2f2f2f; color: var(--t2); align-self: flex-start; border-bottom-left-radius: 4px; }
-.msg-ai strong { color: var(--t1); }
+/* ══ COMUNICAÇÃO COM CLIENTE ══ */
+.client-sec{padding:80px 0}
+.client-sec .c{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+@media(max-width:900px){.client-sec .c{grid-template-columns:1fr}}
+.client-journey{display:flex;flex-direction:column;gap:8px}
+.cj-step{display:flex;gap:14px;background:var(--bg2);border:1px solid var(--bg3);border-radius:12px;padding:16px;transition:all .25s}
+.cj-step:hover{border-color:rgba(34,197,94,.2)}
+.cj-icon{font-size:22px;flex-shrink:0;width:40px;height:40px;background:rgba(34,197,94,.08);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.cj-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.cj-desc{font-size:12px;color:var(--t2);line-height:1.5}
+.cj-when{font-size:10px;color:var(--g);font-weight:600;margin-top:4px}
 
-/* Steps */
-.steps { display: flex; flex-direction: column; gap: 4px; }
-.step-item {
-  display: flex; gap: 16px; align-items: flex-start;
-  padding: 18px;
-  background: var(--bg2);
-  border: 1px solid var(--bg3);
-  border-radius: var(--radius);
-  transition: border-color 0.2s, transform 0.2s;
-}
-.step-item:hover { border-color: rgba(34,197,94,0.3); transform: translateX(4px); }
-.step-n {
-  width: 34px; height: 34px; flex-shrink: 0;
-  background: rgba(34,197,94,0.1);
-  color: var(--green);
-  border-radius: 10px;
-  font-weight: 800;
-  font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
-}
-.step-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-.step-desc { font-size: 13px; color: var(--t2); line-height: 1.5; }
-.step-tag {
-  display: inline-block; margin-top: 7px;
-  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px;
-  background: rgba(34,197,94,0.1); color: var(--green);
-}
+/* ══ NPS / SOCIAL / RELATÓRIOS ══ */
+.extras-sec{padding:80px 0;background:var(--bg2)}
+.extras-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
+@media(max-width:900px){.extras-grid{grid-template-columns:1fr}}
+.ex-card{background:var(--bg3);border:1px solid var(--bg4);border-radius:16px;padding:26px;transition:all .25s}
+.ex-card:hover{border-color:rgba(34,197,94,.2);transform:translateY(-3px)}
+.ex-icon{font-size:36px;margin-bottom:16px}
+.ex-title{font-size:17px;font-weight:700;margin-bottom:8px}
+.ex-desc{font-size:14px;color:var(--t2);line-height:1.7;margin-bottom:14px}
+.ex-list{display:flex;flex-direction:column;gap:7px}
+.exl{font-size:13px;color:var(--t2);display:flex;gap:8px}
+.exl .ck{color:var(--g);flex-shrink:0}
 
-/* ═══════════════════ PROBLEMAS ═══════════════════ */
-.problems-bg { background: linear-gradient(180deg, transparent, rgba(239,68,68,0.03), transparent); }
-.probs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 48px; }
-@media (max-width: 900px) { .probs-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 540px) { .probs-grid { grid-template-columns: 1fr; } }
-.prob-card {
-  background: var(--bg2);
-  border: 1px solid var(--bg3);
-  border-radius: var(--radius);
-  padding: 22px;
-  transition: border-color 0.2s, transform 0.2s;
-}
-.prob-card:hover { border-color: rgba(239,68,68,0.2); transform: translateY(-3px); }
-.prob-icon { font-size: 28px; margin-bottom: 12px; }
-.prob-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-.prob-desc { font-size: 13px; color: var(--t2); line-height: 1.6; }
-.prob-cost { font-size: 12px; color: #f87171; font-weight: 600; margin-top: 8px; }
+/* ══ PROBLEMAS ══ */
+.prob-sec{padding:80px 0}
+.prob-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
+@media(max-width:900px){.prob-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){.prob-grid{grid-template-columns:1fr}}
+.prob{background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--r);padding:22px;transition:all .25s}
+.prob:hover{border-color:rgba(239,68,68,.2);transform:translateY(-3px)}
+.prob-ic{font-size:28px;margin-bottom:12px}
+.prob-t{font-size:14px;font-weight:700;margin-bottom:6px}
+.prob-d{font-size:13px;color:var(--t2);line-height:1.6}
+.prob-c{font-size:11px;color:#f87171;font-weight:600;margin-top:8px}
 
-/* ═══════════════════ ANTES/DEPOIS ═══════════════════ */
-.comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 48px; }
-@media (max-width: 600px) { .comp-grid { grid-template-columns: 1fr; } }
-.comp-col { background: var(--bg2); border: 1px solid var(--bg3); border-radius: var(--radius); padding: 24px; }
-.comp-col.good { border-color: rgba(34,197,94,0.25); background: rgba(34,197,94,0.03); }
-.comp-head { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding-bottom: 12px; border-bottom: 1px solid var(--bg3); margin-bottom: 14px; }
-.comp-head.bad { color: #f87171; }
-.comp-head.ok { color: var(--green); }
-.comp-item { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; color: var(--t2); }
-.comp-item:last-child { border: none; }
+/* ══ DEPOIMENTOS ══ */
+.testi-sec{padding:80px 0;background:var(--bg2)}
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
+@media(max-width:900px){.tg{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.tg{grid-template-columns:1fr}}
+.tc{background:var(--bg3);border:1px solid var(--bg4);border-radius:var(--r);padding:22px;position:relative;transition:all .25s}
+.tc:hover{border-color:rgba(34,197,94,.2);transform:translateY(-3px)}
+.tc-plan{position:absolute;top:16px;right:16px;font-size:10px;font-weight:700;padding:2px 9px;border-radius:100px;background:rgba(34,197,94,.1);color:var(--g)}
+.tc-stars{color:#fbbf24;font-size:14px;letter-spacing:2px;margin-bottom:12px}
+.tc-text{font-size:13px;color:var(--t2);line-height:1.75;margin-bottom:16px;font-style:italic}
+.tc-text strong{color:var(--t1);font-style:normal}
+.tc-auth{display:flex;align-items:center;gap:11px}
+.tc-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
+.tc-name{font-size:13px;font-weight:700}
+.tc-role{font-size:11px;color:var(--t3)}
+.tc-ver{font-size:10px;color:var(--g);margin-top:2px}
 
-/* ═══════════════════ RESULTADOS ═══════════════════ */
-.results-bg { background: var(--bg2); }
-.results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 48px; border-radius: 16px; overflow: hidden; }
-@media (max-width: 640px) { .results-grid { grid-template-columns: repeat(2, 1fr); } }
-.result-card { background: var(--bg3); padding: 28px 20px; text-align: center; transition: background 0.2s; }
-.result-card:hover { background: var(--bg4); }
-.result-icon { font-size: 26px; margin-bottom: 10px; }
-.result-num { font-size: 40px; font-weight: 800; color: var(--green); letter-spacing: -1px; line-height: 1; }
-.result-label { font-size: 12px; color: var(--t2); margin-top: 6px; line-height: 1.4; }
-@media (max-width: 640px) { .result-num { font-size: 30px; } }
+/* ══ RESULTADOS ══ */
+.res-sec{padding:80px 0}
+.rg{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;border-radius:16px;overflow:hidden;margin-top:48px}
+@media(max-width:640px){.rg{grid-template-columns:repeat(2,1fr)}}
+.rc{background:var(--bg2);padding:28px 20px;text-align:center;transition:background .2s}
+.rc:hover{background:var(--bg3)}
+.rc-i{font-size:26px;margin-bottom:10px}
+.rc-n{font-size:38px;font-weight:800;color:var(--g);letter-spacing:-1px;line-height:1}
+.rc-l{font-size:12px;color:var(--t2);margin-top:6px;line-height:1.4}
+@media(max-width:640px){.rc-n{font-size:28px}}
 
-/* ═══════════════════ DEPOIMENTOS ═══════════════════ */
-.testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 48px; }
-@media (max-width: 900px) { .testi-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .testi-grid { grid-template-columns: 1fr; } }
-.testi-card {
-  background: var(--bg2); border: 1px solid var(--bg3);
-  border-radius: var(--radius); padding: 22px; position: relative;
-  transition: border-color 0.2s, transform 0.2s;
-}
-.testi-card:hover { border-color: rgba(34,197,94,0.2); transform: translateY(-3px); }
-.tplan { position: absolute; top: 16px; right: 16px; font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 100px; background: rgba(34,197,94,0.1); color: var(--green); }
-.tstars { color: #fbbf24; font-size: 14px; letter-spacing: 2px; margin-bottom: 12px; }
-.ttext { font-size: 13px; color: var(--t2); line-height: 1.75; margin-bottom: 16px; font-style: italic; }
-.ttext strong { color: var(--t1); font-style: normal; }
-.tauthor { display: flex; align-items: center; gap: 11px; }
-.tav { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; }
-.tname { font-size: 13px; font-weight: 700; }
-.trole { font-size: 11px; color: var(--t3); }
-.tver { font-size: 10px; color: var(--green); margin-top: 2px; }
+/* ══ PORTAIS ══ */
+.portais-sec{padding:80px 0;background:var(--bg2)}
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:48px}
+@media(max-width:900px){.pg{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){.pg{grid-template-columns:1fr}}
+.pc{background:var(--bg3);border:1px solid var(--bg4);border-radius:var(--r);padding:20px;cursor:pointer;transition:all .22s}
+.pc:hover{border-color:var(--g);transform:translateY(-3px);background:rgba(34,197,94,.03)}
+.pc-ic{font-size:30px;margin-bottom:12px}
+.pc-t{font-size:14px;font-weight:700;margin-bottom:5px}
+.pc-d{font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:9px}
+.pc-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(34,197,94,.1);color:var(--g)}
 
-/* ═══════════════════ PORTAIS ═══════════════════ */
-.portais-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 48px; }
-@media (max-width: 900px) { .portais-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 540px) { .portais-grid { grid-template-columns: 1fr; } }
-.portal-card {
-  background: var(--bg2); border: 1px solid var(--bg3);
-  border-radius: var(--radius); padding: 20px; cursor: pointer;
-  transition: border-color 0.2s, transform 0.2s, background 0.2s;
-}
-.portal-card:hover { border-color: var(--green); transform: translateY(-3px); background: rgba(34,197,94,0.03); }
-.portal-icon { font-size: 30px; margin-bottom: 12px; }
-.portal-name { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
-.portal-desc { font-size: 12px; color: var(--t2); line-height: 1.5; margin-bottom: 10px; }
-.portal-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; background: rgba(34,197,94,0.1); color: var(--green); }
+/* ══ URGÊNCIA ══ */
+.urg-sec{padding:72px 0;background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(34,197,94,.02));border-top:1px solid rgba(34,197,94,.12);border-bottom:1px solid rgba(34,197,94,.12)}
+.urg-inner{max-width:640px;margin:0 auto;text-align:center}
+.urg-ic{font-size:44px;margin-bottom:14px}
+.urg-t{font-size:clamp(24px,3.5vw,38px);font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:10px}
+.urg-p{font-size:16px;color:var(--t2);margin-bottom:28px}
+.clock{display:flex;gap:12px;justify-content:center;margin-bottom:28px}
+.clk{text-align:center}
+.clk-n{width:60px;height:60px;background:var(--bg1);border:1px solid var(--bg3);border-radius:12px;font-size:26px;font-weight:800;color:var(--g);display:flex;align-items:center;justify-content:center}
+.clk-l{font-size:10px;color:var(--t3);margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+.clk-sep{font-size:22px;color:var(--t3);align-self:flex-start;padding-top:17px}
+.vbar{background:var(--bg3);border-radius:100px;height:7px;max-width:280px;margin:0 auto 8px;overflow:hidden}
+.vfill{height:100%;background:linear-gradient(90deg,var(--g),var(--gd));width:33%}
+.vtxt{font-size:13px;color:var(--t2)}
+@media(max-width:480px){.clk-n{width:52px;height:52px;font-size:22px}.urg-t{font-size:24px}}
 
-/* ═══════════════════ URGÊNCIA ═══════════════════ */
-.urgency-bg {
-  background: linear-gradient(135deg, rgba(34,197,94,0.07), rgba(34,197,94,0.02));
-  border-top: 1px solid rgba(34,197,94,0.12);
-  border-bottom: 1px solid rgba(34,197,94,0.12);
-}
-.urgency-inner { max-width: 620px; margin: 0 auto; text-align: center; }
-.urg-icon { font-size: 48px; margin-bottom: 14px; }
-.urg-title { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; }
-.urg-sub { font-size: 16px; color: var(--t2); margin-bottom: 28px; }
-.clock { display: flex; gap: 12px; justify-content: center; margin-bottom: 28px; }
-.clock-item { text-align: center; }
-.clock-n {
-  width: 64px; height: 64px;
-  background: var(--bg);
-  border: 1px solid var(--bg3);
-  border-radius: 12px;
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--green);
-  display: flex; align-items: center; justify-content: center;
-}
-.clock-l { font-size: 10px; color: var(--t3); margin-top: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
-.clock-sep { font-size: 24px; color: var(--t3); align-self: flex-start; padding-top: 18px; }
-.vagas-bar { background: var(--bg3); border-radius: 100px; height: 7px; max-width: 280px; margin: 0 auto 8px; overflow: hidden; }
-.vagas-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--green), var(--green-d)); width: 33%; }
-.vagas-txt { font-size: 13px; color: var(--t2); }
-@media (max-width: 480px) {
-  .urg-title { font-size: 24px; }
-  .clock-n { width: 52px; height: 52px; font-size: 22px; }
-}
+/* ══ PREÇOS ══ */
+.price-sec{padding:80px 0}
+.pt-wrap{display:flex;justify-content:center;margin:24px 0}
+.ptoggle{display:flex;background:var(--bg2);border:1px solid var(--bg3);border-radius:100px;padding:4px}
+.pto{padding:8px 20px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;color:var(--t2);background:transparent;border:none;transition:all .2s}
+.pto.on{background:var(--t1);color:#000;font-weight:700}
+.save-b{background:var(--g);color:#000;font-size:10px;font-weight:800;padding:1px 7px;border-radius:100px;margin-left:4px}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:900px){.pgrid{grid-template-columns:1fr;max-width:400px;margin:0 auto}}
+.prcard{background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--r);padding:28px;position:relative}
+.prcard.hot{border-color:var(--g);background:rgba(34,197,94,.03)}
+.hot-b{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--g);color:#000;font-size:10px;font-weight:800;padding:3px 14px;border-radius:100px;white-space:nowrap}
+.pr-name{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.pr-val{font-size:42px;font-weight:800;letter-spacing:-1.5px;line-height:1;margin-bottom:4px}
+.pr-val sup{font-size:17px;color:var(--t2);vertical-align:top;margin-top:7px}
+.pr-val .per{font-size:13px;color:var(--t2);font-weight:400}
+.pr-desc{font-size:13px;color:var(--t2);margin:12px 0 18px;line-height:1.5}
+.pr-btn{display:block;width:100%;padding:12px;text-align:center;border-radius:10px;font-size:14px;font-weight:700;margin-bottom:20px;cursor:pointer;border:none;transition:all .2s}
+.pr-g{background:var(--g);color:#000}.pr-g:hover{background:var(--gd)}
+.pr-o{background:transparent;border:1px solid var(--bg4);color:var(--t2)}.pr-o:hover{border-color:var(--t2);color:var(--t1)}
+.pr-feats{display:flex;flex-direction:column;gap:9px}
+.prf{display:flex;gap:9px;font-size:13px;color:var(--t2);align-items:flex-start}
+.prf .ok{color:var(--g);font-weight:700;flex-shrink:0}
+.prf .no{color:var(--bg4);flex-shrink:0}
 
-/* ═══════════════════ PREÇOS ═══════════════════ */
-.price-toggle { display: inline-flex; background: var(--bg2); border: 1px solid var(--bg3); border-radius: 100px; padding: 4px; margin: 24px 0; }
-.pto { padding: 8px 20px; border-radius: 100px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--t2); background: transparent; border: none; transition: all 0.2s; }
-.pto.on { background: var(--t1); color: #000; font-weight: 700; }
-.save-badge { background: var(--green); color: #000; font-size: 10px; font-weight: 800; padding: 1px 7px; border-radius: 100px; margin-left: 4px; }
-.price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-@media (max-width: 900px) { .price-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; } }
-.price-card {
-  background: var(--bg2); border: 1px solid var(--bg3);
-  border-radius: var(--radius); padding: 28px; position: relative;
-}
-.price-card.popular { border-color: var(--green); background: rgba(34,197,94,0.04); }
-.pop-badge { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--green); color: #000; font-size: 10px; font-weight: 800; padding: 3px 14px; border-radius: 100px; white-space: nowrap; }
-.price-name { font-size: 12px; font-weight: 700; color: var(--t2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-.price-val { font-size: 44px; font-weight: 800; letter-spacing: -1.5px; line-height: 1; margin-bottom: 4px; }
-.price-val sup { font-size: 18px; color: var(--t2); vertical-align: top; margin-top: 8px; }
-.price-val .per { font-size: 13px; color: var(--t2); font-weight: 400; }
-.price-desc { font-size: 13px; color: var(--t2); margin: 12px 0 18px; line-height: 1.5; }
-.price-btn { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 10px; font-size: 14px; font-weight: 700; margin-bottom: 20px; cursor: pointer; border: none; transition: all 0.2s; }
-.price-btn.g { background: var(--green); color: #000; }
-.price-btn.g:hover { background: var(--green-d); }
-.price-btn.o { background: transparent; border: 1px solid var(--bg4); color: var(--t2); }
-.price-btn.o:hover { border-color: var(--t2); color: var(--t1); }
-.price-feats { display: flex; flex-direction: column; gap: 9px; }
-.pf { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; color: var(--t2); }
-.pf .ok { color: var(--green); font-weight: 700; flex-shrink: 0; }
-.pf .no { color: var(--bg4); flex-shrink: 0; }
+/* ══ CTA FINAL ══ */
+.cta-sec{padding:100px 0;text-align:center;background:linear-gradient(180deg,transparent,rgba(34,197,94,.05),transparent)}
+.cta-t{font-size:clamp(32px,5vw,60px);font-weight:800;letter-spacing:-2px;line-height:1.05;margin-bottom:18px}
+.cta-t em{color:var(--g);font-style:normal}
+.cta-p{font-size:17px;color:var(--t2);margin-bottom:36px}
+.wbtn{display:inline-flex;align-items:center;gap:12px;padding:18px 36px;background:#25d366;color:#fff;border:none;border-radius:14px;font-size:17px;font-weight:800;cursor:pointer;transition:all .22s;margin-bottom:14px}
+.wbtn:hover{background:#1db954;transform:translateY(-3px);box-shadow:0 16px 48px rgba(37,211,102,.25)}
+.cta-note{font-size:13px;color:var(--t3)}
+@media(max-width:600px){.cta-t{font-size:30px;letter-spacing:-1px}.wbtn{width:100%;max-width:300px;justify-content:center}}
 
-/* ═══════════════════ CTA FINAL ═══════════════════ */
-.cta-final { text-align: center; background: linear-gradient(180deg, transparent, rgba(34,197,94,0.05), transparent); }
-.cta-title { font-size: 44px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.05; margin-bottom: 16px; }
-.cta-title span { color: var(--green); }
-.cta-sub { font-size: 17px; color: var(--t2); margin-bottom: 36px; }
-.wpp-btn {
-  display: inline-flex; align-items: center; gap: 12px;
-  padding: 18px 36px;
-  background: #25d366;
-  color: #fff;
-  border-radius: 14px;
-  font-size: 17px;
-  font-weight: 800;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-  margin-bottom: 14px;
-}
-.wpp-btn:hover { background: #1db954; transform: translateY(-3px); box-shadow: 0 16px 48px rgba(37,211,102,0.25); }
-.cta-note { font-size: 13px; color: var(--t3); }
-@media (max-width: 640px) {
-  .cta-title { font-size: 28px; letter-spacing: -0.5px; }
-  .wpp-btn { width: 100%; max-width: 320px; justify-content: center; }
-}
+/* ══ FOOTER ══ */
+.footer{padding:40px 0;border-top:1px solid rgba(255,255,255,.06)}
+.footer .c{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.ft-logo{font-size:16px;font-weight:800}.ft-logo b{color:var(--g)}
+.ft-links{display:flex;gap:18px;flex-wrap:wrap}
+.ft-links a{font-size:13px;color:var(--t3);transition:color .2s}.ft-links a:hover{color:var(--t1)}
+.ft-copy{font-size:12px;color:var(--t3)}
 
-/* ═══════════════════ FOOTER ═══════════════════ */
-.footer {
-  padding: 40px 0;
-  border-top: 1px solid var(--bg3);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-.footer-logo { font-size: 17px; font-weight: 800; }
-.footer-logo span { color: var(--green); }
-.footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
-.footer-links a { font-size: 13px; color: var(--t3); transition: color 0.2s; }
-.footer-links a:hover { color: var(--t1); }
-.footer-copy { font-size: 12px; color: var(--t3); }
+/* ══ STICKY MOBILE ══ */
+.sticky{display:none;position:fixed;bottom:0;left:0;right:0;z-index:90;padding:10px 16px 20px;background:rgba(9,9,11,.97);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.07)}
+.sticky.on{display:block}
+.stk-btn{width:100%;padding:15px;background:var(--g);color:#000;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer}
+@media(min-width:769px){.sticky{display:none!important}}
 
-/* ═══════════════════ STICKY CTA MOBILE ═══════════════════ */
-.sticky-mobile {
-  display: none;
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
-  padding: 10px 16px 20px;
-  background: rgba(10,10,10,0.97);
-  backdrop-filter: blur(16px);
-  border-top: 1px solid var(--bg3);
-}
-.sticky-mobile.show { display: block; }
-.sticky-btn { width: 100%; padding: 15px; background: var(--green); color: #000; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; }
-@media (min-width: 769px) { .sticky-mobile { display: none !important; } }
+/* ══ QR MODAL ══ */
+.qr-bg{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
+.qr-bg.on{display:flex}
+.qr-box{background:var(--bg2);border:1px solid var(--bg4);border-radius:20px;padding:30px 26px;text-align:center;max-width:310px;width:100%;position:relative;animation:popUp .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popUp{from{transform:scale(.82);opacity:0}to{transform:scale(1);opacity:1}}
+.qr-x{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:var(--bg4);border:none;color:var(--t2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
+.qr-x:hover{background:var(--bg3);color:var(--t1)}
+.qr-t{font-size:19px;font-weight:800;margin-bottom:6px}
+.qr-s{font-size:13px;color:var(--t2);margin-bottom:16px;line-height:1.5}
+.qr-img-wrap{width:180px;height:180px;background:#fff;border-radius:12px;padding:8px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center}
+.qr-img-wrap img{width:100%;height:100%;border-radius:6px}
+.qr-or{display:flex;align-items:center;gap:8px;color:var(--t3);font-size:12px;margin:12px 0}
+.qr-or::before,.qr-or::after{content:'';flex:1;height:1px;background:var(--bg4)}
+.qr-wa{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;background:#25d366;color:#fff;border-radius:100px;font-size:14px;font-weight:700;transition:background .2s}
+.qr-wa:hover{background:#1db954}
+.qr-num{font-size:11px;color:var(--t3);margin-top:10px}
 
-/* ═══════════════════ QR MODAL ═══════════════════ */
-.qr-backdrop {
-  display: none;
-  position: fixed; inset: 0; z-index: 500;
-  background: rgba(0,0,0,0.82);
-  backdrop-filter: blur(8px);
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.qr-backdrop.show { display: flex; }
-.qr-modal {
-  background: var(--bg2);
-  border: 1px solid var(--bg4);
-  border-radius: 20px;
-  padding: 32px 28px;
-  text-align: center;
-  max-width: 320px;
-  width: 100%;
-  position: relative;
-  animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
-}
-@keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.qr-x { position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; border-radius: 50%; background: var(--bg4); border: none; color: var(--t2); cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
-.qr-x:hover { background: var(--bg3); color: var(--t1); }
-.qr-title { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
-.qr-sub { font-size: 13px; color: var(--t2); margin-bottom: 18px; line-height: 1.5; }
-.qr-img {
-  width: 188px; height: 188px;
-  background: #fff;
-  border-radius: 12px;
-  padding: 8px;
-  margin: 0 auto 16px;
-  display: flex; align-items: center; justify-content: center;
-}
-.qr-img img { width: 100%; height: 100%; border-radius: 6px; }
-.qr-or { display: flex; align-items: center; gap: 8px; color: var(--t3); font-size: 12px; margin: 12px 0; }
-.qr-or::before, .qr-or::after { content: ''; flex: 1; height: 1px; background: var(--bg4); }
-.qr-wpp { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; background: #25d366; color: #fff; border-radius: 100px; font-size: 14px; font-weight: 700; transition: background 0.2s; }
-.qr-wpp:hover { background: #1db954; }
-.qr-num { font-size: 11px; color: var(--t3); margin-top: 12px; }
-
-/* ═══════════════════ UTILS ═══════════════════ */
-.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
-.reveal.in { opacity: 1; transform: none; }
-.reveal-1 { transition-delay: 0.08s; }
-.reveal-2 { transition-delay: 0.16s; }
-.reveal-3 { transition-delay: 0.24s; }
-.text-center { text-align: center; }
-.mt-4 { margin-top: 16px; }
-.mt-8 { margin-top: 32px; }
+/* ══ UTILS ══ */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
+.rv.in{opacity:1;transform:none}
+.rv1{transition-delay:.08s}.rv2{transition-delay:.16s}.rv3{transition-delay:.24s}
+.tc_{text-align:center}
+.mt4{margin-top:16px}.mt8{margin-top:32px}.mt12{margin-top:48px}
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
-<header class="header">
-  <div class="container">
-    <div class="logo">Mecani<span>.AI</span></div>
-    <nav class="nav">
-      <a href="#como-funciona">Como funciona</a>
-      <a href="#resultados">Resultados</a>
+<header class="hd">
+  <div class="c">
+    <div class="logo">Mecani<b>.AI</b></div>
+    <nav class="hdnav">
+      <a href="#funcionalidades">Funcionalidades</a>
+      <a href="#fluxo">Como funciona</a>
       <a href="#depoimentos">Depoimentos</a>
       <a href="#precos">Preços</a>
-      <button class="nav-btn" onclick="abrirQR()">Testar grátis →</button>
+      <button class="hdbtn" onclick="abrirQR()">Testar 7 dias grátis →</button>
     </nav>
   </div>
 </header>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="container">
-    <div class="hero-badge"><div class="badge-dot"></div>IA para oficinas mecânicas</div>
-    <h1>Sua oficina no <span class="green">piloto automático.</span></h1>
-    <p class="hero-sub">O mecânico descreve o problema no WhatsApp, a IA diagnostica para ele, cota as peças, avisa o cliente e fecha o caixa — tudo automático, 24 horas por dia.</p>
-    <div class="hero-btns">
-      <button class="btn-primary" onclick="abrirQR()">📱 Testar grátis por 7 dias</button>
-      <a href="#como-funciona" class="btn-outline">Ver como funciona ↓</a>
+  <div class="hero-glow"></div>
+  <div class="pill"><div class="dot"></div>IA para gestão de oficinas mecânicas</div>
+  <h1>A IA que cuida da sua oficina enquanto você cuida dos <em>carros.</em></h1>
+  <p class="hero-p">Seu mecânico descreve o problema no WhatsApp — voz ou texto. A IA diagnostica, cota peças com os fornecedores, avisa o cliente em tempo real, fecha o caixa e ainda posta no Instagram. Tudo automático, 24 horas por dia, 7 dias por semana.</p>
+  <div class="hero-btns">
+    <button class="btn-g" onclick="abrirQR()">📱 Testar grátis por 7 dias</button>
+    <a href="#funcionalidades" class="btn-o">Ver tudo que faz ↓</a>
+  </div>
+  <div class="hero-trust">
+    <div class="ht"><div class="ht-n">16</div><div class="ht-l">automações ativas</div></div>
+    <div class="ht"><div class="ht-n">7 dias</div><div class="ht-l">teste grátis</div></div>
+    <div class="ht"><div class="ht-n">3h</div><div class="ht-l">salvas por dia</div></div>
+    <div class="ht"><div class="ht-n">24/7</div><div class="ht-l">funcionando</div></div>
+  </div>
+</section>
+
+<!-- VÍDEO EXPLICATIVO -->
+<section class="video-sec rv">
+  <div class="c">
+    <div class="vsec-txt">
+      <div class="stag">Veja ao vivo</div>
+      <div class="stit">Do check-in ao NPS — tudo acontece no WhatsApp</div>
+      <p class="sdesc">O mecânico usa o WhatsApp que já tem. A IA assume o trabalho chato: abre OS, diagnostica o problema técnico para o mecânico inspecionar, cota peças, avisa o cliente, fecha o caixa, manda recibo por email e ainda pesquisa satisfação — sem você fazer nada.</p>
+      <div class="check-list">
+        <div class="cli"><span class="ck">✓</span><span><strong>Sem instalar nada</strong> — funciona no WhatsApp atual da oficina</span></div>
+        <div class="cli"><span class="ck">✓</span><span><strong>Voz ou texto</strong> — mecânico fala naturalmente, IA entende tudo</span></div>
+        <div class="cli"><span class="ck">✓</span><span><strong>IA diagnostica para o mecânico</strong> — não para o cliente, para guiar a inspeção técnica</span></div>
+        <div class="cli"><span class="ck">✓</span><span><strong>Cliente acompanha em tempo real</strong> — portal exclusivo pelo celular</span></div>
+        <div class="cli"><span class="ck">✓</span><span><strong>Caixa sempre atualizado</strong> — cada OS fechada registra automaticamente</span></div>
+        <div class="cli"><span class="ck">✓</span><span><strong>Relatório toda segunda-feira</strong> — métricas + insight de IA</span></div>
+      </div>
     </div>
-    <div class="hero-stats">
-      <div class="hstat"><div class="hstat-n">7 dias</div><div class="hstat-l">de teste grátis</div></div>
-      <div class="hstat"><div class="hstat-n">3h</div><div class="hstat-l">salvas por dia</div></div>
-      <div class="hstat"><div class="hstat-n">8 min</div><div class="hstat-l">check-in ao orçamento</div></div>
-      <div class="hstat"><div class="hstat-n">24h</div><div class="hstat-l">funcionando</div></div>
+    <!-- PLAYER ANIMADO -->
+    <div class="video-player">
+      <div class="vp-bar">
+        <div class="vp-dot" style="background:#ff5f57"></div>
+        <div class="vp-dot" style="background:#ffbd2e"></div>
+        <div class="vp-dot" style="background:#28c840"></div>
+        <span class="vp-title">Mecani.AI — Demo ao vivo</span>
+        <span class="vp-live">● AO VIVO</span>
+      </div>
+      <div class="vp-progress"><div class="vp-fill" id="vfill"></div></div>
+      <div class="vp-content">
+
+        <!-- CENA 1: Check-in -->
+        <div class="scene active" id="sc1">
+          <div class="scene-title">📋 Cena 1 — Check-in por voz</div>
+          <div class="bubble bm">🎙️ [áudio 12s] "Chegou um Corolla 2020 prata, placa ABC1234, cliente Pedro Mendes, telefone 61977776666. Tá com barulho estranho ao frear nos dois lados"<div class="btime">Carlos (mecânico) · agora</div></div>
+          <div class="bubble bai"><strong>✅ OS #47 aberta!</strong><br>🚗 Toyota Corolla 2020 — Pedro Mendes<br>📞 61977776666<br>📱 Cliente avisado: "Seu carro chegou! Acompanhe em tempo real no link abaixo"<div class="btime">Mecani.AI · automático · 4 seg</div></div>
+          <div class="scene-stat"><div class="ss-icon">⚡</div><div class="ss-text"><strong>4 segundos</strong> para abrir OS, registrar veículo, cadastrar cliente e avisar o dono do carro</div></div>
+        </div>
+
+        <!-- CENA 2: Diagnóstico IA -->
+        <div class="scene" id="sc2">
+          <div class="scene-title">🔍 Cena 2 — Diagnóstico para o mecânico</div>
+          <div class="bubble bai">📋 <strong>Diagnóstico técnico para você, Carlos:</strong><br>Barulho ao frear pode indicar:<br>1. Pastilha de freio desgastada (mais provável)<br>2. Disco com ranhura ou empenamento<br>3. Rolamento de roda<br><br>Verifique os dois eixos. Qualquer coisa, me manda o que encontrou.<div class="btime">Mecani.AI · para o mecânico · privado</div></div>
+          <div class="bubble bm">Confirmado: pastilha dianteira gasta dos dois lados. Disco ok. Precisa de 2 jogos de pastilha Bosch.<div class="btime">Carlos · 25min</div></div>
+          <div class="scene-stat"><div class="ss-icon">🧠</div><div class="ss-text"><strong>IA diagnóstica para o mecânico</strong> — não para o cliente. Guia a inspeção técnica com base no relato.</div></div>
+        </div>
+
+        <!-- CENA 3: Cotação -->
+        <div class="scene" id="sc3">
+          <div class="scene-title">💰 Cena 3 — Cotação automática</div>
+          <div class="bubble bai">🛒 <strong>Cotação enviada para 3 fornecedores!</strong><br>Peça: Pastilha freio Bosch (2 jogos)<div class="btime">Mecani.AI · automático</div></div>
+          <div class="bubble bsi">📊 <strong>Propostas recebidas:</strong><br>🥇 Distribuidora Silva — R$ 148 · entrega 1h<br>🥈 AutoPeças BR — R$ 162 · imediato<br>🥉 Peças Rápidas — R$ 174 · 2h<div class="btime">Mecani.AI · comparação automática</div></div>
+          <div class="bubble bai">Orçamento <strong>R$ 380</strong> (peças + mão de obra) enviado ao Pedro. Aguardando aprovação do dono ⏳<div class="btime">Mecani.AI · automático</div></div>
+          <div class="scene-stat"><div class="ss-icon">💸</div><div class="ss-text"><strong>12% de economia média</strong> nas peças com cotação automática em múltiplos fornecedores</div></div>
+        </div>
+
+        <!-- CENA 4: Aprovação -->
+        <div class="scene" id="sc4">
+          <div class="scene-title">✅ Cena 4 — Aprovação dupla</div>
+          <div class="bubble bai">João (dono), aguardando sua aprovação para a OS #47:<br>🚗 Corolla do Pedro — Pastilha de freio<br>💰 R$ 380 total<br><br>Responda: <strong>APROVAR</strong> ou <strong>RECUSAR</strong><div class="btime">Mecani.AI · para o dono</div></div>
+          <div class="bubble bm" style="align-self:flex-end">APROVAR<div class="btime">João (dono) · 1 toque</div></div>
+          <div class="bubble bai"><strong>✅ Aprovado!</strong> Pedido enviado para Distribuidora Silva. Pedro foi avisado que o serviço foi aprovado e a peça está a caminho.<div class="btime">Mecani.AI · automático</div></div>
+          <div class="scene-stat"><div class="ss-icon">📱</div><div class="ss-text">Dono e cliente aprovam cada um com <strong>1 mensagem</strong> — rastreável, com registro de data e hora</div></div>
+        </div>
+
+        <!-- CENA 5: Conclusão -->
+        <div class="scene" id="sc5">
+          <div class="scene-title">🏁 Cena 5 — Fechamento automático</div>
+          <div class="bubble bm">Pronto! Serviço concluído, carro entregue<div class="btime">Carlos · 2h depois</div></div>
+          <div class="bubble bai">🏁 <strong>OS #47 fechada!</strong><br>💰 Caixa atualizado: +R$ 380<br>📧 Recibo enviado por email ao Pedro<br>📱 Pedro avisado: "Seu Corolla está pronto!"<br>⭐ Pesquisa NPS programada para 72h<br>📱 Lembrete de revisão em 6 meses<div class="btime">Mecani.AI · automático · tudo de uma vez</div></div>
+          <div class="scene-stat"><div class="ss-icon">🎯</div><div class="ss-text">Uma mensagem do mecânico aciona <strong>6 ações automáticas</strong> simultâneas sem você fazer nada</div></div>
+        </div>
+
+      </div>
+      <div class="vp-controls">
+        <button class="vp-btn" id="play-btn" onclick="togglePlay()">⏸</button>
+        <span style="font-size:11px;color:var(--t3)" id="vp-scene-label">Cena 1 de 5</span>
+        <div class="vp-scene-dots">
+          <div class="vp-sdot on" onclick="goScene(0)"></div>
+          <div class="vp-sdot" onclick="goScene(1)"></div>
+          <div class="vp-sdot" onclick="goScene(2)"></div>
+          <div class="vp-sdot" onclick="goScene(3)"></div>
+          <div class="vp-sdot" onclick="goScene(4)"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- COMO FUNCIONA -->
-<section id="como-funciona">
-  <div class="container">
-    <div class="reveal">
-      <div class="section-tag">Como funciona</div>
-      <div class="section-title">O mecânico fala.<br>A IA resolve tudo.</div>
-      <p class="section-sub">Sem instalar nada. Seu mecânico usa o WhatsApp que já tem.</p>
+<!-- FUNCIONALIDADES -->
+<section class="features" id="funcionalidades">
+  <div class="c">
+    <div class="feat-intro rv tc_">
+      <div class="stag">16 automações ativas</div>
+      <div class="stit">Tudo que o Mecani.AI faz pela sua oficina</div>
+      <p class="sdesc">Não é só um chatbot. É um agente completo que substitui o gerente administrativo.</p>
     </div>
-    <div class="demo-wrap mt-8">
-      <!-- CHAT DEMO -->
-      <div class="phone reveal">
-        <div class="phone-notch"></div>
-        <div class="phone-screen">
-          <div class="chat-header">📱 WhatsApp — Mecani.AI Oficina</div>
-          <div class="msg msg-mec">
-            🚗 Entrou um Corolla 2020 preto, placa ABC1234, João Silva, 61988887777. Tá com barulho estranho ao frear
-            <div class="msg-time">Carlos (mecânico) · agora</div>
+    <div class="feat-grid mt8">
+      <div class="feat-card rv">
+        <div class="fc-icon">🎙️</div>
+        <div class="fc-title">Check-in por voz ou texto</div>
+        <div class="fc-desc">Mecânico fala no WhatsApp descrevendo o carro e o problema. A IA extrai placa, modelo, cliente, telefone e sintoma — cria a OS completa em segundos.</div>
+        <span class="fc-tag">✅ Sem formulário</span>
+      </div>
+      <div class="feat-card rv rv1">
+        <div class="fc-icon">🔍</div>
+        <div class="fc-title">Diagnóstico assistido por IA</div>
+        <div class="fc-desc">Com base no relato e no histórico do veículo, a IA lista causas prováveis, peças relacionadas e orienta o mecânico tecnicamente — para guiar a inspeção, não para substituí-la.</div>
+        <span class="fc-tag">🧠 Gemini 2.0 Flash</span>
+      </div>
+      <div class="feat-card rv rv2">
+        <div class="fc-icon">💰</div>
+        <div class="fc-title">Cotação automática com fornecedores</div>
+        <div class="fc-desc">A IA contacta todos os fornecedores cadastrados via WhatsApp, recebe propostas, compara preços e prazos, e monta o melhor orçamento — automaticamente, em minutos.</div>
+        <span class="fc-tag fc-tag-amber">💸 12% de economia média</span>
+      </div>
+      <div class="feat-card rv">
+        <div class="fc-icon">📱</div>
+        <div class="fc-title">Portal do cliente em tempo real</div>
+        <div class="fc-desc">O cliente recebe um link no WhatsApp e acompanha o status do carro em tempo real: diagnóstico, orçamento, aprovação, execução e entrega. Sem precisar ligar.</div>
+        <span class="fc-tag fc-tag-blue">🚗 Elimina 80% das ligações</span>
+      </div>
+      <div class="feat-card rv rv1">
+        <div class="fc-icon">✅</div>
+        <div class="fc-title">Aprovação dupla rastreável</div>
+        <div class="fc-desc">O dono da oficina aprova o orçamento com "APROVAR". O cliente também aprova pelo celular. Tudo registrado com data, hora e IP — acabou o "eu não autorizei".</div>
+        <span class="fc-tag">🔒 Juridicamente rastreável</span>
+      </div>
+      <div class="feat-card rv rv2">
+        <div class="fc-icon">🏁</div>
+        <div class="fc-title">Fechamento automático da OS</div>
+        <div class="fc-desc">Mecânico diz "pronto". A IA fecha a OS, registra no caixa, envia recibo por email ao cliente, avisa que o carro está pronto e agenda NPS para 72h — tudo de uma vez.</div>
+        <span class="fc-tag">⚡ 6 ações em 1 mensagem</span>
+      </div>
+      <div class="feat-card rv">
+        <div class="fc-icon">📊</div>
+        <div class="fc-title">Dashboard kanban em tempo real</div>
+        <div class="fc-desc">Visão completa de todas as OS em andamento: diagnóstico, cotação, aprovação, execução, aguardando peça. Financeiro, clientes, agendamentos e NPS em uma tela.</div>
+        <span class="fc-tag fc-tag-blue">📈 Gestão visual</span>
+      </div>
+      <div class="feat-card rv rv1">
+        <div class="fc-icon">📧</div>
+        <div class="fc-title">Emails automáticos</div>
+        <div class="fc-desc">Orçamento por email com botão de aprovar, recibo detalhado ao fechar a OS, e relatório semanal para o dono toda segunda-feira às 8h com insights de IA.</div>
+        <span class="fc-tag">📬 4 templates automáticos</span>
+      </div>
+      <div class="feat-card rv rv2">
+        <div class="fc-icon">⭐</div>
+        <div class="fc-title">NPS automático + Google Review</div>
+        <div class="fc-desc">72 horas após a conclusão, o cliente recebe pesquisa de satisfação automática. Se a nota for 9 ou 10, a IA incentiva a deixar avaliação no Google. Se for baixa, alerta o dono.</div>
+        <span class="fc-tag fc-tag-amber">⭐ 9.4 de NPS médio</span>
+      </div>
+      <div class="feat-card rv">
+        <div class="fc-icon">🔔</div>
+        <div class="fc-title">CRM preventivo automático</div>
+        <div class="fc-desc">A IA calcula quando cada veículo precisa de revisão com base no histórico. Envia lembrete personalizado ao cliente no prazo certo — sem você precisar lembrar de nada.</div>
+        <span class="fc-tag">🔁 Clientes que voltam</span>
+      </div>
+      <div class="feat-card rv rv1">
+        <div class="fc-icon">📸</div>
+        <div class="fc-title">Social media com IA</div>
+        <div class="fc-desc">Mecânico tira foto do serviço e manda no WhatsApp. A IA usa visão computacional para analisar a imagem, gera legenda profissional com hashtags e posta no Instagram e Facebook.</div>
+        <span class="fc-tag fc-tag-purple">🤖 Visão computacional</span>
+      </div>
+      <div class="feat-card rv rv2">
+        <div class="fc-icon">📅</div>
+        <div class="fc-title">Agendamento online 24h</div>
+        <div class="fc-desc">Cliente acessa o link, escolhe o serviço, data e horário disponível — e confirma. A IA envia lembrete 24h e 1h antes. Sem telefonema, sem agenda no papel.</div>
+        <span class="fc-tag">📅 Sempre disponível</span>
+      </div>
+      <div class="feat-card rv">
+        <div class="fc-icon">📦</div>
+        <div class="fc-title">Controle de estoque inteligente</div>
+        <div class="fc-desc">Baixa automática das peças usadas em cada OS. Quando o estoque atinge o mínimo configurado, a IA envia alerta imediato. Nunca mais para no meio do serviço por falta de peça.</div>
+        <span class="fc-tag">📦 Alerta automático</span>
+      </div>
+      <div class="feat-card rv rv1">
+        <div class="fc-icon">🛡️</div>
+        <div class="fc-title">Controle de garantia automático</div>
+        <div class="fc-desc">A IA detecta quando um cliente retorna com o mesmo problema dentro do prazo de garantia e aciona o processo de garantia automaticamente — sem discussão, sem perda.</div>
+        <span class="fc-tag">🛡️ Sem desgaste</span>
+      </div>
+      <div class="feat-card rv rv2">
+        <div class="fc-icon">📊</div>
+        <div class="fc-title">Relatório semanal com insight IA</div>
+        <div class="fc-desc">Toda segunda-feira às 8h você recebe: OS abertas e fechadas, receita, ticket médio, NPS, top serviços e uma sugestão de melhoria gerada pela IA com base nos seus dados.</div>
+        <span class="fc-tag fc-tag-purple">🧠 Insight semanal</span>
+      </div>
+      <div class="feat-card rv">
+        <div class="fc-icon">🏪</div>
+        <div class="fc-title">Portal do fornecedor</div>
+        <div class="fc-desc">Seus fornecedores têm acesso a um portal para responder cotações, gerenciar pedidos e acompanhar score de confiança. Quanto mais rápido respondem, melhor a posição nas próximas cotações.</div>
+        <span class="fc-tag">🏆 Gamificação</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLUXO COMPLETO -->
+<section class="flow-sec" id="fluxo">
+  <div class="c">
+    <div class="rv">
+      <div class="stag">Fluxo completo</div>
+      <div class="stit">Do carro na porta ao dinheiro na conta</div>
+      <p class="sdesc">7 etapas completamente automatizadas. Você só aprova e monitora.</p>
+      <div class="flow-steps mt8">
+        <div class="fl"><div class="fl-num">1</div><div><div class="fl-t">Mecânico faz check-in</div><div class="fl-d">Voz ou texto no WhatsApp. IA abre OS, registra veículo, cadastra cliente e avisa o dono do carro.</div><span class="fl-badge fb-g">✅ Automático</span></div></div>
+        <div class="fl-arr">↓</div>
+        <div class="fl"><div class="fl-num">2</div><div><div class="fl-t">IA auxilia o diagnóstico técnico</div><div class="fl-d">A IA analisa o relato, consulta o histórico do veículo e sugere causas prováveis para o mecânico verificar.</div><span class="fl-badge fb-p">🧠 IA Gemini</span></div></div>
+        <div class="fl-arr">↓</div>
+        <div class="fl"><div class="fl-num">3</div><div><div class="fl-t">Cotação automática com fornecedores</div><div class="fl-d">IA contacta todos os fornecedores, compara preços e prazos, monta o orçamento com o melhor custo-benefício.</div><span class="fl-badge fb-g">💰 Melhor preço</span></div></div>
+        <div class="fl-arr">↓</div>
+        <div class="fl"><div class="fl-num">4</div><div><div class="fl-t">Aprovação do dono + cliente</div><div class="fl-d">Dono aprova com "APROVAR". Cliente confirma pelo portal. Tudo rastreado com data e hora.</div><span class="fl-badge fb-b">📱 1 toque</span></div></div>
+        <div class="fl-arr">↓</div>
+        <div class="fl"><div class="fl-num">5</div><div><div class="fl-t">Execução com acompanhamento</div><div class="fl-d">Cliente recebe notificação quando as peças chegam e quando o serviço começa. Sem precisar ligar.</div><span class="fl-badge fb-g">🔔 Cliente informado</span></div></div>
+        <div class="fl-arr">↓</div>
+        <div class="fl"><div class="fl-num">6</div><div><div class="fl-t">Fechamento e faturamento</div><div class="fl-d">Mecânico diz "pronto". IA fecha OS, registra no caixa, avisa o cliente, envia recibo por email.</div><span class="fl-badge fb-g">💰 Caixa atualizado</span></div></div>
+        <div class="fl-arr">↓</div>
+        <div class="fl"><div class="fl-num">7</div><div><div class="fl-t">NPS + CRM preventivo</div><div class="fl-d">72h depois: pesquisa de satisfação automática. 6 meses depois: lembrete de revisão para o cliente.</div><span class="fl-badge fb-p">⭐ Cliente fiel</span></div></div>
+      </div>
+    </div>
+    <!-- Dashboard preview -->
+    <div class="rv rv1">
+      <div class="dash-preview">
+        <div class="dp-bar">
+          <div class="dp-dot" style="background:#ff5f57"></div>
+          <div class="dp-dot" style="background:#ffbd2e"></div>
+          <div class="dp-dot" style="background:#28c840"></div>
+          <span class="dp-title">Dashboard — Hoje</span>
+          <span class="dp-live">● Ao vivo</span>
+        </div>
+        <div class="dp-body">
+          <div class="dp-metrics">
+            <div class="dm"><div class="dm-n" id="dm-os">7</div><div class="dm-l">OS abertas</div></div>
+            <div class="dm"><div class="dm-n" style="color:#fbbf24">⭐ 9.4</div><div class="dm-l">NPS semana</div></div>
+            <div class="dm"><div class="dm-n">R$ 2.840</div><div class="dm-l">Receita hoje</div></div>
+            <div class="dm"><div class="dm-n" style="color:#c4b5fd">R$ 406</div><div class="dm-l">Ticket médio</div></div>
           </div>
-          <div class="msg msg-ai">
-            ✅ <strong>OS #47 aberta!</strong><br>
-            📋 Diagnóstico para você, Carlos: barulho ao frear pode indicar pastilha desgastada, disco com ranhura ou rolamento de roda. Inspecione os dois lados.<br>
-            📱 Cliente avisado — acompanha em tempo real
-            <div class="msg-time">Mecani.AI · automático</div>
+          <div class="dp-os-title">OS em andamento</div>
+          <div class="os-list">
+            <div class="os-item"><span class="os-placa">ABC-1234</span><span class="os-st st-cot">Cotação</span></div>
+            <div class="os-item"><span class="os-placa">DEF-5678</span><span class="os-st st-diag">Diagnóstico</span></div>
+            <div class="os-item"><span class="os-placa">GHI-9012</span><span class="os-st st-wait">Aguardando peça</span></div>
+            <div class="os-item"><span class="os-placa">JKL-3456</span><span class="os-st st-ok">Pronto ✓</span></div>
+            <div class="os-item"><span class="os-placa">MNO-7890</span><span class="os-st st-diag">Em execução</span></div>
           </div>
-          <div class="msg msg-mec">
-            Confirmado: pastilha dianteira gasta, disco ok. Precisa de 2 jogos de pastilha Bosch
-            <div class="msg-time">Carlos · 22min</div>
-          </div>
-          <div class="msg msg-ai">
-            💰 <strong>Cotação enviada para 3 fornecedores!</strong><br>
-            🥇 Peças Silva — R$ 148 · 1h<br>
-            🥈 AutoBR — R$ 162 · imediato<br>
-            Orçamento R$ 380 enviado ao João para aprovar
-            <div class="msg-time">Mecani.AI · automático</div>
-          </div>
-          <div class="msg msg-mec">
-            Pronto! Serviço concluído
-            <div class="msg-time">Carlos · 2h depois</div>
-          </div>
-          <div class="msg msg-ai">
-            🏁 <strong>OS #47 fechada!</strong><br>
-            💰 Caixa +R$ 380 · 📧 Recibo enviado · ⭐ NPS em 72h
-            <div class="msg-time">Mecani.AI · automático</div>
+          <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.15);border-radius:10px;padding:12px;margin-top:12px;font-size:12px;color:var(--t2);line-height:1.5">
+            💡 <strong style="color:var(--t1)">Insight da semana:</strong> Serviço de troca de óleo representou 38% da receita. Considere criar um pacote revisão mensal para fidelizar esses clientes.
           </div>
         </div>
       </div>
-      <!-- STEPS -->
-      <div class="steps reveal reveal-1">
-        <div class="step-item">
-          <div class="step-n">1</div>
-          <div>
-            <div class="step-title">Mecânico descreve o problema</div>
-            <div class="step-desc">Texto ou áudio no WhatsApp. A IA abre a OS, identifica o veículo e sugere o diagnóstico para o mecânico — não para o cliente.</div>
-            <span class="step-tag">🤖 IA Gemini 2.0</span>
+      <!-- Comunicação com cliente -->
+      <div style="background:var(--bg2);border:1px solid var(--bg3);border-radius:14px;padding:16px;margin-top:12px">
+        <div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">📱 O que o cliente vê no celular</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div style="display:flex;gap:8px;align-items:center;background:var(--bg3);border-radius:8px;padding:10px;font-size:12px">
+            <span>📥</span><div style="flex:1"><strong>Carro recebido</strong><div style="color:var(--t2);font-size:11px;margin-top:1px">Diagnóstico em andamento</div></div><span style="color:#fbbf24;font-size:10px;font-weight:700">AGORA</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;background:var(--bg3);border-radius:8px;padding:10px;font-size:12px">
+            <span>💰</span><div style="flex:1"><strong>Orçamento pronto: R$ 380</strong><div style="color:var(--t2);font-size:11px;margin-top:1px">Toque para aprovar</div></div><span style="color:var(--g);font-size:10px;font-weight:700">APROVAR</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;background:var(--bg3);border-radius:8px;padding:10px;font-size:12px">
+            <span>✅</span><div style="flex:1"><strong>Seu Corolla está pronto!</strong><div style="color:var(--t2);font-size:11px;margin-top:1px">Pode buscar. Recibo no email.</div></div><span style="color:var(--g);font-size:10px;font-weight:700">PRONTO</span>
           </div>
         </div>
-        <div class="step-item">
-          <div class="step-n">2</div>
-          <div>
-            <div class="step-title">IA auxilia no diagnóstico técnico</div>
-            <div class="step-desc">Com base no relato e histórico do veículo, a IA lista causas prováveis e peças para o mecânico verificar e confirmar.</div>
-            <span class="step-tag">🔍 Diagnóstico assistido</span>
-          </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMUNICAÇÃO COM CLIENTE -->
+<section class="client-sec rv">
+  <div class="c">
+    <div>
+      <div class="stag">Experiência do cliente</div>
+      <div class="stit">O cliente acompanha tudo — sem precisar ligar</div>
+      <p class="sdesc">Cada etapa do serviço é comunicada automaticamente ao cliente via WhatsApp e pelo portal exclusivo. Resultado: fim das ligações de status e clientes muito mais satisfeitos.</p>
+      <div class="mt4">
+        <button class="btn-g" onclick="abrirQR()">📱 Quero essa experiência na minha oficina</button>
+      </div>
+    </div>
+    <div class="client-journey">
+      <div class="cj-step"><div class="cj-icon">📥</div><div><div class="cj-title">Carro chegou</div><div class="cj-desc">Cliente recebe confirmação imediata com link do portal para acompanhar em tempo real</div><div class="cj-when">⚡ Em 4 segundos após o check-in</div></div></div>
+      <div class="cj-step"><div class="cj-icon">🔍</div><div><div class="cj-title">Diagnóstico informado</div><div class="cj-desc">Cliente recebe resumo do problema encontrado em linguagem acessível (diferente do diagnóstico técnico enviado ao mecânico)</div><div class="cj-when">📱 Assim que o mecânico confirmar</div></div></div>
+      <div class="cj-step"><div class="cj-icon">💰</div><div><div class="cj-title">Orçamento para aprovar</div><div class="cj-desc">Cliente recebe o orçamento detalhado pelo WhatsApp e por email, com botão de APROVAR ou RECUSAR</div><div class="cj-when">🔔 Com notificação automática</div></div></div>
+      <div class="cj-step"><div class="cj-icon">🔧</div><div><div class="cj-title">Serviço em execução</div><div class="cj-desc">Atualizações automáticas quando as peças chegam e quando o serviço começa</div><div class="cj-when">📊 Barra de progresso no portal</div></div></div>
+      <div class="cj-step"><div class="cj-icon">✅</div><div><div class="cj-title">Carro pronto + recibo</div><div class="cj-desc">Aviso no WhatsApp que pode buscar o carro + recibo detalhado enviado por email automaticamente</div><div class="cj-when">📧 Recibo chegou antes de chegar à oficina</div></div></div>
+      <div class="cj-step"><div class="cj-icon">⭐</div><div><div class="cj-title">Pesquisa de satisfação</div><div class="cj-desc">72h depois: NPS automático. Nota alta → convite para Google Review. Nota baixa → alerta para o dono resolver antes que vire reclamação pública</div><div class="cj-when">🔔 72h após a entrega</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXTRAS: NPS, SOCIAL, RELATÓRIO -->
+<section class="extras-sec">
+  <div class="c">
+    <div class="rv tc_">
+      <div class="stag">Além da OS</div>
+      <div class="stit">O sistema que cuida do futuro da sua oficina</div>
+    </div>
+    <div class="extras-grid">
+      <div class="ex-card rv">
+        <div class="ex-icon">📸</div>
+        <div class="ex-title">Social Media com IA</div>
+        <div class="ex-desc">O mecânico tira uma foto do serviço e manda no WhatsApp. A IA analisa a imagem com visão computacional, gera legenda profissional com hashtags relevantes e posta automaticamente no Instagram e Facebook da oficina.</div>
+        <div class="ex-list">
+          <div class="exl"><span class="ck">✓</span>Análise de imagem automática</div>
+          <div class="exl"><span class="ck">✓</span>Legenda em português natural</div>
+          <div class="exl"><span class="ck">✓</span>Hashtags relevantes do setor</div>
+          <div class="exl"><span class="ck">✓</span>Posta no Instagram + Facebook</div>
+          <div class="exl"><span class="ck">✓</span>Histórico de posts no dashboard</div>
         </div>
-        <div class="step-item">
-          <div class="step-n">3</div>
-          <div>
-            <div class="step-title">Cotação automática com fornecedores</div>
-            <div class="step-desc">IA contacta todos os fornecedores, compara preços e prazo, e monta o melhor orçamento em minutos.</div>
-            <span class="step-tag">💰 Economia garantida</span>
-          </div>
+      </div>
+      <div class="ex-card rv rv1">
+        <div class="ex-icon">📊</div>
+        <div class="ex-title">Relatório Semanal com Insight</div>
+        <div class="ex-desc">Toda segunda-feira às 8h você recebe no WhatsApp e por email um relatório completo da semana com uma sugestão de melhoria gerada pela IA baseada nos seus próprios dados.</div>
+        <div class="ex-list">
+          <div class="exl"><span class="ck">✓</span>OS abertas e fechadas na semana</div>
+          <div class="exl"><span class="ck">✓</span>Receita, custo e margem</div>
+          <div class="exl"><span class="ck">✓</span>Ticket médio e top serviços</div>
+          <div class="exl"><span class="ck">✓</span>NPS e avaliações recebidas</div>
+          <div class="exl"><span class="ck">✓</span>1 insight de melhoria gerado por IA</div>
         </div>
-        <div class="step-item">
-          <div class="step-n">4</div>
-          <div>
-            <div class="step-title">Dono aprova com 1 toque</div>
-            <div class="step-desc">APROVAR no WhatsApp. IA confirma peças, atualiza o cliente e inicia o serviço. Zero burocracia.</div>
-            <span class="step-tag">✅ 1 toque só</span>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-n">5</div>
-          <div>
-            <div class="step-title">Fechamento 100% automático</div>
-            <div class="step-desc">"Pronto" no WhatsApp → IA fecha caixa, manda recibo por email, avisa o cliente e programa NPS para 72h.</div>
-            <span class="step-tag">🏁 Fim do trabalho</span>
-          </div>
+      </div>
+      <div class="ex-card rv rv2">
+        <div class="ex-icon">🔔</div>
+        <div class="ex-title">CRM Preventivo — Cliente Fiel</div>
+        <div class="ex-desc">A IA calcula o prazo ideal de revisão de cada veículo com base no modelo, ano, km e histórico de serviços. Envia lembrete personalizado ao cliente na hora certa — quando ele ainda está pensando em revisar.</div>
+        <div class="ex-list">
+          <div class="exl"><span class="ck">✓</span>Lembrete personalizado por veículo</div>
+          <div class="exl"><span class="ck">✓</span>No prazo certo — não antes nem depois</div>
+          <div class="exl"><span class="ck">✓</span>Tom natural, não parece propaganda</div>
+          <div class="exl"><span class="ck">✓</span>Link direto para agendar</div>
+          <div class="exl"><span class="ck">✓</span>Taxa de retorno 40% maior</div>
         </div>
       </div>
     </div>
@@ -614,325 +684,153 @@ section { padding: 80px 0; }
 </section>
 
 <!-- PROBLEMAS -->
-<section class="problems-bg">
-  <div class="container">
-    <div class="reveal text-center">
-      <div class="section-tag">O problema</div>
-      <div class="section-title">Você reconhece isso no seu dia a dia?</div>
-    </div>
-    <div class="probs-grid">
-      <div class="prob-card reveal">
-        <div class="prob-icon">📞</div>
-        <div class="prob-title">Telefone não para de tocar</div>
-        <div class="prob-desc">Cliente liga só para saber se o carro ficou pronto. 15 vezes por dia. Você para tudo para atender.</div>
-        <div class="prob-cost">⏱ 2h por dia perdidas</div>
-      </div>
-      <div class="prob-card reveal reveal-1">
-        <div class="prob-icon">📋</div>
-        <div class="prob-title">Orçamento no papel se perde</div>
-        <div class="prob-desc">Cliente nega que aprovou, você não tem como provar. Conflito toda semana e prejuízo garantido.</div>
-        <div class="prob-cost">💸 R$ 800/mês de prejuízo médio</div>
-      </div>
-      <div class="prob-card reveal reveal-2">
-        <div class="prob-icon">📦</div>
-        <div class="prob-title">Cotação de peças no braço</div>
-        <div class="prob-desc">Liga pra um fornecedor, depois outro, compara na cabeça. 40 minutos para cotar 3 peças simples.</div>
-        <div class="prob-cost">⏱ 40min por OS desperdiçados</div>
-      </div>
-      <div class="prob-card reveal">
-        <div class="prob-icon">💸</div>
-        <div class="prob-title">Cliente some e não volta</div>
-        <div class="prob-desc">Sem lembrete automático, o cliente esquece de fazer a revisão e vai na concorrência da próxima vez.</div>
-        <div class="prob-cost">📉 60% dos clientes não retornam</div>
-      </div>
-      <div class="prob-card reveal reveal-1">
-        <div class="prob-icon">😤</div>
-        <div class="prob-title">Dono refém do operacional</div>
-        <div class="prob-desc">Passa o dia inteiro em burocracia em vez de crescer. Fim de dia exausto e com a sensação de não ter avançado.</div>
-        <div class="prob-cost">🔥 Negócio estagnado</div>
-      </div>
-      <div class="prob-card reveal reveal-2">
-        <div class="prob-icon">📊</div>
-        <div class="prob-title">Gestão às cegas</div>
-        <div class="prob-desc">Sem relatório, sem controle de caixa em tempo real. Descobre que o mês foi ruim só quando vê o extrato do banco.</div>
-        <div class="prob-cost">📉 Decisões erradas</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ANTES / DEPOIS -->
-<section>
-  <div class="container">
-    <div class="reveal text-center">
-      <div class="section-tag">Transformação</div>
-      <div class="section-title">Antes e depois do Mecani.AI</div>
-    </div>
-    <div class="comp-grid">
-      <div class="comp-col reveal">
-        <div class="comp-head bad">❌ Sem Mecani.AI</div>
-        <div class="comp-item"><span>📞</span>Liga para o cliente atualizar status</div>
-        <div class="comp-item"><span>📋</span>Orçamento escrito no papel</div>
-        <div class="comp-item"><span>⏱</span>40min cotando peças por telefone</div>
-        <div class="comp-item"><span>🗂</span>Histórico de OS em papelão</div>
-        <div class="comp-item"><span>❓</span>Não sabe NPS da oficina</div>
-        <div class="comp-item"><span>💸</span>Cliente some e não volta</div>
-        <div class="comp-item"><span>😤</span>Dono no telefone o dia todo</div>
-      </div>
-      <div class="comp-col good reveal reveal-1">
-        <div class="comp-head ok">✅ Com Mecani.AI</div>
-        <div class="comp-item"><span>🤖</span>IA avisa o cliente automaticamente</div>
-        <div class="comp-item"><span>📱</span>Orçamento digital com aprovação rastreada</div>
-        <div class="comp-item"><span>⚡</span>Cotação automática em 5 minutos</div>
-        <div class="comp-item"><span>☁️</span>Todo histórico na nuvem</div>
-        <div class="comp-item"><span>⭐</span>NPS 9.4 de média</div>
-        <div class="comp-item"><span>🔔</span>Lembrete automático de revisão</div>
-        <div class="comp-item"><span>📊</span>Dono só aprova e monitora</div>
-      </div>
+<section class="prob-sec rv">
+  <div class="c tc_">
+    <div class="stag">A realidade da maioria</div>
+    <div class="stit">Você se reconhece em algum desses?</div>
+    <div class="prob-grid mt8">
+      <div class="prob rv"><div class="prob-ic">📞</div><div class="prob-t">Telefone não para de tocar</div><div class="prob-d">Cliente liga 15 vezes por dia só pra saber se o carro ficou pronto. Você para tudo para atender.</div><div class="prob-c">⏱ 2h por dia perdidas</div></div>
+      <div class="prob rv rv1"><div class="prob-ic">📋</div><div class="prob-t">Orçamento no papel se perde</div><div class="prob-d">Cliente diz que não aprovou. Você diz que aprovou. Sem prova. Conflito e prejuízo garantidos.</div><div class="prob-c">💸 R$ 800/mês de prejuízo médio</div></div>
+      <div class="prob rv rv2"><div class="prob-ic">📦</div><div class="prob-t">Cotação no braço</div><div class="prob-d">Liga pra um fornecedor, depois outro, compara na cabeça. 40 minutos por OS de tempo jogado fora.</div><div class="prob-c">⏱ 40min por OS desperdiçados</div></div>
+      <div class="prob rv"><div class="prob-ic">💸</div><div class="prob-t">Cliente que some</div><div class="prob-d">Sem lembrete automático o cliente esquece de revisar e vai na concorrência da próxima vez.</div><div class="prob-c">📉 60% não retornam</div></div>
+      <div class="prob rv rv1"><div class="prob-ic">😤</div><div class="prob-t">Dono no operacional</div><div class="prob-d">Passa o dia resolvendo administração em vez de crescer. Fim do dia exausto e sem ter avançado nada.</div><div class="prob-c">🔥 Negócio estagnado</div></div>
+      <div class="prob rv rv2"><div class="prob-ic">📊</div><div class="prob-t">Gestão às cegas</div><div class="prob-d">Sem relatório, sem controle em tempo real. Descobre que o mês foi ruim só quando vê o extrato.</div><div class="prob-c">📉 Decisões erradas</div></div>
     </div>
   </div>
 </section>
 
 <!-- RESULTADOS -->
-<section class="results-bg" id="resultados">
-  <div class="container">
-    <div class="reveal text-center">
-      <div class="section-tag">Resultados</div>
-      <div class="section-title">O que muda na prática</div>
-    </div>
-    <div class="results-grid reveal">
-      <div class="result-card"><div class="result-icon">⏱</div><div class="result-num">3h</div><div class="result-label">economizadas por dia em ligações e papelada</div></div>
-      <div class="result-card"><div class="result-icon">🚗</div><div class="result-num">40%</div><div class="result-label">mais clientes atendidos com a mesma equipe</div></div>
-      <div class="result-card"><div class="result-icon">⚡</div><div class="result-num">8min</div><div class="result-label">do check-in ao orçamento no celular do cliente</div></div>
-      <div class="result-card"><div class="result-icon">🌙</div><div class="result-num">24/7</div><div class="result-label">atendimento automático mesmo dormindo</div></div>
-      <div class="result-card"><div class="result-icon">💰</div><div class="result-num">12%</div><div class="result-label">de economia nas peças com cotação automática</div></div>
-      <div class="result-card"><div class="result-icon">⭐</div><div class="result-num">9.4</div><div class="result-label">de NPS médio das oficinas com o sistema</div></div>
+<section style="padding:80px 0;background:var(--bg2)" id="resultados">
+  <div class="c rv tc_">
+    <div class="stag">Resultados</div>
+    <div class="stit">O que muda quando você usa o Mecani.AI</div>
+    <div class="rg mt8">
+      <div class="rc"><div class="rc-i">⏱</div><div class="rc-n">3h</div><div class="rc-l">economizadas por dia em ligações e papelada</div></div>
+      <div class="rc"><div class="rc-i">🚗</div><div class="rc-n">40%</div><div class="rc-l">mais clientes atendidos com a mesma equipe</div></div>
+      <div class="rc"><div class="rc-i">⚡</div><div class="rc-n">8min</div><div class="rc-l">do check-in ao orçamento no celular do cliente</div></div>
+      <div class="rc"><div class="rc-i">🌙</div><div class="rc-n">24/7</div><div class="rc-l">atendimento automático mesmo dormindo</div></div>
+      <div class="rc"><div class="rc-i">💰</div><div class="rc-n">12%</div><div class="rc-l">de economia nas peças com cotação automática</div></div>
+      <div class="rc"><div class="rc-i">⭐</div><div class="rc-n">9.4</div><div class="rc-l">de NPS médio das oficinas com o sistema</div></div>
     </div>
   </div>
 </section>
 
 <!-- DEPOIMENTOS -->
-<section id="depoimentos">
-  <div class="container">
-    <div class="reveal">
-      <div class="section-tag">Depoimentos</div>
-      <div class="section-title">Donos que já transformaram suas oficinas</div>
-    </div>
-    <div class="testi-grid mt-8">
-      <div class="testi-card reveal">
-        <span class="tplan">Pro</span>
-        <div class="tstars">★★★★★</div>
-        <div class="ttext">"Antes ficava até as 8h respondendo clientes no zap. Agora o sistema responde tudo sozinho. <strong>Na primeira semana atendi 30% mais carros</strong> porque parei de ficar no telefone."</div>
-        <div class="tauthor">
-          <div class="tav" style="background:rgba(34,197,94,.15);color:#22c55e">RS</div>
-          <div>
-            <div class="tname">Roberto S.</div>
-            <div class="trole">Dono — Oficina RS Auto, Brasília/DF</div>
-            <div class="tver">✅ Verificado</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card reveal reveal-1">
-        <span class="tplan">Pro</span>
-        <div class="tstars">★★★★★</div>
-        <div class="ttext">"A cotação automática é incrível. Antes eu ligava pra 3 fornecedores e demorava 40 minutos. Agora em 5 minutos tenho as melhores propostas. <strong>Economizei R$ 1.200 no primeiro mês.</strong>"</div>
-        <div class="tauthor">
-          <div class="tav" style="background:rgba(59,130,246,.15);color:#60a5fa">MC</div>
-          <div>
-            <div class="tname">Marcos C.</div>
-            <div class="trole">Gerente — Mecânica Central, Goiânia/GO</div>
-            <div class="tver">✅ Verificado</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card reveal reveal-2">
-        <span class="tplan">Starter</span>
-        <div class="tstars">★★★★★</div>
-        <div class="ttext">"Pensei que seria difícil pra minha equipe aprender. Em 10 minutos todo mundo usava. <strong>É o WhatsApp que eles já usam</strong> — a IA faz o trabalho chato por eles. Simples assim."</div>
-        <div class="tauthor">
-          <div class="tav" style="background:rgba(245,158,11,.15);color:#fbbf24">AF</div>
-          <div>
-            <div class="tname">Ana F.</div>
-            <div class="trole">Proprietária — Auto Center ANA, São Paulo/SP</div>
-            <div class="tver">✅ Verificado</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card reveal">
-        <span class="tplan">Pro</span>
-        <div class="tstars">★★★★★</div>
-        <div class="ttext">"O relatório toda segunda de manhã é incrível. Hoje tenho tudo no celular. <strong>Minha oficina cresceu 35% em 3 meses</strong> porque comecei a tomar as decisões certas com os dados."</div>
-        <div class="tauthor">
-          <div class="tav" style="background:rgba(239,68,68,.15);color:#f87171">JP</div>
-          <div>
-            <div class="tname">João P.</div>
-            <div class="trole">Dono — JP Motors, Belo Horizonte/MG</div>
-            <div class="tver">✅ Verificado</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card reveal reveal-1">
-        <span class="tplan">Pro</span>
-        <div class="tstars">★★★★★</div>
-        <div class="ttext">"Meu cliente fica impressionado. Recebe diagnóstico, orçamento pra aprovar, recibo por email. <strong>Parece oficina de concessionária</strong> — mas é minha pequena oficina de bairro."</div>
-        <div class="tauthor">
-          <div class="tav" style="background:rgba(99,102,241,.15);color:#a5b4fc">LS</div>
-          <div>
-            <div class="tname">Luís S.</div>
-            <div class="trole">Proprietário — LS Multimarcas, Rio de Janeiro/RJ</div>
-            <div class="tver">✅ Verificado</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card reveal reveal-2">
-        <span class="tplan">Starter</span>
-        <div class="tstars">★★★★★</div>
-        <div class="ttext">"Usava planilha de Excel. Um inferno. Hoje tudo é automático. <strong>Quando o cliente volta, a IA já sabe o histórico do veículo dele.</strong> Profissional demais pra esse preço."</div>
-        <div class="tauthor">
-          <div class="tav" style="background:rgba(34,197,94,.15);color:#22c55e">CM</div>
-          <div>
-            <div class="tname">Carlos M.</div>
-            <div class="trole">Dono — Auto Elétrica CM, Recife/PE</div>
-            <div class="tver">✅ Verificado</div>
-          </div>
-        </div>
-      </div>
+<section class="testi-sec" id="depoimentos">
+  <div class="c rv">
+    <div class="stag">Depoimentos</div>
+    <div class="stit">Donos que já transformaram suas oficinas</div>
+    <div class="tg mt8">
+      <div class="tc rv"><span class="tc-plan">Pro</span><div class="tc-stars">★★★★★</div><div class="tc-text">"Antes ficava até as 8h respondendo clientes no zap. Agora o sistema responde tudo sozinho. <strong>Na primeira semana atendi 30% mais carros</strong> porque parei de ficar no telefone."</div><div class="tc-auth"><div class="tc-av" style="background:rgba(34,197,94,.15);color:var(--g)">RS</div><div><div class="tc-name">Roberto S.</div><div class="tc-role">Dono — Oficina RS Auto, Brasília/DF</div><div class="tc-ver">✅ Verificado</div></div></div></div>
+      <div class="tc rv rv1"><span class="tc-plan">Pro</span><div class="tc-stars">★★★★★</div><div class="tc-text">"A cotação automática é incrível. Antes eu ligava pra 3 fornecedores e demorava 40 minutos. Agora em 5 minutos tenho as melhores propostas. <strong>Economizei R$ 1.200 no primeiro mês.</strong>"</div><div class="tc-auth"><div class="tc-av" style="background:rgba(59,130,246,.15);color:#93c5fd">MC</div><div><div class="tc-name">Marcos C.</div><div class="tc-role">Gerente — Mecânica Central, Goiânia/GO</div><div class="tc-ver">✅ Verificado</div></div></div></div>
+      <div class="tc rv rv2"><span class="tc-plan">Starter</span><div class="tc-stars">★★★★★</div><div class="tc-text">"Pensei que seria difícil pra equipe aprender. Errei. Em 10 minutos todo mundo usava. <strong>É o WhatsApp que já usam</strong> — a IA faz o trabalho chato. Simples assim."</div><div class="tc-auth"><div class="tc-av" style="background:rgba(245,158,11,.15);color:#fcd34d">AF</div><div><div class="tc-name">Ana F.</div><div class="tc-role">Proprietária — Auto Center ANA, São Paulo/SP</div><div class="tc-ver">✅ Verificado</div></div></div></div>
+      <div class="tc rv"><span class="tc-plan">Pro</span><div class="tc-stars">★★★★★</div><div class="tc-text">"O relatório toda segunda é incrível. <strong>Minha oficina cresceu 35% em 3 meses</strong> porque comecei a tomar decisões certas com os dados. Antes era gestão no escuro."</div><div class="tc-auth"><div class="tc-av" style="background:rgba(239,68,68,.15);color:#fca5a5">JP</div><div><div class="tc-name">João P.</div><div class="tc-role">Dono — JP Motors, Belo Horizonte/MG</div><div class="tc-ver">✅ Verificado</div></div></div></div>
+      <div class="tc rv rv1"><span class="tc-plan">Pro</span><div class="tc-stars">★★★★★</div><div class="tc-text">"Meu cliente recebe diagnóstico, orçamento pra aprovar, aviso quando fica pronto, recibo por email. <strong>Parece concessionária</strong> — mas é minha pequena oficina de bairro."</div><div class="tc-auth"><div class="tc-av" style="background:rgba(99,102,241,.15);color:#c4b5fd">LS</div><div><div class="tc-name">Luís S.</div><div class="tc-role">Proprietário — LS Multimarcas, Rio de Janeiro/RJ</div><div class="tc-ver">✅ Verificado</div></div></div></div>
+      <div class="tc rv rv2"><span class="tc-plan">Starter</span><div class="tc-stars">★★★★★</div><div class="tc-text">"Usava planilha de Excel. Quando o cliente volta, <strong>a IA já sabe o histórico completo do veículo dele.</strong> Profissional demais pra esse preço. Nunca mais volto ao papel."</div><div class="tc-auth"><div class="tc-av" style="background:rgba(34,197,94,.15);color:var(--g)">CM</div><div><div class="tc-name">Carlos M.</div><div class="tc-role">Dono — Auto Elétrica CM, Recife/PE</div><div class="tc-ver">✅ Verificado</div></div></div></div>
     </div>
   </div>
 </section>
 
 <!-- PORTAIS -->
-<section style="background:var(--bg2)">
-  <div class="container">
-    <div class="reveal text-center">
-      <div class="section-tag">Ecossistema</div>
-      <div class="section-title">Uma plataforma. Todos os portais.</div>
-      <p class="section-sub" style="margin:0 auto">Mecânico, cliente, fornecedor e dono — cada um com seu espaço.</p>
-    </div>
-    <div class="portais-grid mt-8">
-      <div class="portal-card reveal" onclick="window.open('portal-mecanico.html','_blank')">
-        <div class="portal-icon">🔧</div>
-        <div class="portal-name">Portal do Mecânico</div>
-        <div class="portal-desc">App instalável. Check-in por voz, diagnóstico IA, fechar OS com 1 toque.</div>
-        <span class="portal-tag">PWA instalável</span>
-      </div>
-      <div class="portal-card reveal reveal-1" onclick="window.open('portal-cliente.html','_blank')">
-        <div class="portal-icon">🚗</div>
-        <div class="portal-name">Portal do Cliente</div>
-        <div class="portal-desc">Acompanha o carro em tempo real, aprova orçamento e vê histórico completo.</div>
-        <span class="portal-tag">Tempo real</span>
-      </div>
-      <div class="portal-card reveal reveal-2" onclick="window.open('portal-agendamento.html','_blank')">
-        <div class="portal-icon">📅</div>
-        <div class="portal-name">Agendamento Online</div>
-        <div class="portal-desc">Cliente agenda sem ligar. Confirmação automática via WhatsApp.</div>
-        <span class="portal-tag">Sem telefonema</span>
-      </div>
-      <div class="portal-card reveal" onclick="window.open('portal-fornecedor.html','_blank')">
-        <div class="portal-icon">🏪</div>
-        <div class="portal-name">Portal do Fornecedor</div>
-        <div class="portal-desc">Recebe cotações automáticas e responde preços com score de confiança.</div>
-        <span class="portal-tag">Cotação auto</span>
-      </div>
-      <div class="portal-card reveal reveal-1" onclick="window.open('https://www.mecaniia.com.br','_blank')">
-        <div class="portal-icon">📊</div>
-        <div class="portal-name">Dashboard</div>
-        <div class="portal-desc">Kanban de OS, financeiro, social media com IA, relatórios em tempo real.</div>
-        <span class="portal-tag">Tempo real</span>
-      </div>
-      <div class="portal-card reveal reveal-2" onclick="window.open('portal-estoque.html','_blank')">
-        <div class="portal-icon">📦</div>
-        <div class="portal-name">Controle de Estoque</div>
-        <div class="portal-desc">Gestão de peças com alertas automáticos de reposição.</div>
-        <span class="portal-tag">Alertas IA</span>
-      </div>
+<section class="portais-sec">
+  <div class="c rv tc_">
+    <div class="stag">Ecossistema completo</div>
+    <div class="stit">Uma plataforma. Todos os portais.</div>
+    <p class="sdesc" style="margin:0 auto">Cada participante tem seu espaço personalizado no sistema.</p>
+    <div class="pg mt8">
+      <div class="pc" onclick="window.open('portal-mecanico.html','_blank')"><div class="pc-ic">🔧</div><div class="pc-t">Portal do Mecânico</div><div class="pc-d">App instalável no celular. Check-in por voz, diagnóstico IA, fechar OS com 1 toque.</div><span class="pc-tag">PWA instalável</span></div>
+      <div class="pc" onclick="window.open('portal-cliente.html','_blank')"><div class="pc-ic">🚗</div><div class="pc-t">Portal do Cliente</div><div class="pc-d">Acompanha o carro em tempo real, aprova orçamento, vê histórico completo — sem ligar.</div><span class="pc-tag">Tempo real</span></div>
+      <div class="pc" onclick="window.open('portal-agendamento.html','_blank')"><div class="pc-ic">📅</div><div class="pc-t">Agendamento Online</div><div class="pc-d">Cliente agenda sem ligar, qualquer hora do dia. Confirmação automática via WhatsApp.</div><span class="pc-tag">24h disponível</span></div>
+      <div class="pc" onclick="window.open('portal-fornecedor.html','_blank')"><div class="pc-ic">🏪</div><div class="pc-t">Portal do Fornecedor</div><div class="pc-d">Recebe cotações, responde preços e gerencia pedidos com score de confiança automático.</div><span class="pc-tag">Cotação auto</span></div>
+      <div class="pc" onclick="window.open('https://www.mecaniia.com.br','_blank')"><div class="pc-ic">📊</div><div class="pc-t">Dashboard Completo</div><div class="pc-d">Kanban, financeiro, clientes, NPS, social media, estoque, agendamentos — tudo em um lugar.</div><span class="pc-tag">Tempo real</span></div>
+      <div class="pc" onclick="window.open('portal-estoque.html','_blank')"><div class="pc-ic">📦</div><div class="pc-t">Controle de Estoque</div><div class="pc-d">Baixa automática nas OS, alertas de reposição. Nunca para serviço por falta de peça.</div><span class="pc-tag">Alertas IA</span></div>
     </div>
   </div>
 </section>
 
 <!-- URGÊNCIA -->
-<section class="urgency-bg">
-  <div class="container">
-    <div class="urgency-inner reveal">
-      <div class="urg-icon">🔥</div>
-      <div class="urg-title">Vagas piloto limitadas em Brasília</div>
-      <p class="urg-sub">Selecionamos 3 oficinas por cidade para testar gratuitamente e nos ajudar a melhorar.</p>
-      <div class="clock">
-        <div class="clock-item"><div class="clock-n" id="ch">00</div><div class="clock-l">horas</div></div>
-        <div class="clock-sep">:</div>
-        <div class="clock-item"><div class="clock-n" id="cm">00</div><div class="clock-l">min</div></div>
-        <div class="clock-sep">:</div>
-        <div class="clock-item"><div class="clock-n" id="cs">00</div><div class="clock-l">seg</div></div>
-      </div>
-      <div class="vagas-bar"><div class="vagas-fill"></div></div>
-      <p class="vagas-txt"><strong>1 de 3 vagas</strong> preenchidas em Brasília</p>
-      <div class="mt-8">
-        <button class="btn-primary" onclick="abrirQR()" style="margin:0 auto">📱 Garantir minha vaga — 7 dias grátis</button>
-      </div>
-      <p class="mt-4" style="font-size:12px;color:var(--t3)">Sem cartão · Sem contrato · Cancela quando quiser</p>
+<section class="urg-sec">
+  <div class="c"><div class="urg-inner rv">
+    <div class="urg-ic">🔥</div>
+    <div class="urg-t">Vagas piloto limitadas em Brasília</div>
+    <p class="urg-p">Apenas 3 oficinas por cidade para testar de graça. Configuramos em 1 hora ao vivo com você.</p>
+    <div class="clock">
+      <div class="clk"><div class="clk-n" id="ch">00</div><div class="clk-l">horas</div></div>
+      <div class="clk-sep">:</div>
+      <div class="clk"><div class="clk-n" id="cm">00</div><div class="clk-l">min</div></div>
+      <div class="clk-sep">:</div>
+      <div class="clk"><div class="clk-n" id="cs">00</div><div class="clk-l">seg</div></div>
     </div>
-  </div>
+    <div class="vbar"><div class="vfill"></div></div>
+    <p class="vtxt"><strong>1 de 3 vagas</strong> preenchidas em Brasília</p>
+    <div class="mt8"><button class="btn-g" onclick="abrirQR()" style="margin:0 auto">📱 Garantir vaga — 7 dias grátis</button></div>
+    <p class="mt4" style="font-size:12px;color:var(--t3)">Sem cartão · Sem contrato · Configuro ao vivo com você</p>
+  </div></div>
 </section>
 
 <!-- PREÇOS -->
-<section id="precos">
-  <div class="container text-center">
-    <div class="reveal">
-      <div class="section-tag">Planos</div>
-      <div class="section-title">Simples e transparente</div>
-      <p class="section-sub" style="margin:0 auto">7 dias grátis. Sem cartão de crédito. Cancele quando quiser.</p>
-      <div class="price-toggle">
+<section class="price-sec" id="precos">
+  <div class="c rv tc_">
+    <div class="stag">Planos</div>
+    <div class="stit">Simples e transparente</div>
+    <p class="sdesc" style="margin:0 auto">7 dias grátis. Sem cartão de crédito. Cancele quando quiser.</p>
+    <div class="pt-wrap">
+      <div class="ptoggle">
         <button class="pto on" onclick="setPlano('m',this)">Mensal</button>
-        <button class="pto" onclick="setPlano('a',this)">Anual <span class="save-badge">-20%</span></button>
+        <button class="pto" onclick="setPlano('a',this)">Anual <span class="save-b">-20%</span></button>
       </div>
     </div>
-    <div class="price-grid reveal">
-      <div class="price-card">
-        <div class="price-name">Starter</div>
-        <div class="price-val"><sup>R$</sup><span class="pn" data-m="197" data-a="158">197</span><span class="per">/mês</span></div>
-        <div class="price-desc">Para oficinas iniciando a automatização</div>
-        <button class="price-btn o" onclick="abrirQR()">Começar grátis →</button>
-        <div class="price-feats">
-          <div class="pf"><span class="ok">✓</span>Até 50 OS por mês</div>
-          <div class="pf"><span class="ok">✓</span>Check-in por WhatsApp</div>
-          <div class="pf"><span class="ok">✓</span>Diagnóstico assistido por IA</div>
-          <div class="pf"><span class="ok">✓</span>Portal do cliente</div>
-          <div class="pf"><span class="ok">✓</span>Email automático</div>
-          <div class="pf"><span class="no">✗</span>Cotação automática</div>
-          <div class="pf"><span class="no">✗</span>Social media IA</div>
+    <div class="pgrid">
+      <div class="prcard">
+        <div class="pr-name">Starter</div>
+        <div class="pr-val"><sup>R$</sup><span class="pn" data-m="197" data-a="158">197</span><span class="per">/mês</span></div>
+        <div class="pr-desc">Para oficinas iniciando a automatização</div>
+        <button class="pr-btn pr-o" onclick="abrirQR()">Começar grátis →</button>
+        <div class="pr-feats">
+          <div class="prf"><span class="ok">✓</span>Até 50 OS por mês</div>
+          <div class="prf"><span class="ok">✓</span>Check-in por WhatsApp</div>
+          <div class="prf"><span class="ok">✓</span>Diagnóstico assistido por IA</div>
+          <div class="prf"><span class="ok">✓</span>Portal do cliente</div>
+          <div class="prf"><span class="ok">✓</span>Email automático</div>
+          <div class="prf"><span class="ok">✓</span>Dashboard básico</div>
+          <div class="prf"><span class="no">✗</span>Cotação automática</div>
+          <div class="prf"><span class="no">✗</span>Social media IA</div>
+          <div class="prf"><span class="no">✗</span>Relatório semanal</div>
         </div>
       </div>
-      <div class="price-card popular">
-        <div class="pop-badge">⭐ Mais popular</div>
-        <div class="price-name">Pro</div>
-        <div class="price-val"><sup>R$</sup><span class="pn" data-m="397" data-a="318">397</span><span class="per">/mês</span></div>
-        <div class="price-desc">Automatização completa — do check-in ao NPS</div>
-        <button class="price-btn g" onclick="abrirQR()">Começar grátis →</button>
-        <div class="price-feats">
-          <div class="pf"><span class="ok">✓</span>OS ilimitadas</div>
-          <div class="pf"><span class="ok">✓</span>Tudo do Starter</div>
-          <div class="pf"><span class="ok">✓</span>Cotação automática fornecedores</div>
-          <div class="pf"><span class="ok">✓</span>Social media com IA</div>
-          <div class="pf"><span class="ok">✓</span>Relatório semanal + insights</div>
-          <div class="pf"><span class="ok">✓</span>CRM preventivo automático</div>
-          <div class="pf"><span class="ok">✓</span>Controle de estoque</div>
-          <div class="pf"><span class="ok">✓</span>App Android + iOS</div>
-          <div class="pf"><span class="ok">✓</span>Garantia automática</div>
+      <div class="prcard hot">
+        <div class="hot-b">⭐ Mais popular</div>
+        <div class="pr-name">Pro</div>
+        <div class="pr-val"><sup>R$</sup><span class="pn" data-m="397" data-a="318">397</span><span class="per">/mês</span></div>
+        <div class="pr-desc">Automatização completa — do check-in ao NPS</div>
+        <button class="pr-btn pr-g" onclick="abrirQR()">Começar grátis →</button>
+        <div class="pr-feats">
+          <div class="prf"><span class="ok">✓</span>OS ilimitadas</div>
+          <div class="prf"><span class="ok">✓</span>Tudo do Starter</div>
+          <div class="prf"><span class="ok">✓</span>Cotação automática fornecedores</div>
+          <div class="prf"><span class="ok">✓</span>Social media com IA</div>
+          <div class="prf"><span class="ok">✓</span>Relatório semanal + insight IA</div>
+          <div class="prf"><span class="ok">✓</span>CRM preventivo automático</div>
+          <div class="prf"><span class="ok">✓</span>Controle de estoque</div>
+          <div class="prf"><span class="ok">✓</span>App Android + iOS</div>
+          <div class="prf"><span class="ok">✓</span>Garantia automática</div>
+          <div class="prf"><span class="ok">✓</span>Agendamento online</div>
+          <div class="prf"><span class="ok">✓</span>NPS + Google Review</div>
         </div>
       </div>
-      <div class="price-card">
-        <div class="price-name">Enterprise</div>
-        <div class="price-val" style="font-size:24px;padding-top:8px">Sob consulta</div>
-        <div class="price-desc">Para redes com múltiplas unidades</div>
-        <button class="price-btn o" onclick="abrirQR()">Falar com consultor →</button>
-        <div class="price-feats">
-          <div class="pf"><span class="ok">✓</span>Multi-unidades</div>
-          <div class="pf"><span class="ok">✓</span>Tudo do Pro</div>
-          <div class="pf"><span class="ok">✓</span>Dashboard consolidado</div>
-          <div class="pf"><span class="ok">✓</span>API dedicada</div>
-          <div class="pf"><span class="ok">✓</span>Onboarding personalizado</div>
-          <div class="pf"><span class="ok">✓</span>SLA garantido</div>
-          <div class="pf"><span class="ok">✓</span>White-label disponível</div>
+      <div class="prcard">
+        <div class="pr-name">Enterprise</div>
+        <div class="pr-val" style="font-size:22px;padding-top:8px;letter-spacing:-.5px">Sob consulta</div>
+        <div class="pr-desc">Para redes com múltiplas unidades</div>
+        <button class="pr-btn pr-o" onclick="abrirQR()">Falar com consultor →</button>
+        <div class="pr-feats">
+          <div class="prf"><span class="ok">✓</span>Multi-unidades</div>
+          <div class="prf"><span class="ok">✓</span>Tudo do Pro</div>
+          <div class="prf"><span class="ok">✓</span>Dashboard consolidado</div>
+          <div class="prf"><span class="ok">✓</span>API dedicada</div>
+          <div class="prf"><span class="ok">✓</span>Onboarding personalizado</div>
+          <div class="prf"><span class="ok">✓</span>SLA garantido</div>
+          <div class="prf"><span class="ok">✓</span>White-label disponível</div>
         </div>
       </div>
     </div>
@@ -940,23 +838,20 @@ section { padding: 80px 0; }
 </section>
 
 <!-- CTA FINAL -->
-<section class="cta-final">
-  <div class="container reveal">
-    <div class="cta-title">Pronto para sua<br>oficina <span>decolar?</span></div>
-    <p class="cta-sub">Configuração em menos de 1 hora. Resultado no primeiro dia.</p>
-    <button class="wpp-btn" onclick="abrirQR()">
-      <span style="font-size:22px">📱</span>
-      Falar no WhatsApp agora
-    </button>
-    <p class="cta-note">7 dias grátis · Sem cartão · Configuro com você em 1 hora</p>
+<section class="cta-sec rv">
+  <div class="c">
+    <div class="cta-t">Pronto para sua oficina<br><em>trabalhar por você?</em></div>
+    <p class="cta-p">Configuração em menos de 1 hora com você ao vivo. Resultado no primeiro dia.</p>
+    <button class="wbtn" onclick="abrirQR()"><span style="font-size:22px">📱</span>Falar no WhatsApp agora</button>
+    <p class="cta-note">7 dias grátis · Sem cartão · Cancele quando quiser · Configuro ao vivo com você</p>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer>
-  <div class="container footer">
-    <div class="footer-logo">Mecani<span>.AI</span></div>
-    <div class="footer-links">
+<footer class="footer">
+  <div class="c">
+    <div class="ft-logo">Mecani<b>.AI</b></div>
+    <div class="ft-links">
       <a href="portal-agendamento.html">Agendar</a>
       <a href="precos.html">Preços</a>
       <a href="faq.html">FAQ</a>
@@ -966,30 +861,26 @@ section { padding: 80px 0; }
       <a href="privacidade.html">Privacidade</a>
       <a href="termos.html">Termos</a>
     </div>
-    <div class="footer-copy">© 2025 Mecani.AI</div>
+    <div class="ft-copy">© 2025 Mecani.AI · mecaniia.com.br</div>
   </div>
 </footer>
 
 <!-- STICKY MOBILE -->
-<div class="sticky-mobile" id="sticky">
-  <button class="sticky-btn" onclick="abrirQR()">📱 Testar grátis por 7 dias →</button>
+<div class="sticky" id="stk">
+  <button class="stk-btn" onclick="abrirQR()">📱 Testar grátis por 7 dias →</button>
 </div>
 
 <!-- QR MODAL -->
-<div class="qr-backdrop" id="qr-backdrop" onclick="if(event.target===this)fecharQR()">
-  <div class="qr-modal">
+<div class="qr-bg" id="qrbg" onclick="if(event.target===this)fecharQR()">
+  <div class="qr-box">
     <button class="qr-x" onclick="fecharQR()">×</button>
-    <div class="qr-title">Começar agora 🚀</div>
-    <div class="qr-sub">No celular: escaneie o QR code abaixo com a câmera para abrir o WhatsApp diretamente.</div>
-    <div class="qr-img">
-      <img
-        src="https://api.qrserver.com/v1/create-qr-code/?size=172x172&color=000000&bgcolor=ffffff&data=https%3A%2F%2Fwa.me%2F5561991775904%3Ftext%3DQuero%2Btestar%2Bo%2BMecani.AI%2Bgratuitamente"
-        alt="QR Code WhatsApp"
-        loading="lazy"
-        width="172" height="172">
+    <div class="qr-t">Começar agora 🚀</div>
+    <div class="qr-s">No celular: aponte a câmera para o QR code para abrir o WhatsApp diretamente.</div>
+    <div class="qr-img-wrap">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=164x164&data=https%3A%2F%2Fwa.me%2F5561991775904%3Ftext%3DQuero%2Btestar%2Bo%2BMecani.AI%2B7%2Bdias%2Bgr%25C3%25A1tis" alt="QR Code WhatsApp" width="164" height="164" loading="lazy">
     </div>
-    <div class="qr-or">ou</div>
-    <a class="qr-wpp" href="https://wa.me/5561991775904?text=Quero+testar+o+Mecani.AI+gratuitamente" target="_blank">
+    <div class="qr-or">ou clique abaixo</div>
+    <a class="qr-wa" href="https://wa.me/5561991775904?text=Quero+testar+o+Mecani.AI+7+dias+gr%C3%A1tis" target="_blank">
       <span style="font-size:18px">📱</span> Abrir WhatsApp
     </a>
     <div class="qr-num">(61) 99177-5904 · Respondemos em minutos</div>
@@ -997,52 +888,84 @@ section { padding: 80px 0; }
 </div>
 
 <script>
-// ── QR Modal ──────────────────────────────────────
-function abrirQR() {
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  if (isMobile) {
-    window.open('https://wa.me/5561991775904?text=Quero+testar+o+Mecani.AI+gratuitamente', '_blank');
+/* ── QR Modal ── */
+function abrirQR(){
+  if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){
+    window.open('https://wa.me/5561991775904?text=Quero+testar+o+Mecani.AI+7+dias+gr%C3%A1tis','_blank');
     return;
   }
-  document.getElementById('qr-backdrop').classList.add('show');
-  document.body.style.overflow = 'hidden';
+  document.getElementById('qrbg').classList.add('on');
+  document.body.style.overflow='hidden';
 }
-function fecharQR() {
-  document.getElementById('qr-backdrop').classList.remove('show');
-  document.body.style.overflow = '';
+function fecharQR(){
+  document.getElementById('qrbg').classList.remove('on');
+  document.body.style.overflow='';
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharQR(); });
+document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharQR()});
 
-// ── Scroll Reveal ─────────────────────────────────
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+/* ── Scroll Reveal ── */
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')})},{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
 
-// ── Sticky mobile ─────────────────────────────────
-window.addEventListener('scroll', () => {
-  document.getElementById('sticky').classList.toggle('show', scrollY > 500);
-}, { passive: true });
+/* ── Sticky ── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('stk').classList.toggle('on',scrollY>600);
+},{passive:true});
 
-// ── Countdown ─────────────────────────────────────
-function tick() {
-  const now = new Date();
-  const end = new Date(now); end.setHours(23, 59, 59, 0);
-  const d = end - now;
-  document.getElementById('ch').textContent = String(Math.floor(d / 3600000)).padStart(2, '0');
-  document.getElementById('cm').textContent = String(Math.floor((d % 3600000) / 60000)).padStart(2, '0');
-  document.getElementById('cs').textContent = String(Math.floor((d % 60000) / 1000)).padStart(2, '0');
+/* ── Countdown ── */
+function tick(){
+  const n=new Date(),e=new Date(n);e.setHours(23,59,59,0);
+  const d=e-n;
+  document.getElementById('ch').textContent=String(Math.floor(d/3600000)).padStart(2,'0');
+  document.getElementById('cm').textContent=String(Math.floor((d%3600000)/60000)).padStart(2,'0');
+  document.getElementById('cs').textContent=String(Math.floor((d%60000)/1000)).padStart(2,'0');
 }
-tick(); setInterval(tick, 1000);
+tick();setInterval(tick,1000);
 
-// ── Preços toggle ─────────────────────────────────
-function setPlano(m, el) {
-  document.querySelectorAll('.pto').forEach(x => x.classList.remove('on'));
+/* ── Preços ── */
+function setPlano(m,el){
+  document.querySelectorAll('.pto').forEach(x=>x.classList.remove('on'));
   el.classList.add('on');
-  document.querySelectorAll('.pn').forEach(n => {
-    n.textContent = m === 'm' ? n.dataset.m : n.dataset.a;
-  });
+  document.querySelectorAll('.pn').forEach(n=>{n.textContent=m==='m'?n.dataset.m:n.dataset.a});
 }
+
+/* ── Video Player Animado ── */
+const scenes=['sc1','sc2','sc3','sc4','sc5'];
+let cur=0,playing=true,timer=null,elapsed=0;
+const DURATION=8000; // 8s por cena
+
+function goScene(i){
+  document.getElementById(scenes[cur]).classList.remove('active');
+  document.querySelectorAll('.vp-sdot')[cur].classList.remove('on');
+  cur=i;
+  document.getElementById(scenes[cur]).classList.add('active');
+  document.querySelectorAll('.vp-sdot')[cur].classList.add('on');
+  document.getElementById('vp-scene-label').textContent=`Cena ${cur+1} de ${scenes.length}`;
+  elapsed=0;
+}
+
+function nextScene(){
+  goScene((cur+1)%scenes.length);
+}
+
+function startTimer(){
+  clearInterval(timer);
+  elapsed=0;
+  timer=setInterval(()=>{
+    if(!playing)return;
+    elapsed+=100;
+    const pct=((cur*DURATION+elapsed)/(scenes.length*DURATION))*100;
+    document.getElementById('vfill').style.width=Math.min(pct,100)+'%';
+    if(elapsed>=DURATION){nextScene();}
+  },100);
+}
+
+function togglePlay(){
+  playing=!playing;
+  document.getElementById('play-btn').textContent=playing?'⏸':'▶';
+}
+
+startTimer();
 </script>
 </body>
 </html>
