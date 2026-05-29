@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Social Media — Mecani.AI</title>
+<meta name="description" content="Crie, edite e publique conteúdo profissional para Instagram, Facebook e X da sua oficina. Ferramentas gratuitas e IA para legendas automáticas.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text y='.9em' font-size='80' x='10'>🔧</text></svg>">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px}
+body{background:#09090b;color:#fafaf9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+:root{--g:#22c55e;--gd:#16a34a;--bg1:#09090b;--bg2:#111113;--bg3:#1c1c1f;--bg4:#27272a;--t1:#fafaf9;--t2:#a1a1aa;--t3:#52525b;--r:14px}
+a{text-decoration:none;color:inherit}
+.c{max-width:1100px;margin:0 auto;padding:0 20px}
+
+/* HEADER */
+.hd{position:sticky;top:0;z-index:100;height:60px;background:rgba(9,9,11,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center}
+.hd .c{display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:17px;font-weight:800}.logo b{color:var(--g)}
+.hdnav{display:flex;align-items:center;gap:14px}
+.hdnav a{font-size:13px;color:var(--t2);padding:6px 10px;border-radius:8px;transition:all .2s}
+.hdnav a:hover,.hdnav a.on{color:var(--t1);background:var(--bg3)}
+.hd-back{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--t2);transition:color .2s}
+.hd-back:hover{color:var(--t1)}
+
+/* HERO */
+.hero{padding:48px 0 36px;border-bottom:1px solid rgba(255,255,255,.07)}
+.hero-tag{font-size:11px;font-weight:700;color:var(--g);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.hero-title{font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:12px}
+.hero-sub{font-size:16px;color:var(--t2);max-width:560px;line-height:1.6}
+.hero-actions{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+.btn-g{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:var(--g);color:#000;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-g:hover{background:var(--gd);transform:translateY(-1px)}
+.btn-o{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:transparent;color:var(--t2);border:1px solid var(--bg4);border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;text-decoration:none}
+.btn-o:hover{border-color:var(--t2);color:var(--t1)}
+
+/* TABS */
+.tabs-wrap{padding:24px 0 0;border-bottom:1px solid rgba(255,255,255,.07);position:sticky;top:60px;z-index:90;background:var(--bg1)}
+.tabs{display:flex;gap:4px;overflow-x:auto;padding-bottom:0}
+.tab{display:flex;align-items:center;gap:7px;padding:10px 16px;border-radius:10px 10px 0 0;font-size:14px;font-weight:500;cursor:pointer;color:var(--t2);border:none;background:transparent;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s}
+.tab:hover{color:var(--t1);background:rgba(255,255,255,.04)}
+.tab.on{color:var(--t1);font-weight:700;border-bottom-color:var(--g)}
+
+/* CONTEÚDO */
+.content{padding:32px 0 80px}
+.panel{display:none}.panel.on{display:block}
+
+/* FERRAMENTAS */
+.tools-intro{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:14px;padding:18px 20px;margin-bottom:28px;display:flex;align-items:flex-start;gap:14px}
+.tools-intro-icon{font-size:28px;flex-shrink:0}
+.tools-intro-text{font-size:14px;color:var(--t2);line-height:1.6}.tools-intro-text strong{color:var(--t1)}
+
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:32px}
+.tool-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--r);overflow:hidden;transition:all .25s}
+.tool-card:hover{border-color:rgba(34,197,94,.25);transform:translateY(-2px)}
+.tc-top{padding:20px;border-bottom:1px solid var(--bg3)}
+.tc-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.tc-logo{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.tc-name{font-size:16px;font-weight:700}
+.tc-type{font-size:11px;color:var(--t3);margin-top:1px}
+.tc-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px}
+.b-free{background:rgba(34,197,94,.12);color:var(--g)}
+.b-paid{background:rgba(245,158,11,.1);color:#fcd34d}
+.b-best{background:rgba(99,102,241,.1);color:#c4b5fd}
+.b-photo{background:rgba(236,72,153,.1);color:#f9a8d4}
+.b-video{background:rgba(59,130,246,.1);color:#93c5fd}
+.tc-desc{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:12px}
+.tc-feats{display:flex;flex-direction:column;gap:5px}
+.tc-feat{font-size:12px;color:var(--t2);display:flex;gap:6px}
+.tc-feat .ck{color:var(--g);flex-shrink:0;font-weight:700}
+.tc-bottom{padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.tc-price{font-size:13px;color:var(--t2)}.tc-price strong{color:var(--t1)}
+.tc-btn{padding:8px 16px;background:var(--g);color:#000;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.tc-btn:hover{background:var(--gd)}
+.tc-btn-o{background:transparent;border:1px solid var(--bg4);color:var(--t2)}.tc-btn-o:hover{border-color:var(--g);color:var(--g)}
+
+/* SEÇÃO RECOMENDADA */
+.rec-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.rec-title{font-size:18px;font-weight:700}
+.rec-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;background:var(--g);color:#000}
+.sec-title{font-size:16px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin:28px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--bg3)}
+
+/* GERADOR IA */
+.ai-gen{background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--r);overflow:hidden}
+.ag-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--bg3)}
+.ag-title{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.ag-body{padding:20px;display:flex;flex-direction:column;gap:16px}
+.ag-upload{border:2px dashed var(--bg4);border-radius:12px;padding:40px 20px;text-align:center;cursor:pointer;transition:all .2s}
+.ag-upload:hover{border-color:var(--g);background:rgba(34,197,94,.04)}
+.ag-upload-icon{font-size:36px;margin-bottom:8px}
+.ag-upload-text{font-size:14px;color:var(--t2)}.ag-upload-text strong{color:var(--t1)}
+.ag-upload-sub{font-size:12px;color:var(--t3);margin-top:4px}
+.ag-opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ag-opt label{font-size:12px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
+.ag-opt select,.ag-opt input{width:100%;padding:10px 12px;background:var(--bg3);border:1px solid var(--bg4);border-radius:8px;color:var(--t1);font-size:14px;outline:none}
+.ag-opt select:focus,.ag-opt input:focus{border-color:var(--g)}
+.ag-result{display:none;flex-direction:column;gap:12px}
+.ag-result.show{display:flex}
+.ag-caption-box{background:var(--bg3);border:1px solid var(--bg4);border-radius:10px;padding:14px}
+.ag-cap-label{font-size:11px;font-weight:700;color:var(--g);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.ag-cap-text{font-size:14px;color:var(--t1);line-height:1.7;white-space:pre-wrap}
+.ag-hashtags{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;background:var(--bg3);border-radius:10px;border:1px solid var(--bg4)}
+.ag-tag{font-size:12px;color:var(--g);font-weight:600}
+.ag-actions{display:flex;gap:8px;flex-wrap:wrap}
+.ag-action-btn{padding:9px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;gap:6px}
+.ab-copy{background:var(--bg4);color:var(--t1)}.ab-copy:hover{background:var(--bg3)}
+.ab-ig{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:#fff}
+.ab-fb{background:#1877f2;color:#fff}
+.ab-x{background:#000;border:1px solid #333;color:#fff}
+.ab-dl{background:var(--g);color:#000}
+
+/* POSTS HISTÓRICO */
+.posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.post-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--r);overflow:hidden;transition:all .2s}
+.post-card:hover{border-color:rgba(34,197,94,.2)}
+.pc-img{height:160px;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:48px}
+.pc-body{padding:14px}
+.pc-net{display:flex;gap:5px;margin-bottom:8px}
+.pc-net-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px}
+.pn-ig{background:linear-gradient(135deg,#833ab4,#fd1d1d);color:#fff}
+.pn-fb{background:#1877f2;color:#fff}
+.pn-x{background:#000;border:1px solid #333;color:#fff}
+.pc-text{font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:10px}
+.pc-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--t3)}
+.pc-status{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px}
+.ps-pub{background:rgba(34,197,94,.1);color:var(--g)}
+.ps-pen{background:rgba(245,158,11,.1);color:#fcd34d}
+.ps-fail{background:rgba(239,68,68,.1);color:#fca5a5}
+
+/* CALENDÁRIO */
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.cal-nav{display:flex;align-items:center;gap:12px}
+.cal-month{font-size:16px;font-weight:700}
+.cal-nav-btn{padding:6px 12px;background:var(--bg3);border:none;color:var(--t2);border-radius:8px;cursor:pointer;font-size:13px;transition:all .2s}.cal-nav-btn:hover{color:var(--t1)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-day-header{text-align:center;font-size:11px;font-weight:700;color:var(--t3);padding:6px;text-transform:uppercase;letter-spacing:.5px}
+.cal-day{min-height:72px;background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;padding:8px;cursor:pointer;transition:all .2s}
+.cal-day:hover{border-color:rgba(34,197,94,.25)}
+.cal-day.today{border-color:var(--g)}
+.cal-day-num{font-size:12px;font-weight:700;margin-bottom:4px}
+.cal-day.today .cal-day-num{color:var(--g)}
+.cal-day.other-month .cal-day-num{color:var(--t3)}
+.cal-event{font-size:10px;padding:2px 5px;border-radius:4px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ce-ig{background:rgba(253,29,29,.15);color:#fca5a5}
+.ce-fb{background:rgba(24,119,242,.15);color:#93c5fd}
+
+/* CONECTAR REDES */
+.connect-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:24px}
+.conn-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--r);padding:20px;text-align:center;transition:all .25s}
+.conn-card:hover{border-color:rgba(34,197,94,.2)}
+.conn-icon{font-size:36px;margin-bottom:12px}
+.conn-name{font-size:16px;font-weight:700;margin-bottom:4px}
+.conn-desc{font-size:13px;color:var(--t2);margin-bottom:14px;line-height:1.5}
+.conn-status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;margin-bottom:12px;display:inline-block}
+.cs-on{background:rgba(34,197,94,.1);color:var(--g)}
+.cs-off{background:rgba(255,255,255,.07);color:var(--t3)}
+.conn-btn{width:100%;padding:10px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .2s}
+.cb-on{background:rgba(34,197,94,.1);color:var(--g);cursor:default}
+.cb-off{background:var(--g);color:#000}.cb-off:hover{background:var(--gd)}
+
+/* GUIA */
+.guide-steps{display:flex;flex-direction:column;gap:8px}
+.gs{display:flex;gap:16px;background:var(--bg2);border:1px solid var(--bg3);border-radius:12px;padding:18px;transition:all .25s}
+.gs:hover{border-color:rgba(34,197,94,.2)}
+.gs-num{width:34px;height:34px;background:rgba(34,197,94,.1);color:var(--g);border-radius:10px;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.gs-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.gs-desc{font-size:13px;color:var(--t2);line-height:1.5}
+.gs-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--g);font-weight:600;margin-top:6px}
+.gs-link:hover{text-decoration:underline}
+
+/* DICAS */
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:20px}
+.tip-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:12px;padding:18px}
+.tip-icon{font-size:24px;margin-bottom:10px}
+.tip-title{font-size:14px;font-weight:700;margin-bottom:6px}
+.tip-desc{font-size:12px;color:var(--t2);line-height:1.6}
+
+/* UPLOAD PREVIEW */
+.preview-img{width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-bottom:12px}
+.loading-dots::after{content:'';animation:dots 1.5s infinite}
+@keyframes dots{0%{content:'.'}33%{content:'..'}66%{content:'...'}100%{content:''}}
+.hidden{display:none}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .ag-opts{grid-template-columns:1fr}
+  .cal-grid{grid-template-columns:repeat(7,1fr)}
+  .cal-day{min-height:52px;padding:5px}
+  .tools-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hd">
+  <div class="c">
+    <div style="display:flex;align-items:center;gap:20px">
+      <a href="/" class="hd-back">← Voltar</a>
+      <div class="logo">Mecani<b>.AI</b> — Social Media</div>
+    </div>
+    <nav class="hdnav">
+      <a href="#" class="on" onclick="showPanel('ferramentas',this)">Ferramentas</a>
+      <a href="#" onclick="showPanel('criar',this)">Criar conteúdo</a>
+      <a href="#" onclick="showPanel('posts',this)">Meus posts</a>
+      <a href="#" onclick="showPanel('calendario',this)">Calendário</a>
+      <a href="#" onclick="showPanel('conectar',this)">Conectar redes</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<div style="padding:40px 0 28px;border-bottom:1px solid rgba(255,255,255,.07)">
+  <div class="c">
+    <div class="hero-tag">Social Media com IA</div>
+    <div class="hero-title">Crie conteúdo profissional<br>para sua oficina em minutos.</div>
+    <p class="hero-sub">Foto do serviço → IA gera legenda + hashtags → você aprova → publica no Instagram, Facebook e X. Sem precisar saber design. Sem precisar saber escrever.</p>
+    <div class="hero-actions">
+      <button class="btn-g" onclick="showPanel('criar',null);scrollTo(0,0)">📸 Criar post agora</button>
+      <a href="https://canva.com" target="_blank" class="btn-o">🎨 Abrir Canva (grátis)</a>
+      <a href="https://www.capcut.com/pt-br/" target="_blank" class="btn-o">🎬 Editar vídeo — CapCut</a>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="c">
+    <div class="tabs">
+      <button class="tab on" id="tab-ferramentas" onclick="showPanel('ferramentas',this)">🛠️ Ferramentas</button>
+      <button class="tab" id="tab-criar" onclick="showPanel('criar',this)">✨ Criar com IA</button>
+      <button class="tab" id="tab-posts" onclick="showPanel('posts',this)">📋 Meus posts</button>
+      <button class="tab" id="tab-calendario" onclick="showPanel('calendario',this)">📅 Calendário</button>
+      <button class="tab" id="tab-conectar" onclick="showPanel('conectar',this)">🔗 Conectar redes</button>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+<div class="c">
+
+<!-- ══ FERRAMENTAS ══ -->
+<div class="panel on" id="panel-ferramentas">
+
+  <div class="tools-intro">
+    <div class="tools-intro-icon">💡</div>
+    <div class="tools-intro-text">
+      <strong>Estratégia recomendada para oficinas:</strong> use o Canva (grátis) para criar artes de foto, e o CapCut (grátis) para editar vídeos curtos dos serviços. A IA do Mecani.AI gera a legenda e as hashtags automaticamente a partir da foto. Para agendar posts, use o Meta Business Suite (100% gratuito para Instagram + Facebook).
+    </div>
+  </div>
+
+  <!-- FOTO -->
+  <div class="sec-title">📸 Edição de Fotos — Gratuito</div>
+  <div class="tools-grid">
+
+    <div class="tool-card">
+      <div class="tc-top">
+        <div class="tc-header">
+          <div class="tc-logo" style="background:linear-gradient(135deg,#00c4cc,#7b2ff7)">🎨</div>
+          <div><div class="tc-name">Canva</div><div class="tc-type">Editor de design e fotos</div></div>
+        </div>
+        <div class="tc-badges">
+          <span class="badge b-free">✅ Grátis</span>
+          <span class="badge b-best">⭐ Recomendado</span>
+          <span class="badge b-photo">📸 Foto</span>
+        </div>
+        <div class="tc-desc">O editor mais completo e fácil para criar posts profissionais. Tem templates prontos para oficinas, ajuste de brilho, contraste, filtros, textos, logos e muito mais. Tudo no navegador, sem instalar nada.</div>
+        <div class="tc-feats">
+          <div class="tc-feat"><span class="ck">✓</span>250.000+ templates prontos</div>
+          <div class="tc-feat"><span class="ck">✓</span>Redimensionar para qualquer rede social</div>
+          <div class="tc-feat"><span class="ck">✓</span>Remover fundo da foto (versão Pro)</div>
+          <div class="tc-feat"><span class="ck">✓</span>Animações e efeitos</div>
+          <div class="tc-feat"><span class="ck">✓</span>Banco de imagens gratuito</div>
+          <div class="tc-feat"><span class="ck">✓</span>Funciona no celular e computador</div>
+        </div>
+      </div>
+      <div class="tc-bottom">
+        <div class="tc-price"><strong>Grátis</strong> | Pro: R$ 55/mês</div>
+        <a href="https://canva.com" target="_blank" class="tc-btn">Abrir Canva →</a>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tc-top">
+        <div class="tc-header">
+          <div class="tc-logo" style="background:#1a1a2e">✂️</div>
+          <div><div class="tc-name">Remove.bg</div><div class="tc-type">Remover fundo de fotos</div></div>
+        </div>
+        <div class="tc-badges">
+          <span class="badge b-free">✅ Grátis</span>
+          <span class="badge b-photo">📸 Foto</span>
+        </div>
+        <div class="tc-desc">Remove o fundo de qualquer foto em 1 clique com IA. Perfeito para colocar foto do carro em fundo branco ou colorido para posts profissionais no Instagram.</div>
+        <div class="tc-feats">
+          <div class="tc-feat"><span class="ck">✓</span>Remoção de fundo automática com IA</div>
+          <div class="tc-feat"><span class="ck">✓</span>Perfeito para fotos de carros</div>
+          <div class="tc-feat"><span class="ck">✓</span>Resultado em segundos</div>
+          <div class="tc-feat"><span class="ck">✓</span>5 imagens grátis por mês</div>
+        </div>
+      </div>
+      <div class="tc-bottom">
+        <div class="tc-price"><strong>5 grátis/mês</strong> | Pago: R$ 30/mês</div>
+        <a href="https://remove.bg" target="_blank" class="tc-btn">Abrir →</a>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tc-top">
+        <div class="tc-header">
+          <div class="tc-logo" style="background:#ff6b6b">📱</div>
+          <div><div class="tc-name">Snapseed</div><div class="tc-type">Editor de fotos mobile</div></div>
+        </div>
+        <div class="tc-badges">
+          <span class="badge b-free">✅ 100% Grátis</span>
+          <span class="badge b-photo">📸 Foto</span>
+        </div>
+        <div class="tc-desc">O melhor editor de fotos gratuito para celular (Android e iPhone). Desenvolvido pelo Google. Filtros profissionais, ajuste seletivo, e edição precisa — tudo no celular, direto após o serviço.</div>
+        <div class="tc-feats">
+          <div class="tc-feat"><span class="ck">✓</span>29 ferramentas e filtros profissionais</div>
+          <div class="tc-feat"><span class="ck">✓</span>Ajuste seletivo de áreas</div>
+          <div class="tc-feat"><span class="ck">✓</span>Editar texto e inserir logo</div>
+          <div class="tc-feat"><span class="ck">✓</span>Sem marca d'água</div>
+          <div class="tc-feat"><span class="ck">✓</span>100% gratuito — sem planos pagos</div>
+        </div>
+      </div>
+      <div class="tc-bottom">
+        <div class="tc-price"><strong>Gratuito</strong> — sem custo</div>
+        <a href="https://snapseed.online" target="_blank" class="tc-btn">Abrir →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VÍDEO -->
+  <div class="sec-title">🎬 Edição de Vídeo — Gratuito</div>
+  <div class="tools-grid">
+
+    <div class="tool-card">
+      <div class="tc-top">
+        <div class="tc-header">
+          <div class="tc-logo" style="background:#000">🎬</div>
+          <div><div class="tc-name">CapCut Web</div><div class="tc-type">Editor de vídeo para redes sociais</div></div>
+        </div>
+        <div class="tc-badges">
+          <span class="badge b-free">✅ Grátis</span>
+          <span class="badge b-best">⭐ Recomendado</span>
+          <span class="badge b-video">🎬 Vídeo</span>
+        </div>
+        <div class="tc-desc">O melhor editor gratuito para Reels e Stories. Perfeito para mostrar serviços da oficina. Funciona no navegador e no celular. Sem marca d'água. Tem legendas automáticas com IA, templates prontos e muito mais.</div>
+        <div class="tc-feats">
+          <div class="tc-feat"><span class="ck">✓</span>Legendas automáticas com IA</div>
+          <div class="tc-feat"><span class="ck">✓</span>Templates prontos para Reels</div>
+          <div class="tc-feat"><span class="ck">✓</span>Cortar, unir e adicionar música</div>
+          <div class="tc-feat"><span class="ck">✓</span>Efeitos e transições profissionais</div>
+          <div class="tc-feat"><span class="ck">✓</span>Sem marca d'água — exporta em HD</div>
+          <div class="tc-feat"><span class="ck">✓</span>Funciona no celular (Android + iOS)</div>
+        </div>
+      </div>
+      <div class="tc-bottom">
+        <div class="tc-price"><strong>Grátis</strong> | Pro: R$ 27/mês</div>
+        <a href="https://www.capcut.com/pt-br/" target="_blank" class="tc-btn">Abrir CapCut →</a>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tc-top">
+        <div class="tc-header">
+          <div class="tc-logo" style="background:#ff0050">📺</div>
+          <div><div class="tc-name">InShot</div><div class="tc-type">Vídeo + foto para celular</div></div>
+        </div>
+        <div class="tc-badges">
+          <span class="badge b-free">✅ Grátis</span>
+          <span class="badge b-video">🎬 Vídeo</span>
+          <span class="badge b-photo">📸 Foto</span>
+        </div>
+        <div class="tc-desc">App simples e poderoso para editar vídeos curtos direto no celular. Ideal para gravar o serviço sendo feito e montar um Reel de 30 segundos mostrando o resultado. Muito popular entre pequenos negócios.</div>
+        <div class="tc-feats">
+          <div class="tc-feat"><span class="ck">✓</span>Edição de vídeo e foto</div>
+          <div class="tc-feat"><span class="ck">✓</span>Filtros, música e texto</div>
+          <div class="tc-feat"><span class="ck">✓</span>Formato perfeito para Instagram</div>
+          <div class="tc-feat"><span class="ck">✓</span>Fácil de usar no celular</div>
+        </div>
+      </div>
+      <div class="tc-bottom">
+        <div class="tc-price"><strong>Grátis</strong> | Pro: R$ 20/mês</div>
+        <a href="https://inshot.com" target="_blank" class="tc-btn">Abrir →</a>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tc-top">
+        <div class="tc-header">
+          <div class="tc-logo" style="background:#7c3aed">🎥</div>
+          <div><div class="tc-name">Clipchamp</div><div class="tc-type">Editor de vídeo no navegador</div></div>
+        </div>
+        <div class="tc-badges">
+          <span class="badge b-free">✅ Grátis</span>
+          <span class="badge b-video">🎬 Vídeo</span>
+        </div>
+        <div class="tc-desc">Editor de vídeo do Microsoft, gratuito no navegador. Mais completo que o CapCut para edições mais elaboradas. Ideal para criar vídeos de apresentação da oficina, antes e depois de serviços.</div>
+        <div class="tc-feats">
+          <div class="tc-feat"><span class="ck">✓</span>Linha do tempo completa</div>
+          <div class="tc-feat"><span class="ck">✓</span>Narração e música de fundo</div>
+          <div class="tc-feat"><span class="ck">✓</span>Transições e efeitos</div>
+          <div class="tc-feat"><span class="ck">✓</span>Exporta em 1080p grátis</div>
+        </div>
+      </div>
+      <div class="tc-bottom">
+        <div class="tc-price"><strong>Grátis</strong> — Microsoft</div>
+        <a href="https://clipchamp.com" target="_blank" class="tc-btn">Abrir →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- AGENDAMENTO -->
+  <div class="sec-title">📅 Agendamento e Publicação — Gratuito</div>
+  <div class="tools-grid">
+
+    <div class="tool-card">
+      <div class="tc-top">
+        <div class="tc-header">
+          <div class="tc-logo" style="background:#0866ff">📘</div>
+          <div><div class="tc-name">Meta Business Suite</div><div class="tc-type">Instagram + Facebook — Oficial</div></div>
+        </div>
+        <div class="tc-badges">
+          <span class="badge b-free">✅ 100% Grátis</span>
+          <span class="badge b-best">⭐ Recomendado</span>
+        </div>
+        <div class="tc-desc">Ferramenta oficial do Facebook/Instagram. Agenda posts, Stories e Reels para os dois ao mesmo tempo. Vê estatísticas, responde comentários e mensagens tudo em um lugar. 100% gratuito, sem limitações.</div>
+        <div class="tc-feats">
+          <div class="tc-feat"><span class="ck">✓</span>Agendar posts Instagram + Facebook</div>
+          <div class="tc-feat"><span class="ck">✓</span>Estatísticas detalhadas</div>
+          <div class="tc-feat"><span class="ck">✓</span>Responder comentários e DMs</div>
+          <div class="tc-feat"><span class="ck">✓</span>Calendário editorial</div>
+          <div class="tc-feat"><span class="ck">✓</span>Impulsionar publicações</div>
+        </div>
+      </div>
+      <div class="tc-bottom">
+        <div class="tc-price"><strong>100% Gratuito</strong></div>
+        <a href="https://business.facebook.com" target="_blank" class="tc-btn">Abrir →</a>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tc-top">
+        <div class="tc-header">
+          <div class="tc-logo" style="background:#f59e0b">📊</div>
+          <div><div class="tc-name">Buffer</div><div class="tc-type">Agendamento multi-rede</div></div>
+        </div>
+        <div class="tc-badges">
+          <span class="badge b-free">✅ Grátis</span>
+          <span class="badge b-video">Instagram + Facebook + X</span>
+        </div>
+        <div class="tc-desc">Agenda posts para Instagram, Facebook, X (Twitter) e LinkedIn ao mesmo tempo. O plano grátis permite 3 canais e 10 posts agendados por canal. Perfeito para quem quer publicar nas 3 redes sem esforço.</div>
+        <div class="tc-feats">
+          <div class="tc-feat"><span class="ck">✓</span>Instagram + Facebook + X + LinkedIn</div>
+          <div class="tc-feat"><span class="ck">✓</span>Agendamento de posts e Reels</div>
+          <div class="tc-feat"><span class="ck">✓</span>Análise de melhores horários</div>
+          <div class="tc-feat"><span class="ck">✓</span>Plano grátis: 3 canais</div>
+        </div>
+      </div>
+      <div class="tc-bottom">
+        <div class="tc-price"><strong>Grátis</strong> | Pago: R$ 30/mês</div>
+        <a href="https://buffer.com" target="_blank" class="tc-btn">Abrir →</a>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tc-top">
+        <div class="tc-header">
+          <div class="tc-logo" style="background:#1d9bf0">🐦</div>
+          <div><div class="tc-name">X (Twitter) Studio</div><div class="tc-type">Painel oficial do X</div></div>
+        </div>
+        <div class="tc-badges">
+          <span class="badge b-free">✅ Grátis</span>
+        </div>
+        <div class="tc-desc">Painel oficial do X para negócios. Agende tweets, veja analytics, monetize conteúdo. O plano gratuito já é suficiente para oficinas que querem marcar presença no X.</div>
+        <div class="tc-feats">
+          <div class="tc-feat"><span class="ck">✓</span>Agendar tweets</div>
+          <div class="tc-feat"><span class="ck">✓</span>Analytics de engajamento</div>
+          <div class="tc-feat"><span class="ck">✓</span>Gerenciar perfil da empresa</div>
+        </div>
+      </div>
+      <div class="tc-bottom">
+        <div class="tc-price"><strong>Grátis</strong> | X Premium: R$ 50/mês</div>
+        <a href="https://studio.twitter.com" target="_blank" class="tc-btn">Abrir →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TABELA COMPARATIVA -->
+  <div class="sec-title">💰 Comparativo de custos</div>
+  <div style="background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--r);overflow:hidden">
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:14px">
+        <thead>
+          <tr style="background:var(--bg3)">
+            <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px">Ferramenta</th>
+            <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase">Para quê</th>
+            <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase">Plano grátis</th>
+            <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase">Plano pago</th>
+            <th style="padding:12px 16px;text-align:center;font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase">Recomendo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--bg3)">
+            <td style="padding:12px 16px;font-weight:700">🎨 Canva</td>
+            <td style="padding:12px 16px;color:var(--t2)">Criar artes e editar fotos</td>
+            <td style="padding:12px 16px;color:var(--g)">✅ Completo</td>
+            <td style="padding:12px 16px;color:var(--t2)">R$ 55/mês (IA + resize)</td>
+            <td style="padding:12px 16px;text-align:center"><span style="background:rgba(34,197,94,.1);color:var(--g);padding:2px 8px;border-radius:100px;font-size:11px;font-weight:700">⭐ Sim</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--bg3)">
+            <td style="padding:12px 16px;font-weight:700">🎬 CapCut</td>
+            <td style="padding:12px 16px;color:var(--t2)">Editar vídeos e Reels</td>
+            <td style="padding:12px 16px;color:var(--g)">✅ Sem limite</td>
+            <td style="padding:12px 16px;color:var(--t2)">R$ 27/mês (IA + 4K)</td>
+            <td style="padding:12px 16px;text-align:center"><span style="background:rgba(34,197,94,.1);color:var(--g);padding:2px 8px;border-radius:100px;font-size:11px;font-weight:700">⭐ Sim</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--bg3)">
+            <td style="padding:12px 16px;font-weight:700">📘 Meta Business</td>
+            <td style="padding:12px 16px;color:var(--t2)">Agendar Instagram+Facebook</td>
+            <td style="padding:12px 16px;color:var(--g)">✅ Completo</td>
+            <td style="padding:12px 16px;color:var(--t2)">Grátis (pago só ads)</td>
+            <td style="padding:12px 16px;text-align:center"><span style="background:rgba(34,197,94,.1);color:var(--g);padding:2px 8px;border-radius:100px;font-size:11px;font-weight:700">⭐ Sim</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--bg3)">
+            <td style="padding:12px 16px;font-weight:700">📊 Buffer</td>
+            <td style="padding:12px 16px;color:var(--t2)">Agendar Instagram+Facebook+X</td>
+            <td style="padding:12px 16px;color:var(--g)">✅ 3 canais</td>
+            <td style="padding:12px 16px;color:var(--t2)">R$ 30/mês</td>
+            <td style="padding:12px 16px;text-align:center"><span style="background:rgba(99,102,241,.1);color:#c4b5fd;padding:2px 8px;border-radius:100px;font-size:11px;font-weight:700">Opcional</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--bg3)">
+            <td style="padding:12px 16px;font-weight:700">📱 Snapseed</td>
+            <td style="padding:12px 16px;color:var(--t2)">Editar fotos no celular</td>
+            <td style="padding:12px 16px;color:var(--g)">✅ 100% grátis</td>
+            <td style="padding:12px 16px;color:var(--t2)">Não tem pago</td>
+            <td style="padding:12px 16px;text-align:center"><span style="background:rgba(34,197,94,.1);color:var(--g);padding:2px 8px;border-radius:100px;font-size:11px;font-weight:700">⭐ Sim</span></td>
+          </tr>
+          <tr>
+            <td style="padding:12px 16px;font-weight:700;color:var(--g)">🤖 Mecani.AI IA</td>
+            <td style="padding:12px 16px;color:var(--t2)">Gerar legendas e hashtags</td>
+            <td style="padding:12px 16px;color:var(--g)">✅ Incluído no plano</td>
+            <td style="padding:12px 16px;color:var(--t2)">Já incluso no Pro</td>
+            <td style="padding:12px 16px;text-align:center"><span style="background:rgba(34,197,94,.1);color:var(--g);padding:2px 8px;border-radius:100px;font-size:11px;font-weight:700">⭐ Sim</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-top:14px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:14px 18px;font-size:14px;color:var(--t2)">
+    💡 <strong style="color:var(--t1)">Custo total para ter tudo:</strong> <span style="color:var(--g);font-weight:700">R$ 0/mês</span> usando Canva grátis + CapCut grátis + Meta Business Suite grátis + Snapseed grátis. Se quiser recursos avançados (IA no Canva, vídeos 4K): <span style="color:#fcd34d;font-weight:700">R$ 82/mês</span> com Canva Pro + CapCut Pro.
+  </div>
+
+</div>
+
+<!-- ══ CRIAR COM IA ══ -->
+<div class="panel" id="panel-criar">
+  
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">
+    
+    <!-- GERADOR IA -->
+    <div class="ai-gen">
+      <div class="ag-header">
+        <div class="ag-title">🤖 Gerador de Legenda com IA</div>
+        <span style="font-size:11px;color:var(--g);font-weight:700">Gemini 2.0 Flash</span>
+      </div>
+      <div class="ag-body">
+        <div class="ag-upload" id="upload-area" onclick="document.getElementById('file-input').click()" ondrop="handleDrop(event)" ondragover="event.preventDefault();this.style.borderColor='var(--g)'" ondragleave="this.style.borderColor='var(--bg4)'">
+          <input type="file" id="file-input" accept="image/*" class="hidden" onchange="handleFile(this)">
+          <div id="upload-preview"></div>
+          <div class="ag-upload-icon" id="upload-icon">📸</div>
+          <div class="ag-upload-text" id="upload-text"><strong>Clique ou arraste a foto do serviço</strong></div>
+          <div class="ag-upload-sub" id="upload-sub">JPG, PNG ou WEBP • A IA vai analisar e criar a legenda</div>
+        </div>
+        <div class="ag-opts">
+          <div class="ag-opt">
+            <label>Rede social</label>
+            <select id="rede-select">
+              <option value="instagram">Instagram / Reels</option>
+              <option value="facebook">Facebook</option>
+              <option value="x">X (Twitter)</option>
+              <option value="todas">Todas as redes</option>
+            </select>
+          </div>
+          <div class="ag-opt">
+            <label>Tom do post</label>
+            <select id="tom-select">
+              <option value="profissional">Profissional</option>
+              <option value="descontraido">Descontraído</option>
+              <option value="tecnico">Técnico</option>
+              <option value="vendas">Foco em vendas</option>
+            </select>
+          </div>
+          <div class="ag-opt" style="grid-column:span 2">
+            <label>Detalhes do serviço (opcional)</label>
+            <input type="text" id="detalhes-input" placeholder="Ex: Troca de óleo + filtros em Corolla 2020" style="width:100%">
+          </div>
+        </div>
+        <button class="btn-g" id="gerar-btn" onclick="gerarLegenda()" style="width:100%;justify-content:center" disabled>
+          🤖 Gerar legenda com IA
+        </button>
+        <div class="ag-result" id="resultado">
+          <div class="ag-caption-box">
+            <div class="ag-cap-label">
+              ✨ Legenda gerada
+              <button onclick="copiarLegenda()" style="padding:3px 8px;background:var(--bg4);border:none;color:var(--t2);border-radius:6px;font-size:11px;cursor:pointer">Copiar</button>
+            </div>
+            <div class="ag-cap-text" id="legenda-texto"></div>
+          </div>
+          <div class="ag-caption-box">
+            <div class="ag-cap-label">
+              # Hashtags
+              <button onclick="copiarHashtags()" style="padding:3px 8px;background:var(--bg4);border:none;color:var(--t2);border-radius:6px;font-size:11px;cursor:pointer">Copiar</button>
+            </div>
+            <div class="ag-hashtags" id="hashtags-lista"></div>
+          </div>
+          <div class="ag-actions">
+            <button class="ag-action-btn ab-copy" onclick="copiarTudo()">📋 Copiar tudo</button>
+            <button class="ag-action-btn ab-ig" onclick="abrirInstagram()">📸 Instagram</button>
+            <button class="ag-action-btn ab-fb" onclick="abrirFacebook()">👍 Facebook</button>
+            <button class="ag-action-btn ab-x" onclick="abrirX()">🐦 X</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUIA RÁPIDO -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      
+      <!-- Templates Canva -->
+      <div style="background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--r);overflow:hidden">
+        <div style="padding:16px 18px;border-bottom:1px solid var(--bg3);display:flex;align-items:center;gap:10px">
+          <span style="font-size:20px">🎨</span>
+          <div>
+            <div style="font-size:14px;font-weight:700">Templates para Oficinas — Canva</div>
+            <div style="font-size:12px;color:var(--t2)">Templates gratuitos de mecânica no Canva</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;display:flex;flex-direction:column;gap:8px">
+          <a href="https://www.canva.com/pt_br/criar/posts-instagram/oficina-mecanica/" target="_blank" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg3);border-radius:8px;font-size:13px;transition:background .2s" onmouseover="this.style.background='var(--bg4)'" onmouseout="this.style.background='var(--bg3)'">
+            <span>📸 Templates Instagram — Oficina</span><span style="color:var(--g)">→</span>
+          </a>
+          <a href="https://www.canva.com/pt_br/criar/posts-facebook/mecanica/" target="_blank" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg3);border-radius:8px;font-size:13px;transition:background .2s" onmouseover="this.style.background='var(--bg4)'" onmouseout="this.style.background='var(--bg3)'">
+            <span>📘 Templates Facebook — Mecânica</span><span style="color:var(--g)">→</span>
+          </a>
+          <a href="https://www.canva.com/pt_br/criar/stories-instagram/automovel/" target="_blank" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg3);border-radius:8px;font-size:13px;transition:background .2s" onmouseover="this.style.background='var(--bg4)'" onmouseout="this.style.background='var(--bg3)'">
+            <span>📱 Stories — Automóvel</span><span style="color:var(--g)">→</span>
+          </a>
+          <a href="https://canva.com" target="_blank" class="btn-g" style="justify-content:center;margin-top:4px">🎨 Abrir Canva grátis →</a>
+        </div>
+      </div>
+
+      <!-- Editar vídeo -->
+      <div style="background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--r);overflow:hidden">
+        <div style="padding:16px 18px;border-bottom:1px solid var(--bg3);display:flex;align-items:center;gap:10px">
+          <span style="font-size:20px">🎬</span>
+          <div>
+            <div style="font-size:14px;font-weight:700">Editar vídeo — CapCut</div>
+            <div style="font-size:12px;color:var(--t2)">Crie Reels profissionais grátis</div>
+          </div>
+        </div>
+        <div style="padding:14px 18px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:13px;color:var(--t2);line-height:1.6">Grave o serviço sendo feito, abra o CapCut, escolha um template de Reel automático e exporte. Em 5 minutos você tem um vídeo profissional.</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--t2)"><span style="color:var(--g);font-weight:700">1.</span> Grave 3-5 vídeos curtos do serviço</div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--t2)"><span style="color:var(--g);font-weight:700">2.</span> Abra CapCut → Novo projeto</div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--t2)"><span style="color:var(--g);font-weight:700">3.</span> Escolha template → Adicione os vídeos</div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--t2)"><span style="color:var(--g);font-weight:700">4.</span> Adicione legenda gerada pela IA acima</div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--t2)"><span style="color:var(--g);font-weight:700">5.</span> Exportar e publicar no Instagram</div>
+          </div>
+          <a href="https://www.capcut.com/pt-br/" target="_blank" class="btn-g" style="justify-content:center;margin-top:4px">🎬 Abrir CapCut grátis →</a>
+        </div>
+      </div>
+
+      <!-- Dicas de conteúdo -->
+      <div style="background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--r);padding:16px 18px">
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px">💡 Ideias de conteúdo para sua oficina</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;gap:10px;font-size:13px;color:var(--t2)"><span style="font-size:16px">🔧</span><span><strong style="color:var(--t1)">Antes e depois</strong> — foto do carro sujo/danificado e limpo/consertado</span></div>
+          <div style="display:flex;gap:10px;font-size:13px;color:var(--t2)"><span style="font-size:16px">🎥</span><span><strong style="color:var(--t1)">Vídeo do processo</strong> — 30 segundos mostrando o serviço sendo feito</span></div>
+          <div style="display:flex;gap:10px;font-size:13px;color:var(--t2)"><span style="font-size:16px">💡</span><span><strong style="color:var(--t1)">Dica de manutenção</strong> — "Sabia que troca de óleo a cada 5.000km economiza…"</span></div>
+          <div style="display:flex;gap:10px;font-size:13px;color:var(--t2)"><span style="font-size:16px">⭐</span><span><strong style="color:var(--t1)">Depoimento de cliente</strong> — foto do cliente sorrindo com o carro</span></div>
+          <div style="display:flex;gap:10px;font-size:13px;color:var(--t2)"><span style="font-size:16px">🏆</span><span><strong style="color:var(--t1)">Promoção semanal</strong> — "Segunda: troca de óleo com 20% off"</span></div>
+          <div style="display:flex;gap:10px;font-size:13px;color:var(--t2)"><span style="font-size:16px">👨‍🔧</span><span><strong style="color:var(--t1)">Apresentar a equipe</strong> — foto dos mecânicos com nome e especialidade</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ POSTS ══ -->
+<div class="panel" id="panel-posts">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+    <div>
+      <div style="font-size:18px;font-weight:700">Histórico de posts</div>
+      <div style="font-size:13px;color:var(--t2);margin-top:3px">Posts criados e publicados pelo Mecani.AI</div>
+    </div>
+    <button class="btn-g" onclick="showPanel('criar',null)">+ Criar novo post</button>
+  </div>
+  <div id="posts-container">
+    <div style="text-align:center;padding:60px 20px;color:var(--t3)">
+      <div style="font-size:48px;margin-bottom:12px">📭</div>
+      <div style="font-size:16px;font-weight:700;color:var(--t2);margin-bottom:6px">Ainda não há posts</div>
+      <div style="font-size:14px">Crie seu primeiro post usando a aba "Criar com IA"</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CALENDÁRIO ══ -->
+<div class="panel" id="panel-calendario">
+  <div class="cal-header">
+    <div style="font-size:18px;font-weight:700">Calendário de conteúdo</div>
+    <div class="cal-nav">
+      <button class="cal-nav-btn" onclick="mudarMes(-1)">← Anterior</button>
+      <span class="cal-month" id="cal-month-label">Maio 2026</span>
+      <button class="cal-nav-btn" onclick="mudarMes(1)">Próximo →</button>
+    </div>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--r);padding:20px">
+    <div class="cal-grid" id="cal-grid">
+      <!-- gerado por JS -->
+    </div>
+  </div>
+  <div style="margin-top:16px;background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--r);padding:16px">
+    <div style="font-size:14px;font-weight:700;margin-bottom:12px">💡 Frequência ideal para oficinas</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
+      <div style="background:var(--bg3);border-radius:8px;padding:12px;font-size:13px"><strong style="color:var(--t1)">Instagram</strong><div style="color:var(--t2);margin-top:4px">3-5 posts por semana + Stories diários</div></div>
+      <div style="background:var(--bg3);border-radius:8px;padding:12px;font-size:13px"><strong style="color:var(--t1)">Facebook</strong><div style="color:var(--t2);margin-top:4px">2-3 posts por semana</div></div>
+      <div style="background:var(--bg3);border-radius:8px;padding:12px;font-size:13px"><strong style="color:var(--t1)">X (Twitter)</strong><div style="color:var(--t2);margin-top:4px">1-2 tweets por semana</div></div>
+      <div style="background:var(--bg3);border-radius:8px;padding:12px;font-size:13px"><strong style="color:var(--t1)">Melhores horários</strong><div style="color:var(--t2);margin-top:4px">Seg-Sex: 7h-9h e 18h-20h</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONECTAR REDES ══ -->
+<div class="panel" id="panel-conectar">
+  <div style="margin-bottom:20px">
+    <div style="font-size:18px;font-weight:700;margin-bottom:6px">Conectar suas redes sociais</div>
+    <div style="font-size:14px;color:var(--t2)">Conecte suas redes para que o Mecani.AI possa publicar automaticamente quando o mecânico manda a foto no WhatsApp.</div>
+  </div>
+  <div class="connect-grid">
+    <div class="conn-card">
+      <div class="conn-icon">📸</div>
+      <div class="conn-name">Instagram</div>
+      <div class="conn-desc">Publica posts e Reels automaticamente quando o mecânico envia uma foto no WhatsApp.</div>
+      <div class="conn-status cs-off">Não conectado</div>
+      <button class="conn-btn cb-off" onclick="conectarRede('instagram')">Conectar Instagram</button>
+    </div>
+    <div class="conn-card">
+      <div class="conn-icon">👍</div>
+      <div class="conn-name">Facebook</div>
+      <div class="conn-desc">Publica na página da oficina automaticamente. Mesma foto e legenda do Instagram.</div>
+      <div class="conn-status cs-off">Não conectado</div>
+      <button class="conn-btn cb-off" onclick="conectarRede('facebook')">Conectar Facebook</button>
+    </div>
+    <div class="conn-card">
+      <div class="conn-icon">🐦</div>
+      <div class="conn-name">X (Twitter)</div>
+      <div class="conn-desc">Posta no perfil do X com legenda adaptada ao limite de caracteres da rede.</div>
+      <div class="conn-status cs-off">Não conectado</div>
+      <button class="conn-btn cb-off" onclick="conectarRede('x')">Conectar X</button>
+    </div>
+  </div>
+  <div style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);border-radius:12px;padding:16px 18px;font-size:14px;color:var(--t2)">
+    ⚠️ <strong style="color:var(--t1)">Como funciona a publicação automática:</strong> Quando um mecânico manda uma foto de serviço no WhatsApp da oficina, o sistema detecta a imagem, gera a legenda com IA e envia para o dono aprovar. Ao aprovar, publica nas redes conectadas automaticamente. Para conectar, você precisa ser administrador das páginas no Facebook/Instagram.
+  </div>
+</div>
+
+</div><!-- /container -->
+</div><!-- /content -->
+
+<script>
+const SB_URL = 'https://tcjynyfusqkqtdohnyzq.supabase.co';
+const SB_KEY = 'sb_publishable_gNJhc4WCS9MnnmDAL2T6Vg_AQ71_Vid';
+const { createClient } = supabase;
+const sb = createClient(SB_URL, SB_KEY);
+
+let selectedFile = null;
+let currentMonth = new Date();
+
+/* ── Tabs ── */
+function showPanel(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab, .hdnav a').forEach(t => t.classList.remove('on'));
+  document.getElementById('panel-' + id)?.classList.add('on');
+  if (el) el.classList.add('on');
+  const tab = document.getElementById('tab-' + id);
+  if (tab) tab.classList.add('on');
+  if (id === 'calendario') gerarCalendario();
+  if (id === 'posts') carregarPosts();
+}
+
+/* ── Upload ── */
+function handleFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  selectedFile = file;
+  const url = URL.createObjectURL(file);
+  const area = document.getElementById('upload-area');
+  area.innerHTML = `<img src="${url}" class="preview-img" alt="preview"><div style="font-size:13px;color:var(--g);font-weight:700">✅ ${file.name}</div><div style="font-size:11px;color:var(--t3);margin-top:4px">Clique para trocar a foto</div><input type="file" id="file-input" accept="image/*" class="hidden" onchange="handleFile(this)">`;
+  document.getElementById('gerar-btn').disabled = false;
+  document.getElementById('gerar-btn').style.opacity = '1';
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) {
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    handleFile({ files: dt.files });
+  }
+}
+
+/* ── Gerar legenda ── */
+async function gerarLegenda() {
+  if (!selectedFile) return;
+  const btn = document.getElementById('gerar-btn');
+  btn.textContent = '🤖 Gerando legenda...';
+  btn.disabled = true;
+  document.getElementById('resultado').classList.remove('show');
+
+  try {
+    const rede = document.getElementById('rede-select').value;
+    const tom = document.getElementById('tom-select').value;
+    const detalhes = document.getElementById('detalhes-input').value;
+
+    // Converter imagem para base64
+    const base64 = await fileToBase64(selectedFile);
+
+    const tomsMap = {
+      profissional: 'profissional e confiável',
+      descontraido: 'descontraído e amigável',
+      tecnico: 'técnico e especialista',
+      vendas: 'persuasivo com foco em vendas'
+    };
+
+    const redeMap = {
+      instagram: 'Instagram (até 2200 chars, com emojis, 5 parágrafos)',
+      facebook: 'Facebook (até 500 chars, informal)',
+      x: 'X/Twitter (até 280 chars, direto)',
+      todas: 'Instagram (versão completa com emojis)'
+    };
+
+    const prompt = `Você é um especialista em marketing digital para oficinas mecânicas brasileiras.
+
+Analise esta foto de serviço automotivo e crie uma legenda EXCELENTE para ${redeMap[rede]}.
+
+Tom: ${tomsMap[tom]}
+${detalhes ? `Detalhes do serviço: ${detalhes}` : ''}
+
+REGRAS:
+- Comece com uma frase de impacto sobre o serviço
+- Mencione qualidade, confiança e profissionalismo
+- Termine com uma chamada para ação (WhatsApp, agendamento)
+- Use emojis relevantes de carros/ferramentas
+- Inclua o número WhatsApp (61) 99177-5904 na CTA
+
+Depois da legenda, liste SEPARADAMENTE (após "HASHTAGS:") de 20 a 30 hashtags relevantes para oficina mecânica brasileira no Instagram.
+
+Formato:
+[LEGENDA]
+texto da legenda aqui
+
+HASHTAGS:
+#hashtag1 #hashtag2 ...`;
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: selectedFile.type, data: base64 } },
+            { type: 'text', text: prompt }
+          ]
+        }]
+      })
+    });
+
+    const data = await response.json();
+    const texto = data.content?.[0]?.text || '';
+
+    // Separar legenda e hashtags
+    const partes = texto.split('HASHTAGS:');
+    const legenda = partes[0].replace('[LEGENDA]', '').trim();
+    const hashtags = partes[1] ? partes[1].trim().split(/\s+/).filter(h => h.startsWith('#')) : [];
+
+    document.getElementById('legenda-texto').textContent = legenda;
+    document.getElementById('hashtags-lista').innerHTML = hashtags.map(h =>
+      `<span class="ag-tag">${h}</span>`
+    ).join(' ');
+
+    document.getElementById('resultado').classList.add('show');
+
+    // Salvar no Supabase
+    try {
+      await sb.from('social_posts').insert({
+        tenant_id: 'a1b2c3d4-0000-0000-0000-000000000001',
+        plataforma: rede.toUpperCase(),
+        legenda_gerada: legenda,
+        hashtags: hashtags,
+        status: 'RASCUNHO'
+      });
+    } catch (e) { console.log('Supabase save:', e); }
+
+  } catch (err) {
+    console.error(err);
+    alert('Erro ao gerar legenda. Tente novamente.');
+  }
+
+  btn.textContent = '🤖 Gerar nova legenda';
+  btn.disabled = false;
+}
+
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+function copiarLegenda() {
+  const t = document.getElementById('legenda-texto').textContent;
+  navigator.clipboard.writeText(t).then(() => alert('Legenda copiada!'));
+}
+
+function copiarHashtags() {
+  const tags = Array.from(document.getElementById('hashtags-lista').children).map(el => el.textContent).join(' ');
+  navigator.clipboard.writeText(tags).then(() => alert('Hashtags copiadas!'));
+}
+
+function copiarTudo() {
+  const legenda = document.getElementById('legenda-texto').textContent;
+  const hashtags = Array.from(document.getElementById('hashtags-lista').children).map(el => el.textContent).join(' ');
+  navigator.clipboard.writeText(legenda + '\n\n' + hashtags).then(() => alert('Copiado! Cole no Instagram/Facebook.'));
+}
+
+function abrirInstagram() {
+  window.open('https://www.instagram.com/create/select/', '_blank');
+}
+function abrirFacebook() {
+  window.open('https://www.facebook.com/pages/?category=your_pages', '_blank');
+}
+function abrirX() {
+  const legenda = document.getElementById('legenda-texto').textContent.substring(0, 250);
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(legenda)}`, '_blank');
+}
+
+/* ── Posts ── */
+async function carregarPosts() {
+  try {
+    const { data } = await sb.from('social_posts')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    const container = document.getElementById('posts-container');
+    if (!data || data.length === 0) {
+      container.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--t3)"><div style="font-size:48px;margin-bottom:12px">📭</div><div style="font-size:16px;font-weight:700;color:var(--t2);margin-bottom:6px">Ainda não há posts</div><div style="font-size:14px">Crie seu primeiro post usando a aba "Criar com IA"</div></div>`;
+      return;
+    }
+
+    container.innerHTML = `<div class="posts-grid">${data.map(p => `
+      <div class="post-card">
+        <div class="pc-img">${p.plataforma === 'INSTAGRAM' ? '📸' : p.plataforma === 'FACEBOOK' ? '👍' : '🐦'}</div>
+        <div class="pc-body">
+          <div class="pc-net">
+            <span class="pc-net-badge ${p.plataforma === 'INSTAGRAM' ? 'pn-ig' : p.plataforma === 'FACEBOOK' ? 'pn-fb' : 'pn-x'}">${p.plataforma}</span>
+          </div>
+          <div class="pc-text">${(p.legenda_gerada || '').substring(0, 100)}...</div>
+          <div class="pc-meta">
+            <span class="pc-status ${p.status === 'PUBLICADO' ? 'ps-pub' : p.status === 'RASCUNHO' ? 'ps-pen' : 'ps-fail'}">${p.status}</span>
+            <span>${new Date(p.created_at).toLocaleDateString('pt-BR')}</span>
+          </div>
+        </div>
+      </div>`).join('')}</div>`;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+/* ── Calendário ── */
+function gerarCalendario() {
+  const hoje = new Date();
+  const ano = currentMonth.getFullYear();
+  const mes = currentMonth.getMonth();
+  const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('cal-month-label').textContent = `${meses[mes]} ${ano}`;
+
+  const primeiroDia = new Date(ano, mes, 1).getDay();
+  const totalDias = new Date(ano, mes + 1, 0).getDate();
+  const grid = document.getElementById('cal-grid');
+
+  const dias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  let html = dias.map(d => `<div class="cal-day-header">${d}</div>`).join('');
+
+  for (let i = 0; i < primeiroDia; i++) {
+    html += `<div class="cal-day other-month" style="opacity:.3"><div class="cal-day-num">${new Date(ano, mes, -primeiroDia + i + 1).getDate()}</div></div>`;
+  }
+
+  for (let d = 1; d <= totalDias; d++) {
+    const isHoje = d === hoje.getDate() && mes === hoje.getMonth() && ano === hoje.getFullYear();
+    const diaSemana = new Date(ano, mes, d).getDay();
+    let eventos = '';
+    // Dias recomendados para postar
+    if ([1,2,3,4,5].includes(diaSemana) && d % 2 === 0) {
+      eventos += `<div class="cal-event ce-ig">📸 Instagram</div>`;
+    }
+    if ([1,3,5].includes(diaSemana)) {
+      eventos += `<div class="cal-event ce-fb">👍 Facebook</div>`;
+    }
+    html += `<div class="cal-day${isHoje ? ' today' : ''}"><div class="cal-day-num">${d}</div>${eventos}</div>`;
+  }
+
+  grid.innerHTML = html;
+}
+
+function mudarMes(delta) {
+  currentMonth.setMonth(currentMonth.getMonth() + delta);
+  gerarCalendario();
+}
+
+/* ── Conectar redes ── */
+function conectarRede(rede) {
+  const urls = {
+    instagram: 'https://www.facebook.com/business/tools/meta-business-suite',
+    facebook: 'https://www.facebook.com/business/tools/meta-business-suite',
+    x: 'https://business.twitter.com'
+  };
+  alert(`Para conectar o ${rede.charAt(0).toUpperCase() + rede.slice(1)}, você precisa:\n\n1. Ter uma conta Business no Facebook/Instagram\n2. Acessar o Meta Business Suite\n3. Conectar o WhatsApp da oficina como canal de publicação\n\nVamos abrir a página de configuração agora.`);
+  window.open(urls[rede], '_blank');
+}
+</script>
+</body>
+</html>
