@@ -358,6 +358,37 @@ button{font-family:var(--font-b);cursor:pointer;border:none}
 .qr-divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:#444;font-size:12px}
 .qr-divider::before,.qr-divider::after{content:'';flex:1;height:1px;background:#222}
 
+
+/* ─── Responsividade extra ─── */
+/* Mobile */
+@media(max-width:600px){
+  .hero{padding:90px 18px 60px}
+  .hero-ctas{flex-direction:column;align-items:stretch}
+  .btn-g,.btn-o{text-align:center;justify-content:center;width:100%}
+  .hero-stats{flex-wrap:wrap}
+  .hstat{min-width:50%;flex:1 1 50%}
+  .vdemo-screen{grid-template-columns:1fr!important}
+  .vd-metrics{display:none}
+  .pgrid{grid-template-columns:1fr}
+  .sflow .sfstep{flex-direction:column;gap:12px}
+  .abgrid{grid-template-columns:1fr!important}
+  .tgrid{grid-template-columns:1fr}
+  .egrid{grid-template-columns:1fr}
+  .prgrid{grid-template-columns:1fr}
+  .uclock{gap:8px}
+  .ucn{width:58px;height:58px;font-size:24px}
+  .rcard{padding:24px 16px}
+}
+/* Tablet */
+@media(min-width:601px) and (max-width:900px){
+  .vd-metrics{display:none}
+  .prgrid{grid-template-columns:1fr 1fr}
+  .prcard.hot{order:-1}
+}
+/* Desktop grande — evitar esticamento */
+@media(min-width:1200px){
+  .vsec,.ssec,.tsec,.esec,.prsec,.rsec-inner,.psec-inner{padding-left:calc((100% - 1100px)/2 + 24px);padding-right:calc((100% - 1100px)/2 + 24px)}
+}
 </style>
 </head>
 <body>
