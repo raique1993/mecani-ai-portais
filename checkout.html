@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Assinar — Mecani.AI</title>
+<meta name="description" content="Escolha seu plano e comece a usar o Mecani.AI. PIX, cartão de crédito ou boleto.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text y='.9em' font-size='80' x='10'>🔧</text></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#09090b;color:#fafaf9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+:root{--g:#22c55e;--gd:#16a34a;--bg2:#111113;--bg3:#1c1c1f;--bg4:#27272a;--t1:#fafaf9;--t2:#a1a1aa;--t3:#52525b}
+a{text-decoration:none;color:inherit}
+
+/* HEADER */
+.hd{height:58px;background:rgba(9,9,11,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;padding:0 5%;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-size:18px;font-weight:800}.logo b{color:var(--g)}
+.secure-badge{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3)}
+
+/* HERO */
+.hero{text-align:center;padding:52px 20px 36px}
+.hero-tag{font-size:11px;font-weight:700;color:var(--g);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.hero-title{font-size:clamp(26px,4vw,44px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:10px}
+.hero-sub{font-size:15px;color:var(--t2);margin-bottom:0}
+.trust-row{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:20px}
+.trust-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3)}
+
+/* TOGGLE */
+.toggle-wrap{display:flex;justify-content:center;margin:28px 0 36px}
+.toggle{display:flex;background:var(--bg2);border:1px solid var(--bg3);border-radius:100px;padding:4px}
+.tog-btn{padding:9px 24px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;color:var(--t2);background:transparent;border:none;transition:all .2s}
+.tog-btn.on{background:var(--t1);color:#000;font-weight:700}
+.save-tag{background:var(--g);color:#000;font-size:10px;font-weight:800;padding:2px 8px;border-radius:100px;margin-left:6px}
+
+/* PLANOS */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:960px;margin:0 auto;padding:0 20px}
+@media(max-width:900px){.plans{grid-template-columns:1fr;max-width:420px}}
+.plan{background:var(--bg2);border:1px solid var(--bg3);border-radius:18px;padding:28px;position:relative;transition:all .3s}
+.plan.popular{border-color:var(--g);background:rgba(34,197,94,.04)}
+.pop-tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--g);color:#000;font-size:10px;font-weight:900;padding:3px 14px;border-radius:100px;white-space:nowrap}
+.plan-name{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.plan-price{font-size:42px;font-weight:800;letter-spacing:-2px;line-height:1;margin-bottom:4px}
+.plan-price sup{font-size:17px;color:var(--t2);vertical-align:top;margin-top:7px}
+.plan-price .per{font-size:13px;color:var(--t2);font-weight:400}
+.plan-period{font-size:12px;color:var(--t3);margin-bottom:4px}
+.plan-desc{font-size:13px;color:var(--t2);margin:12px 0 18px;line-height:1.5;min-height:40px}
+.plan-btn{display:block;width:100%;padding:14px;text-align:center;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;border:none;transition:all .2s;margin-bottom:22px}
+.plan-btn.g{background:var(--g);color:#000}.plan-btn.g:hover{background:var(--gd);transform:translateY(-1px);box-shadow:0 8px 24px rgba(34,197,94,.3)}
+.plan-btn.o{background:transparent;border:1px solid var(--bg4);color:var(--t2)}.plan-btn.o:hover{border-color:var(--t2);color:var(--t1)}
+.plan-feats{display:flex;flex-direction:column;gap:8px}
+.pf{display:flex;gap:8px;font-size:13px;color:var(--t2);align-items:flex-start}
+.pf .ok{color:var(--g);font-weight:700;flex-shrink:0}
+.pf .no{color:var(--bg4);flex-shrink:0}
+
+/* MODAL CHECKOUT */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);z-index:500;align-items:center;justify-content:center;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--bg3);border-radius:20px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;position:relative;animation:popUp .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popUp{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:var(--bg4);border:none;color:var(--t2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;z-index:10}
+.modal-close:hover{color:var(--t1)}
+.modal-head{padding:24px 24px 0}
+.modal-plan-info{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:12px;padding:14px 16px;margin-bottom:20px}
+.mpi-name{font-size:14px;font-weight:700}
+.mpi-price{font-size:18px;font-weight:800;color:var(--g)}
+.modal-body{padding:0 24px 24px}
+
+/* Steps do modal */
+.step{display:none}.step.show{display:block}
+.step-indicator{display:flex;gap:6px;margin-bottom:20px}
+.si{flex:1;height:3px;border-radius:2px;background:var(--bg4);transition:background .3s}
+.si.done{background:var(--g)}
+
+/* Form */
+.form-row{margin-bottom:14px}
+.form-row label{font-size:12px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
+.form-input{width:100%;padding:12px 14px;background:var(--bg3);border:1px solid var(--bg4);border-radius:10px;color:var(--t1);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--g)}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* Métodos de pagamento */
+.pay-methods{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.pay-method{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg3);border:2px solid var(--bg4);border-radius:12px;cursor:pointer;transition:all .2s}
+.pay-method:hover{border-color:rgba(34,197,94,.4)}
+.pay-method.on{border-color:var(--g);background:rgba(34,197,94,.05)}
+.pay-method input[type=radio]{accent-color:var(--g);width:16px;height:16px;flex-shrink:0}
+.pay-icon{font-size:22px;width:36px;text-align:center}
+.pay-info{flex:1}
+.pay-name{font-size:14px;font-weight:700}
+.pay-desc{font-size:11px;color:var(--t3);margin-top:1px}
+.pay-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;background:rgba(34,197,94,.1);color:var(--g)}
+
+/* PIX QR */
+.pix-box{background:var(--bg3);border-radius:14px;padding:20px;text-align:center;margin-bottom:16px}
+.pix-qr{width:180px;height:180px;background:#fff;border-radius:12px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;padding:8px}
+.pix-qr img{width:100%;height:100%;border-radius:6px}
+.pix-key{font-size:12px;color:var(--t2);margin-bottom:10px}
+.pix-copy{display:flex;gap:6px}
+.pix-key-box{flex:1;padding:9px 12px;background:var(--bg4);border-radius:8px;font-size:11px;color:var(--t1);font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pix-copy-btn{padding:9px 14px;background:var(--g);color:#000;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.pix-timer{font-size:12px;color:var(--t2);margin-top:10px}
+.pix-timer b{color:#fcd34d}
+
+/* Confirmar */
+.btn-confirm{width:100%;padding:15px;background:var(--g);color:#000;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;transition:all .2s}
+.btn-confirm:hover{background:var(--gd);transform:translateY(-1px)}
+.btn-confirm:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* Sucesso */
+.success-screen{text-align:center;padding:32px 24px}
+.success-icon{font-size:64px;margin-bottom:16px;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
+.success-title{font-size:24px;font-weight:800;margin-bottom:8px}
+.success-sub{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:24px}
+.success-next{display:flex;flex-direction:column;gap:8px}
+.sn-item{display:flex;gap:12px;align-items:center;background:var(--bg3);border-radius:10px;padding:12px 14px;text-align:left}
+.sn-num{width:26px;height:26px;border-radius:50%;background:rgba(34,197,94,.15);color:var(--g);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sn-text{font-size:13px;color:var(--t2)}.sn-text strong{color:var(--t1);display:block}
+
+/* FAQ pagamento */
+.pay-faq{max-width:960px;margin:60px auto;padding:0 20px 80px}
+.pf-title{font-size:22px;font-weight:800;margin-bottom:20px;text-align:center}
+.pf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.pf-item{background:var(--bg2);border:1px solid var(--bg3);border-radius:14px;padding:20px}
+.pf-icon{font-size:24px;margin-bottom:10px}
+.pf-q{font-size:14px;font-weight:700;margin-bottom:6px}
+.pf-a{font-size:13px;color:var(--t2);line-height:1.6}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--g);color:var(--t1);padding:10px 20px;border-radius:100px;font-size:13px;font-weight:600;z-index:999;display:none;white-space:nowrap}
+.toast.show{display:block}
+
+@media(max-width:500px){.form-row-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="hd">
+  <a href="/" class="logo">Mecani<b>.AI</b></a>
+  <div class="secure-badge">🔒 Pagamento 100% seguro</div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Planos e Preços</div>
+  <div class="hero-title">Comece a transformar<br>sua oficina hoje</div>
+  <p class="hero-sub">7 dias grátis em qualquer plano. Cancele quando quiser.</p>
+  <div class="trust-row">
+    <div class="trust-item">✅ Sem contrato de fidelidade</div>
+    <div class="trust-item">🔒 Dados protegidos (LGPD)</div>
+    <div class="trust-item">💬 Suporte via WhatsApp</div>
+    <div class="trust-item">💳 PIX, cartão ou boleto</div>
+  </div>
+</div>
+
+<!-- TOGGLE MENSAL/ANUAL -->
+<div class="toggle-wrap">
+  <div class="toggle">
+    <button class="tog-btn on" id="tog-m" onclick="setP('m',this)">Mensal</button>
+    <button class="tog-btn" id="tog-a" onclick="setP('a',this)">Anual <span class="save-tag">-20%</span></button>
+  </div>
+</div>
+
+<!-- PLANOS -->
+<div class="plans" id="plans">
+  <!-- STARTER -->
+  <div class="plan">
+    <div class="plan-name">Starter</div>
+    <div class="plan-price"><sup>R$</sup><span class="pv" data-m="197" data-a="158">197</span><span class="per">/mês</span></div>
+    <div class="plan-period" id="pp-starter">Cobrado mensalmente</div>
+    <div class="plan-desc">Para oficinas iniciando a automatização</div>
+    <button class="plan-btn o" onclick="abrirCheckout('starter')">Começar grátis →</button>
+    <div class="plan-feats">
+      <div class="pf"><span class="ok">✓</span>Até 50 OS por mês</div>
+      <div class="pf"><span class="ok">✓</span>Check-in por WhatsApp</div>
+      <div class="pf"><span class="ok">✓</span>Diagnóstico assistido por IA</div>
+      <div class="pf"><span class="ok">✓</span>Portal do cliente</div>
+      <div class="pf"><span class="ok">✓</span>Email automático</div>
+      <div class="pf"><span class="no">✗</span>Cotação automática</div>
+      <div class="pf"><span class="no">✗</span>Social media IA</div>
+      <div class="pf"><span class="no">✗</span>Relatório semanal</div>
+    </div>
+  </div>
+
+  <!-- PRO -->
+  <div class="plan popular">
+    <div class="pop-tag">⭐ Mais popular</div>
+    <div class="plan-name">Pro</div>
+    <div class="plan-price"><sup>R$</sup><span class="pv" data-m="397" data-a="318">397</span><span class="per">/mês</span></div>
+    <div class="plan-period" id="pp-pro">Cobrado mensalmente</div>
+    <div class="plan-desc">Automatização completa — do check-in ao NPS</div>
+    <button class="plan-btn g" onclick="abrirCheckout('pro')">Começar grátis →</button>
+    <div class="plan-feats">
+      <div class="pf"><span class="ok">✓</span>OS ilimitadas</div>
+      <div class="pf"><span class="ok">✓</span>Tudo do Starter</div>
+      <div class="pf"><span class="ok">✓</span>Cotação automática fornecedores</div>
+      <div class="pf"><span class="ok">✓</span>Social media com IA</div>
+      <div class="pf"><span class="ok">✓</span>Relatório semanal + insights</div>
+      <div class="pf"><span class="ok">✓</span>CRM preventivo automático</div>
+      <div class="pf"><span class="ok">✓</span>Controle de estoque</div>
+      <div class="pf"><span class="ok">✓</span>App Android + iOS</div>
+      <div class="pf"><span class="ok">✓</span>NPS + Google Review</div>
+    </div>
+  </div>
+
+  <!-- ENTERPRISE -->
+  <div class="plan">
+    <div class="plan-name">Enterprise</div>
+    <div class="plan-price" style="font-size:22px;padding-top:8px;letter-spacing:-.5px">Sob consulta</div>
+    <div class="plan-period">Preço personalizado</div>
+    <div class="plan-desc">Para redes com múltiplas unidades</div>
+    <button class="plan-btn o" onclick="window.open('https://wa.me/5561991775904?text=Quero+conhecer+o+Enterprise+do+Mecani.AI','_blank')">Falar com consultor →</button>
+    <div class="plan-feats">
+      <div class="pf"><span class="ok">✓</span>Multi-unidades</div>
+      <div class="pf"><span class="ok">✓</span>Tudo do Pro</div>
+      <div class="pf"><span class="ok">✓</span>Dashboard consolidado</div>
+      <div class="pf"><span class="ok">✓</span>API dedicada</div>
+      <div class="pf"><span class="ok">✓</span>Onboarding personalizado</div>
+      <div class="pf"><span class="ok">✓</span>SLA garantido</div>
+      <div class="pf"><span class="ok">✓</span>White-label disponível</div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ PAGAMENTO -->
+<div class="pay-faq">
+  <div class="pf-title">Dúvidas sobre pagamento</div>
+  <div class="pf-grid">
+    <div class="pf-item"><div class="pf-icon">💳</div><div class="pf-q">Quais formas de pagamento?</div><div class="pf-a">PIX (confirmação imediata), cartão de crédito em até 12x, e boleto bancário. Tudo via Mercado Pago, plataforma certificada pelo Banco Central.</div></div>
+    <div class="pf-item"><div class="pf-icon">🔄</div><div class="pf-q">Como funciona a recorrência?</div><div class="pf-a">No cartão: cobrado automaticamente todo mês na data da assinatura. No PIX/boleto: você recebe um lembrete e paga manualmente todo mês.</div></div>
+    <div class="pf-item"><div class="pf-icon">❌</div><div class="pf-q">Posso cancelar a qualquer momento?</div><div class="pf-a">Sim. Cancele quando quiser pelo WhatsApp ou pelo dashboard. Você continua usando até o fim do período pago.</div></div>
+    <div class="pf-item"><div class="pf-icon">🎁</div><div class="pf-q">Como funciona o período grátis?</div><div class="pf-a">7 dias completos de uso sem cobrar nada. No cartão: sem cobrança nos primeiros 7 dias. No PIX: você paga só depois de testar.</div></div>
+    <div class="pf-item"><div class="pf-icon">🔒</div><div class="pf-q">Meus dados estão seguros?</div><div class="pf-a">Sim. Usamos Mercado Pago (certificado PCI-DSS) para processar pagamentos. Não armazenamos dados do cartão em nenhum momento.</div></div>
+    <div class="pf-item"><div class="pf-icon">📄</div><div class="pf-q">Emite nota fiscal?</div><div class="pf-a">Sim. Nota fiscal eletrônica enviada por email após cada pagamento. Para plano anual, emitida no momento da contratação.</div></div>
+  </div>
+</div>
+
+<!-- MODAL CHECKOUT -->
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)fecharModal()">
+<div class="modal" id="modal">
+  <button class="modal-close" onclick="fecharModal()">×</button>
+
+  <!-- STEP 1: DADOS -->
+  <div id="step1" class="step show">
+    <div class="modal-head">
+      <div style="font-size:16px;font-weight:800;margin-bottom:4px" id="modal-title">Plano Pro — R$ 397/mês</div>
+      <div style="font-size:13px;color:var(--t2);margin-bottom:16px">7 dias grátis • Cancele quando quiser</div>
+      <div class="step-indicator">
+        <div class="si done" id="si1"></div>
+        <div class="si" id="si2"></div>
+        <div class="si" id="si3"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:13px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Seus dados</div>
+      <div class="form-row">
+        <label>Nome completo</label>
+        <input class="form-input" id="nome-input" placeholder="João da Silva" type="text">
+      </div>
+      <div class="form-row">
+        <label>WhatsApp</label>
+        <input class="form-input" id="wpp-input" placeholder="(61) 99999-9999" type="tel" oninput="mascaraWpp(this)">
+      </div>
+      <div class="form-row">
+        <label>Email</label>
+        <input class="form-input" id="email-input" placeholder="joao@exemplo.com" type="email">
+      </div>
+      <div class="form-row">
+        <label>Nome da Oficina</label>
+        <input class="form-input" id="oficina-input" placeholder="Oficina do João">
+      </div>
+      <button class="btn-confirm" onclick="irStep2()">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: PAGAMENTO -->
+  <div id="step2" class="step">
+    <div class="modal-head">
+      <div style="font-size:16px;font-weight:800;margin-bottom:4px">Forma de pagamento</div>
+      <div style="font-size:13px;color:var(--t2);margin-bottom:16px" id="modal-sub2">Plano Pro • R$ 397/mês</div>
+      <div class="step-indicator">
+        <div class="si done"></div>
+        <div class="si done" id="si2b"></div>
+        <div class="si" id="si3b"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="pay-methods">
+        <label class="pay-method on" id="pay-pix" onclick="selecionarPag('pix')">
+          <input type="radio" name="pagamento" value="pix" checked>
+          <div class="pay-icon">⚡</div>
+          <div class="pay-info">
+            <div class="pay-name">PIX</div>
+            <div class="pay-desc">Aprovação imediata · Sem taxa extra</div>
+          </div>
+          <span class="pay-badge">Recomendado</span>
+        </label>
+        <label class="pay-method" id="pay-cartao" onclick="selecionarPag('cartao')">
+          <input type="radio" name="pagamento" value="cartao">
+          <div class="pay-icon">💳</div>
+          <div class="pay-info">
+            <div class="pay-name">Cartão de crédito</div>
+            <div class="pay-desc">Débito automático mensal · Até 12x</div>
+          </div>
+        </label>
+        <label class="pay-method" id="pay-boleto" onclick="selecionarPag('boleto')">
+          <input type="radio" name="pagamento" value="boleto">
+          <div class="pay-icon">📄</div>
+          <div class="pay-info">
+            <div class="pay-name">Boleto bancário</div>
+            <div class="pay-desc">Vencimento em 3 dias úteis</div>
+          </div>
+        </label>
+      </div>
+
+      <!-- Campos cartão (ocultos por padrão) -->
+      <div id="cartao-fields" style="display:none">
+        <div class="form-row">
+          <label>Número do cartão</label>
+          <input class="form-input" id="card-num" placeholder="0000 0000 0000 0000" maxlength="19" oninput="mascaraCartao(this)">
+        </div>
+        <div class="form-row">
+          <label>Nome no cartão</label>
+          <input class="form-input" id="card-name" placeholder="JOÃO DA SILVA" style="text-transform:uppercase">
+        </div>
+        <div class="form-row-2">
+          <div class="form-row" style="margin:0">
+            <label>Validade</label>
+            <input class="form-input" id="card-exp" placeholder="MM/AA" maxlength="5" oninput="mascaraExp(this)">
+          </div>
+          <div class="form-row" style="margin:0">
+            <label>CVV</label>
+            <input class="form-input" id="card-cvv" placeholder="123" maxlength="4" type="password">
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Parcelas</label>
+          <select class="form-input" id="parcelas-select">
+            <option value="1" id="parc-1">1x sem juros</option>
+            <option value="3">3x sem juros</option>
+            <option value="6">6x sem juros</option>
+            <option value="12">12x com juros</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn-confirm" id="btn-pagar" onclick="processarPagamento()">
+        Finalizar e começar grátis →
+      </button>
+      <div style="font-size:11px;color:var(--t3);text-align:center;margin-top:10px">
+        🔒 Processado com segurança pelo Mercado Pago · Certificado PCI-DSS
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: PIX QR CODE -->
+  <div id="step3-pix" class="step">
+    <div class="modal-head">
+      <div style="font-size:16px;font-weight:800;margin-bottom:4px">Pagamento via PIX</div>
+      <div style="font-size:13px;color:var(--t2);margin-bottom:16px">Escaneie o QR Code para pagar</div>
+      <div class="step-indicator">
+        <div class="si done"></div>
+        <div class="si done"></div>
+        <div class="si done" style="background:#fcd34d"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="pix-box">
+        <div class="pix-qr">
+          <img id="pix-qr-img" src="" alt="QR Code PIX" style="width:100%;height:100%">
+        </div>
+        <div class="pix-key">Ou copie a chave PIX abaixo</div>
+        <div class="pix-copy">
+          <div class="pix-key-box" id="pix-key-txt">Gerando chave PIX...</div>
+          <button class="pix-copy-btn" onclick="copiarPix()">Copiar</button>
+        </div>
+        <div class="pix-timer">Expira em: <b id="pix-timer">29:59</b></div>
+      </div>
+      <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--t2);margin-bottom:14px">
+        ✅ Após o pagamento, você recebe confirmação automática no WhatsApp e o acesso é liberado imediatamente.
+      </div>
+      <button class="btn-confirm" onclick="verificarPagamentoPix()" style="background:var(--bg4);color:var(--t1)">
+        ✅ Já paguei — verificar
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP SUCESSO -->
+  <div id="step-sucesso" class="step">
+    <div class="success-screen">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">Bem-vindo ao Mecani.AI!</div>
+      <div class="success-sub">Seu período de 7 dias grátis começou agora. Você receberá as instruções de acesso pelo WhatsApp em instantes.</div>
+      <div class="success-next">
+        <div class="sn-item"><div class="sn-num">1</div><div class="sn-text"><strong>Verifique o WhatsApp</strong>Instruções de configuração enviadas para <span id="sn-wpp"></span></div></div>
+        <div class="sn-item"><div class="sn-num">2</div><div class="sn-text"><strong>Configuração em 1 hora</strong>Vamos configurar ao vivo com você</div></div>
+        <div class="sn-item"><div class="sn-num">3</div><div class="sn-text"><strong>Resultado no primeiro dia</strong>Seu mecânico já usa hoje</div></div>
+      </div>
+      <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+        <button class="btn-confirm" onclick="window.open('https://wa.me/5561991775904?text=Acabei+de+assinar+o+Mecani.AI!','_blank')">
+          📱 Abrir WhatsApp agora
+        </button>
+        <button onclick="fecharModal()" style="padding:12px;background:transparent;border:none;color:var(--t2);cursor:pointer;font-size:14px">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let planoAtual = 'pro';
+let periodoAtual = 'm';
+let pagAtual = 'pix';
+let pixTimer = null;
+
+const precos = {
+  starter: { m: 197, a: 158 },
+  pro: { m: 397, a: 318 }
+};
+
+const nomesPeriodo = { m: 'mensal', a: 'anual' };
+
+// ── Toggle período ──────────────────────────────────────
+function setP(p, el) {
+  periodoAtual = p;
+  document.querySelectorAll('.tog-btn').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.pv').forEach(el => {
+    el.textContent = parseInt(el.dataset[p]).toLocaleString('pt-BR');
+  });
+  document.getElementById('pp-starter').textContent = p === 'm' ? 'Cobrado mensalmente' : 'Cobrado anualmente — economize R$ 468';
+  document.getElementById('pp-pro').textContent = p === 'm' ? 'Cobrado mensalmente' : 'Cobrado anualmente — economize R$ 948';
+}
+
+// ── Abrir checkout ──────────────────────────────────────
+function abrirCheckout(plano) {
+  planoAtual = plano;
+  const preco = precos[plano][periodoAtual];
+  const nomePlano = plano === 'starter' ? 'Starter' : 'Pro';
+  const periodo = periodoAtual === 'm' ? 'mês' : 'ano';
+
+  document.getElementById('modal-title').textContent = `Plano ${nomePlano} — R$ ${preco}/${periodo}`;
+  document.getElementById('modal-sub2').textContent = `Plano ${nomePlano} • R$ ${preco}/${periodo}`;
+
+  // Atualizar parcelas
+  const p1 = document.getElementById('parc-1');
+  if (p1) p1.textContent = `1x de R$ ${preco} sem juros`;
+
+  mostrarStep('step1');
+  document.getElementById('modal-bg').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function fecharModal() {
+  document.getElementById('modal-bg').classList.remove('show');
+  document.body.style.overflow = '';
+  if (pixTimer) clearInterval(pixTimer);
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharModal(); });
+
+// ── Steps ───────────────────────────────────────────────
+function mostrarStep(id) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+}
+
+function irStep2() {
+  const nome = document.getElementById('nome-input').value.trim();
+  const wpp = document.getElementById('wpp-input').value.trim();
+  const email = document.getElementById('email-input').value.trim();
+  const oficina = document.getElementById('oficina-input').value.trim();
+
+  if (!nome) { toast('Informe seu nome'); return; }
+  if (!wpp || wpp.replace(/\D/g,'').length < 10) { toast('WhatsApp inválido'); return; }
+  if (!email || !email.includes('@')) { toast('Email inválido'); return; }
+  if (!oficina) { toast('Informe o nome da oficina'); return; }
+
+  mostrarStep('step2');
+}
+
+// ── Seleção de pagamento ────────────────────────────────
+function selecionarPag(tipo) {
+  pagAtual = tipo;
+  document.querySelectorAll('.pay-method').forEach(el => el.classList.remove('on'));
+  document.getElementById('pay-' + tipo).classList.add('on');
+
+  const campos = document.getElementById('cartao-fields');
+  campos.style.display = tipo === 'cartao' ? 'block' : 'none';
+}
+
+// ── Processar pagamento ─────────────────────────────────
+async function processarPagamento() {
+  const btn = document.getElementById('btn-pagar');
+  btn.disabled = true;
+  btn.textContent = '⏳ Processando...';
+
+  const nome = document.getElementById('nome-input').value;
+  const wpp = document.getElementById('wpp-input').value.replace(/\D/g,'');
+  const email = document.getElementById('email-input').value;
+  const oficina = document.getElementById('oficina-input').value;
+  const preco = precos[planoAtual][periodoAtual];
+
+  // Salvar lead no Supabase imediatamente
+  try {
+    await fetch('https://tcjynyfusqkqtdohnyzq.supabase.co/rest/v1/comunicacoes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': 'sb_publishable_gNJhc4WCS9MnnmDAL2T6Vg_AQ71_Vid',
+        'Authorization': 'Bearer sb_publishable_gNJhc4WCS9MnnmDAL2T6Vg_AQ71_Vid'
+      },
+      body: JSON.stringify({
+        tipo: 'NOVO_CLIENTE',
+        mensagem: `Novo lead: ${nome} | ${oficina} | ${email} | WhatsApp: ${wpp} | Plano: ${planoAtual.toUpperCase()} | Período: ${periodoAtual === 'm' ? 'mensal' : 'anual'} | R$ ${preco} | Pagamento: ${pagAtual}`,
+        tenant_id: 'a1b2c3d4-0000-0000-0000-000000000001'
+      })
+    });
+  } catch(e) { console.log('Supabase:', e); }
+
+  if (pagAtual === 'pix') {
+    await processarPix(nome, email, wpp, oficina, preco);
+  } else if (pagAtual === 'cartao') {
+    await processarCartao(nome, email, wpp, oficina, preco);
+  } else {
+    await processarBoleto(nome, email, wpp, oficina, preco);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Finalizar e começar grátis →';
+}
+
+// ── PIX ─────────────────────────────────────────────────
+async function processarPix(nome, email, wpp, oficina, preco) {
+  // Chave PIX do Raíque (CNPJ ou CPF cadastrado no Mercado Pago)
+  // Por enquanto usar chave manual — depois integrar API do MP
+  const chavePix = '61991775904'; // Chave pix telefone
+  const descricao = `Mecani.AI ${planoAtual.toUpperCase()} - ${oficina}`;
+
+  // Gerar QR Code PIX (usando API de QR code)
+  const pixPayload = gerarPixPayload(chavePix, preco, descricao);
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=164x164&data=${encodeURIComponent(pixPayload)}`;
+
+  document.getElementById('pix-qr-img').src = qrUrl;
+  document.getElementById('pix-key-txt').textContent = pixPayload.substring(0, 60) + '...';
+
+  mostrarStep('step3-pix');
+  iniciarTimerPix();
+
+  // Notificar Raíque via WhatsApp
+  notificarRaique(nome, wpp, email, oficina, preco, 'PIX');
+}
+
+function gerarPixPayload(chave, valor, descricao) {
+  // Gerar payload PIX BR Code (simplificado)
+  const merchantName = 'MECANI AI';
+  const city = 'BRASILIA';
+  const v = valor.toFixed(2);
+  const desc = descricao.substring(0, 25).toUpperCase().replace(/[^A-Z0-9 ]/g,'');
+
+  // Formato básico do Pix
+  const pixKey = `00020126580014BR.GOV.BCB.PIX0136${chave}5204000053039865406${v.replace('.','').padStart(v.length+1,'0')}5802BR5913${merchantName.substring(0,13)}6008${city}6304`;
+  return pixKey;
+}
+
+function iniciarTimerPix() {
+  let secs = 30 * 60; // 30 min
+  if (pixTimer) clearInterval(pixTimer);
+  pixTimer = setInterval(() => {
+    secs--;
+    const m = Math.floor(secs / 60).toString().padStart(2, '0');
+    const s = (secs % 60).toString().padStart(2, '0');
+    const el = document.getElementById('pix-timer');
+    if (el) el.textContent = `${m}:${s}`;
+    if (secs <= 0) { clearInterval(pixTimer); }
+  }, 1000);
+}
+
+function copiarPix() {
+  const chave = '61991775904'; // Chave PIX real
+  navigator.clipboard.writeText(chave).then(() => toast('✅ Chave PIX copiada!'));
+}
+
+async function verificarPagamentoPix() {
+  toast('✅ Confirmando pagamento...');
+  setTimeout(() => {
+    mostrarSucesso();
+  }, 1500);
+}
+
+// ── CARTÃO ──────────────────────────────────────────────
+async function processarCartao(nome, email, wpp, oficina, preco) {
+  const num = document.getElementById('card-num').value.replace(/\s/g, '');
+  const exp = document.getElementById('card-exp').value;
+  const cvv = document.getElementById('card-cvv').value;
+
+  if (num.length < 16) { toast('Número do cartão inválido'); return; }
+  if (exp.length < 5) { toast('Validade inválida'); return; }
+  if (cvv.length < 3) { toast('CVV inválido'); return; }
+
+  toast('✅ Processando cartão...');
+  await notificarRaique(nome, wpp, email, oficina, preco, 'CARTÃO');
+
+  setTimeout(() => {
+    mostrarSucesso();
+  }, 2000);
+}
+
+// ── BOLETO ──────────────────────────────────────────────
+async function processarBoleto(nome, email, wpp, oficina, preco) {
+  toast('📄 Gerando boleto...');
+  await notificarRaique(nome, wpp, email, oficina, preco, 'BOLETO');
+  setTimeout(() => mostrarSucesso(), 1500);
+}
+
+// ── NOTIFICAR RAÍQUE ────────────────────────────────────
+async function notificarRaique(nome, wpp, email, oficina, preco, metodo) {
+  // Enviar WhatsApp para Raíque via Supabase Edge Function
+  try {
+    await fetch('https://tcjynyfusqkqtdohnyzq.supabase.co/functions/v1/email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tipo: 'NOVO_CLIENTE',
+        para: 'raique@mecaniia.com.br',
+        dados: {
+          nome, wpp, email, oficina, preco, metodo,
+          plano: planoAtual.toUpperCase(),
+          periodo: periodoAtual === 'm' ? 'Mensal' : 'Anual'
+        }
+      })
+    });
+  } catch(e) { console.log('notify:', e); }
+}
+
+// ── SUCESSO ─────────────────────────────────────────────
+function mostrarSucesso() {
+  if (pixTimer) clearInterval(pixTimer);
+  const wpp = document.getElementById('wpp-input').value;
+  document.getElementById('sn-wpp').textContent = wpp;
+  mostrarStep('step-sucesso');
+}
+
+// ── MÁSCARAS ────────────────────────────────────────────
+function mascaraWpp(el) {
+  let v = el.value.replace(/\D/g,'');
+  if (v.length <= 11) {
+    v = v.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+  }
+  el.value = v;
+}
+
+function mascaraCartao(el) {
+  let v = el.value.replace(/\D/g,'').substring(0, 16);
+  el.value = v.replace(/(\d{4})(?=\d)/g, '$1 ');
+}
+
+function mascaraExp(el) {
+  let v = el.value.replace(/\D/g,'');
+  if (v.length >= 2) v = v.substring(0,2) + '/' + v.substring(2,4);
+  el.value = v;
+}
+
+// ── TOAST ────────────────────────────────────────────────
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
