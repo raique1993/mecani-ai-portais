@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deploy Mecani.AI</title><meta name="robots" content="noindex">
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#09090b;color:#fafaf9;font-family:-apple-system,sans-serif;padding:24px;max-width:660px;margin:0 auto}h1{font-size:20px;font-weight:800;margin-bottom:6px}.sub{font-size:13px;color:#a1a1aa;margin-bottom:20px}.item{background:#111;border:1px solid #1c1c1f;border-radius:10px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:10px}.name{flex:1;font-size:13px;font-weight:700}.st{font-size:11px;font-weight:700;padding:2px 9px;border-radius:100px;background:rgba(255,255,255,.07);color:#71717a}.run{background:rgba(245,158,11,.1);color:#fbbf24}.ok{background:rgba(34,197,94,.1);color:#22c55e}.err{background:rgba(239,68,68,.1);color:#f87171}.btn{width:100%;padding:13px;background:#22c55e;color:#000;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:14px}.btn:disabled{opacity:.5}.log{background:#000;border:1px solid #1c1c1f;border-radius:8px;padding:12px;font-family:monospace;font-size:11px;max-height:160px;overflow-y:auto;white-space:pre-wrap;color:#555;margin-top:10px}.sql{background:#000;border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:12px;font-family:monospace;font-size:11px;white-space:pre-wrap;color:#86efac;max-height:200px;overflow-y:auto}</style>
+</head>
+<body>
+<h1>Deploy Mecani.AI</h1>
+<p class="sub">Instala as Edge Functions automaticamente.</p>
+
+<div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:12px;font-size:13px;color:#fcd34d;margin-bottom:18px">
+  Cole seu token Supabase PAT abaixo para autenticar:
+</div>
+
+<div style="margin-bottom:14px">
+  <label style="font-size:12px;color:#71717a;display:block;margin-bottom:5px">Token PAT (sbp_...)</label>
+  <input id="tk-input" type="password" placeholder="sbp_..." style="width:100%;padding:10px 12px;background:#111;border:1px solid #333;border-radius:8px;color:#fafaf9;font-size:13px;font-family:monospace">
+</div>
+
+<button class="btn" id="btn" onclick="run()">Instalar Edge Functions</button>
+
+<div id="fns" style="display:none">
+  <div class="item"><span>🎯</span><div class="name">orchestrator</div><span class="st" id="s0">Aguardando</span></div>
+  <div class="item"><span>📋</span><div class="name">checkin-v2</div><span class="st" id="s1">Aguardando</span></div>
+  <div class="item"><span>💰</span><div class="name">cotacao</div><span class="st" id="s2">Aguardando</span></div>
+  <div class="item"><span>✅</span><div class="name">aprovacao</div><span class="st" id="s3">Aguardando</span></div>
+  <div class="item"><span>🏁</span><div class="name">conclusao</div><span class="st" id="s4">Aguardando</span></div>
+  <div class="item"><span>⭐</span><div class="name">nps</div><span class="st" id="s5">Aguardando</span></div>
+  <div class="log" id="log"></div>
+</div>
+
+<div id="sql-sec" style="display:none;margin-top:18px">
+  <div style="font-size:14px;font-weight:700;margin-bottom:8px">SQL para executar no Supabase:</div>
+  <a href="https://supabase.com/dashboard/project/tcjynyfusqkqtdohnyzq/sql/new" target="_blank" style="display:inline-block;padding:7px 14px;background:#22c55e;color:#000;border-radius:7px;font-size:12px;font-weight:700;margin-bottom:8px;text-decoration:none">Abrir SQL Editor</a>
+  <button onclick="navigator.clipboard.writeText(document.getElementById('sql').textContent).then(()=>alert('Copiado!'))" style="padding:7px 14px;background:transparent;border:1px solid #333;color:#a1a1aa;border-radius:7px;font-size:12px;cursor:pointer;margin-left:6px">Copiar SQL</button>
+  <div class="sql" id="sql">INSERT INTO fornecedores (tenant_id, nome_fantasia, whatsapp_consultor, email, ativo)
+VALUES
+  ('a1b2c3d4-0000-0000-0000-000000000001','Distribuidora Silva','5561999990001','silva@pecas.com.br',true),
+  ('a1b2c3d4-0000-0000-0000-000000000001','AutoPecas BR','5561999990002','br@autopecas.com.br',true),
+  ('a1b2c3d4-0000-0000-0000-000000000001','Pecas Rapidas','5561999990003','rapidas@pecas.com.br',true)
+ON CONFLICT DO NOTHING;
+
+SELECT 'Tenant:' || nome_oficina || ' | Plano:' || plano AS ok FROM tenants;
+SELECT 'Fornec:' || nome_fantasia AS ok FROM fornecedores WHERE tenant_id='a1b2c3d4-0000-0000-0000-000000000001';</div>
+</div>
+
+<div id="fim" style="display:none;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:16px;text-align:center;margin-top:14px">
+  <div style="font-size:28px">🎉</div><div style="font-size:16px;font-weight:800;margin-top:6px">Edge Functions instaladas!</div>
+  <div style="font-size:12px;color:#a1a1aa;margin-top:4px">Execute o SQL acima. Depois conecte o WhatsApp.</div>
+</div>
+
+<script>
+const PJ='tcjynyfusqkqtdohnyzq',API='https://api.supabase.com/v1/projects/'+PJ+'/functions';
+const CODES=[
+  ['orchestrator',ORCH],['checkin-v2',CHECKIN],['cotacao',COTACAO],
+  ['aprovacao',APROVACAO],['conclusao',CONCLUSAO],['nps',NPS]
+];
+function lg(m){const e=document.getElementById('log');e.textContent+=new Date().toLocaleTimeString()+' '+m+'\n';e.scrollTop=9e9;}
+function st(i,t,c){const e=document.getElementById('s'+i);if(e){e.textContent=t;e.className='st '+c;}}
+async function dep(i,slug,code,tk){
+  st(i,'...','run');lg(slug);
+  const h={'Authorization':'Bearer '+tk,'Content-Type':'application/json'};
+  let r=await fetch(API+'/'+slug,{method:'PATCH',headers:h,body:JSON.stringify({body:code,verify_jwt:false})});
+  if(r.ok){st(i,'OK','ok');lg('OK '+slug);return true;}
+  r=await fetch(API,{method:'POST',headers:h,body:JSON.stringify({slug,name:slug,body:code,verify_jwt:false})});
+  if(r.ok||r.status===201||r.status===409){st(i,'OK','ok');return true;}
+  const e=await r.text();st(i,'ERR','err');lg('ERRO '+slug+': '+e.substring(0,50));return false;
+}
+async function run(){
+  const tk=document.getElementById('tk-input').value.trim();
+  if(!tk||!tk.startsWith('sbp_')){alert('Cole o token PAT (sbp_...) no campo acima');return;}
+  document.getElementById('btn').disabled=true;
+  document.getElementById('fns').style.display='block';
+  let ok=0;
+  for(let i=0;i<CODES.length;i++){
+    try{if(await dep(i,CODES[i][0],CODES[i][1],tk))ok++;}catch(e){lg('ERR:'+e.message);}
+    await new Promise(r=>setTimeout(r,400));
+  }
+  document.getElementById('sql-sec').style.display='block';
+  if(ok>=CODES.length-1)document.getElementById('fim').style.display='block';
+}
+</script>
+<script>
+const ORCH=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SB_URL = Deno.env.get("SUPABASE_URL")!;
+const SB_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const EVO_URL = Deno.env.get("EVOLUTION_API_URL")!;
+const EVO_KEY = Deno.env.get("EVOLUTION_API_KEY")!;
+
+const sb = createClient(SB_URL, SB_KEY);
+
+interface WppMsg {
+  instance: string;
+  data: {
+    key: { remoteJid: string; fromMe: boolean; id: string };
+    message: { conversation?: string; audioMessage?: any; imageMessage?: any };
+    messageType: string;
+    pushName?: string;
+  };
+}
+
+Deno.serve(async (req) => {
+  if (req.method !== "POST") return new Response("ok");
+
+  let body: WppMsg;
+  try { body = await req.json(); } 
+  catch { return new Response("invalid json", { status: 400 }); }
+
+  const { instance, data } = body;
+  if (!data?.key || data.key.fromMe) return new Response("skip");
+
+  const from = data.key.remoteJid.replace("@s.whatsapp.net", "").replace("@g.us", "");
+  const msg = data.message?.conversation || data.message?.extendedTextMessage?.text || "";
+  const tipo = data.messageType;
+
+  // Buscar tenant pela instância Evolution
+  const { data: tenant } = await sb
+    .from("tenants")
+    .select("id, nome_oficina, telefone, telefone_dono, plano")
+    .eq("instancia_evolution", instance)
+    .eq("ativo", true)
+    .single();
+
+  if (!tenant) {
+    console.log(\`Tenant não encontrado para instância: \${instance}\`);
+    return new Response("tenant_not_found");
+  }
+
+  const tenantId = tenant.id;
+  const telefoneDono = tenant.telefone_dono || tenant.telefone;
+
+  // Registrar mensagem
+  await sb.from("comunicacoes").insert({
+    tenant_id: tenantId,
+    tipo: "WHATSAPP_ENTRADA",
+    de: from,
+    mensagem: msg.substring(0, 1000),
+    raw: JSON.stringify(data).substring(0, 2000)
+  }).catch(() => {});
+
+  // Roteamento inteligente
+  const msgLower = msg.toLowerCase().trim();
+
+  // ── COMANDOS DO DONO ─────────────────────────────────────
+  if (from === telefoneDono) {
+    if (msgLower === "aprovar" || msgLower.startsWith("aprovar")) {
+      return await rotearParaFuncao("aprovacao", { tenantId, from, msg, instance }, req);
+    }
+    if (msgLower === "recusar") {
+      return await rotearParaFuncao("aprovacao", { tenantId, from, msg, instance, acao: "RECUSAR" }, req);
+    }
+    if (msgLower.startsWith("relatorio")) {
+      return await rotearParaFuncao("relatorio-semanal", { tenantId, force: true }, req);
+    }
+    if (msgLower === "status") {
+      return await enviarStatus(tenantId, instance, from);
+    }
+  }
+
+  // ── CHECK-IN POR MECÂNICO ─────────────────────────────────
+  const padraoOS = /(?:entrou|chegou|recebemos|temos|veio|tem|chegou)\\s+(?:um|uma|o|a)/i;
+  const temPlaca = /[A-Z]{3}[\\s-]?\\d[A-Z0-9]\\d{2}|[A-Z]{3}[\\s-]?\\d{4}/i;
+  const temCarro = /corolla|civic|hb20|golf|uno|gol|polo|onix|sandero|clio|palio|ka|fiesta|focus|308|208|c3|kwid|tracker|renegade|compass|tucson|hr-v|t-cross|nivus|yaris|argo|cronos|strada|hilux|ranger|s10/i;
+
+  if (padraoOS.test(msg) || temPlaca.test(msg) || (temCarro.test(msg) && msg.length > 30)) {
+    return await rotearParaFuncao("checkin-v2", { tenantId, from, msg, instance, nome: data.pushName }, req);
+  }
+
+  // ── APROVAÇÃO DE ORÇAMENTO POR CLIENTE ───────────────────
+  if (msgLower === "sim" || msgLower === "aprovar" || msgLower === "ok" || msgLower === "confirmar") {
+    return await rotearParaFuncao("aprovacao", { tenantId, from, msg: "SIM", instance }, req);
+  }
+  if (msgLower === "não" || msgLower === "nao" || msgLower === "recusar" || msgLower === "cancelar") {
+    return await rotearParaFuncao("aprovacao", { tenantId, from, msg: "NAO", instance }, req);
+  }
+
+  // ── CONCLUSÃO DE OS ───────────────────────────────────────
+  const terminosPronto = /^(pronto|finalizado|concluido|concluído|entregue|feito|ok pronto|carro pronto|os pronta|servico pronto|serviço pronto)/i;
+  if (terminosPronto.test(msgLower)) {
+    return await rotearParaFuncao("conclusao", { tenantId, from, msg, instance }, req);
+  }
+
+  // ── AGENDAMENTO ───────────────────────────────────────────
+  const pedidoAgendamento = /agendar|agendamento|marcar|remarcar|horario|horário/i;
+  if (pedidoAgendamento.test(msgLower)) {
+    return await rotearParaFuncao("agendamento", { tenantId, from, msg, instance, nome: data.pushName }, req);
+  }
+
+  // ── FOTO PARA SOCIAL MEDIA ────────────────────────────────
+  if (tipo === "imageMessage") {
+    return await rotearParaFuncao("social", { tenantId, from, instance, imageData: data.message.imageMessage }, req);
+  }
+
+  // ── RESPOSTA DO NPS ───────────────────────────────────────
+  if (/^\\d$/.test(msgLower) && parseInt(msgLower) >= 1 && parseInt(msgLower) <= 10) {
+    return await rotearParaFuncao("nps", { tenantId, from, nota: parseInt(msgLower), instance }, req);
+  }
+
+  // ── GARANTIA ──────────────────────────────────────────────
+  const voltouGarantia = /garantia|voltou|mesmo problema|mesmo defeito|nao resolveu|não resolveu/i;
+  if (voltouGarantia.test(msgLower)) {
+    return await rotearParaFuncao("garantia", { tenantId, from, msg, instance }, req);
+  }
+
+  // Mensagem não reconhecida — não responder automaticamente
+  console.log(\`Mensagem não roteada de \${from}: \${msg.substring(0, 50)}\`);
+  return new Response("unrouted");
+});
+
+async function rotearParaFuncao(funcao: string, payload: any, req: Request) {
+  try {
+    const url = \`\${Deno.env.get("SUPABASE_URL")}/functions/v1/\${funcao}\`;
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": req.headers.get("Authorization") || "",
+        "x-supabase-service-role": Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || ""
+      },
+      body: JSON.stringify(payload)
+    });
+    return new Response(await resp.text(), { status: resp.status });
+  } catch (e) {
+    console.error(\`Erro ao rotear para \${funcao}:\`, e);
+    return new Response("routing_error", { status: 500 });
+  }
+}
+
+async function enviarStatus(tenantId: string, instance: string, para: string) {
+  const sb2 = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+  
+  const { count: osAbertas } = await sb2.from("ordens_servico")
+    .select("*", { count: "exact", head: true })
+    .eq("tenant_id", tenantId)
+    .not("status", "eq", "CONCLUIDO")
+    .not("status", "eq", "CANCELADO");
+
+  const hoje = new Date().toISOString().split("T")[0];
+  const { data: financeiro } = await sb2.from("ordens_servico")
+    .select("valor_total")
+    .eq("tenant_id", tenantId)
+    .eq("status", "CONCLUIDO")
+    .gte("updated_at", hoje);
+
+  const receitaHoje = financeiro?.reduce((s: number, os: any) => s + (os.valor_total || 0), 0) || 0;
+
+  const status = \`📊 *Status Mecani.AI*\\n\\n\` +
+    \`🚗 OS abertas: \${osAbertas || 0}\\n\` +
+    \`💰 Receita hoje: R$ \${receitaHoje.toFixed(2)}\\n\` +
+    \`⏰ \${new Date().toLocaleTimeString("pt-BR")}\\n\\n\` +
+    \`Dashboard: https://www.mecaniia.com.br\`;
+
+  await fetch(\`\${Deno.env.get("EVOLUTION_API_URL")}/message/sendText/\${instance}\`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "apikey": Deno.env.get("EVOLUTION_API_KEY") || "" },
+    body: JSON.stringify({ number: para, text: status })
+  });
+
+  return new Response("status_sent");
+}
+`;
+const CHECKIN=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+const GEMINI = Deno.env.get("GEMINI_API_KEY")!;
+const EVO = Deno.env.get("EVOLUTION_API_URL")!;
+const EK = Deno.env.get("EVOLUTION_API_KEY")!;
+
+Deno.serve(async (req) => {
+  const { tenantId, from, msg, instance, nome } = await req.json();
+
+  // 1. Extrair dados com Gemini
+  const prompt = \`Analise esta mensagem de check-in de oficina mecânica e extraia os dados em JSON.
+Mensagem: "\${msg}"
+
+Retorne APENAS JSON:
+{
+  "placa": "ABC1234 ou null",
+  "modelo": "nome do carro ou null",
+  "cliente_nome": "nome do cliente ou null",
+  "cliente_telefone": "número sem formatação ou null",
+  "problema": "descrição do problema relatado",
+  "diagnostico_sugerido": "possíveis causas técnicas em lista",
+  "pecas_provaveis": ["peça1", "peça2"]
+}\`;
+
+  let dados: any = {};
+  try {
+    const gr = await fetch(\`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=\${GEMINI}\`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+    });
+    const gd = await gr.json();
+    const raw = gd.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+    const match = raw.match(/\\{[\\s\\S]*\\}/);
+    if (match) dados = JSON.parse(match[0]);
+  } catch (e) { console.error("Gemini erro:", e); }
+
+  // 2. Buscar ou criar cliente
+  let clienteId = null;
+  if (dados.cliente_telefone || dados.cliente_nome) {
+    const { data: clienteExiste } = await sb.from("clientes")
+      .select("id")
+      .eq("tenant_id", tenantId)
+      .or(\`telefone.eq.\${dados.cliente_telefone || ""},nome.ilike.%\${dados.cliente_nome || ""}%\`)
+      .maybeSingle();
+
+    if (clienteExiste) {
+      clienteId = clienteExiste.id;
+    } else if (dados.cliente_nome) {
+      const { data: novoCliente } = await sb.from("clientes").insert({
+        tenant_id: tenantId,
+        nome: dados.cliente_nome,
+        telefone: dados.cliente_telefone || null
+      }).select("id").single();
+      clienteId = novoCliente?.id;
+    }
+  }
+
+  // 3. Gerar número da OS
+  const { count } = await sb.from("ordens_servico")
+    .select("*", { count: "exact", head: true })
+    .eq("tenant_id", tenantId);
+  const numOS = (count || 0) + 1;
+
+  // 4. Criar OS
+  const { data: os } = await sb.from("ordens_servico").insert({
+    tenant_id: tenantId,
+    numero_os: numOS,
+    placa_veiculo: dados.placa,
+    modelo_veiculo: dados.modelo,
+    cliente_id: clienteId,
+    nome_cliente: dados.cliente_nome,
+    telefone_cliente: dados.cliente_telefone,
+    relato_inicial: dados.problema || msg,
+    diagnostico_tecnico: dados.diagnostico_sugerido,
+    status: "EM_DIAGNOSTICO",
+    mecanico_responsavel: from
+  }).select("id, numero_os").single();
+
+  if (!os) return new Response("erro_criar_os", { status: 500 });
+
+  // 5. Responder ao mecânico com diagnóstico
+  const respMecanico = \`✅ *OS #\${os.numero_os} aberta!*\\n\\n\` +
+    \`🚗 \${dados.modelo || "Veículo"} \${dados.placa ? \`• \${dados.placa}\` : ""}\\n\` +
+    \`👤 \${dados.cliente_nome || "Cliente"} \${dados.cliente_telefone ? \`• \${dados.cliente_telefone}\` : ""}\\n\\n\` +
+    \`🔍 *Diagnóstico para você:*\\n\${dados.diagnostico_sugerido || "Analise o veículo e confirme o problema"}\\n\\n\` +
+    \`📦 *Peças prováveis:* \${(dados.pecas_provaveis || []).join(", ") || "A confirmar"}\\n\\n\` +
+    \`_Confirme o diagnóstico e as peças necessárias._\`;
+
+  await enviarWpp(instance, from, respMecanico);
+
+  // 6. Avisar cliente se tiver telefone
+  if (dados.cliente_telefone) {
+    const respCliente = \`Olá\${dados.cliente_nome ? \` \${dados.cliente_nome.split(" ")[0]}\` : ""}! 👋\\n\\n\` +
+      \`Seu veículo\${dados.modelo ? \` (\${dados.modelo})\` : ""} chegou na oficina e já estamos cuidando dele.\\n\\n\` +
+      \`Acompanhe o status em tempo real:\\n\` +
+      \`🔗 https://mecaniia.com.br/portal-cliente.html\${dados.placa ? \`?placa=\${dados.placa}\` : ""}\\n\\n\` +
+      \`Em breve te enviamos o diagnóstico e orçamento. ✅\`;
+    await enviarWpp(instance, \`55\${dados.cliente_telefone.replace(/\\D/g,"")}\`, respCliente);
+  }
+
+  return new Response(JSON.stringify({ os_id: os.id, numero_os: os.numero_os }));
+});
+
+async function enviarWpp(instance: string, numero: string, texto: string) {
+  try {
+    await fetch(\`\${EVO}/message/sendText/\${instance}\`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "apikey": EK },
+      body: JSON.stringify({ number: numero, text: texto })
+    });
+  } catch (e) { console.error("Erro WPP:", e); }
+}
+`;
+const COTACAO=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+const EVO = Deno.env.get("EVOLUTION_API_URL")!;
+const EK = Deno.env.get("EVOLUTION_API_KEY")!;
+const GEMINI = Deno.env.get("GEMINI_API_KEY")!;
+
+Deno.serve(async (req) => {
+  const { tenantId, osId, pecas, instance } = await req.json();
+
+  // Buscar OS se não vier pecas
+  let listaPecas = pecas;
+  if (!listaPecas && osId) {
+    const { data: os } = await sb.from("ordens_servico").select("diagnostico_tecnico, relato_inicial").eq("id", osId).single();
+    const prompt = \`Da seguinte OS: "\${os?.diagnostico_tecnico || os?.relato_inicial}", liste as peças necessárias em JSON: {"pecas": ["peça1 quantidade", "peça2"]}\`;
+    const gr = await fetch(\`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=\${GEMINI}\`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+    });
+    const gd = await gr.json();
+    try {
+      const raw = gd.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+      listaPecas = JSON.parse(raw.match(/\\{[\\s\\S]*\\}/)?.[0] || "{}").pecas || [];
+    } catch { listaPecas = []; }
+  }
+
+  if (!listaPecas?.length) return new Response("sem_pecas");
+
+  // Buscar fornecedores ativos
+  const { data: fornecedores } = await sb.from("fornecedores")
+    .select("id, nome_fantasia, whatsapp_consultor")
+    .eq("tenant_id", tenantId)
+    .eq("ativo", true)
+    .limit(5);
+
+  if (!fornecedores?.length) return new Response("sem_fornecedores");
+
+  // Criar cotação no banco
+  const { data: cotacao } = await sb.from("cotacoes").insert({
+    tenant_id: tenantId,
+    os_id: osId,
+    pecas_solicitadas: listaPecas,
+    status: "AGUARDANDO",
+    fornecedores_contatados: fornecedores.length
+  }).select("id").single();
+
+  // Enviar para cada fornecedor
+  const msg = \`🛒 *Nova cotação — Mecani.AI*\\n\\n\` +
+    \`Peças necessárias:\\n\${listaPecas.map((p: string, i: number) => \`\${i+1}. \${p}\`).join("\\n")}\\n\\n\` +
+    \`Responda com seus melhores preços e prazo de entrega.\\n\` +
+    \`Cotação válida por 2 horas. ⏰\`;
+
+  for (const f of fornecedores) {
+    if (f.whatsapp_consultor) {
+      await fetch(\`\${EVO}/message/sendText/\${instance}\`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "apikey": EK },
+        body: JSON.stringify({ number: \`55\${f.whatsapp_consultor.replace(/\\D/g,"")}\`, text: msg })
+      }).catch(() => {});
+    }
+  }
+
+  return new Response(JSON.stringify({ cotacao_id: cotacao?.id, fornecedores: fornecedores.length }));
+});
+`;
+const APROVACAO=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+const EVO = Deno.env.get("EVOLUTION_API_URL")!;
+const EK = Deno.env.get("EVOLUTION_API_KEY")!;
+
+Deno.serve(async (req) => {
+  const { tenantId, from, msg, instance, acao } = await req.json();
+  const aprovado = acao === "RECUSAR" ? false : msg.toUpperCase().includes("APROVAR") || msg.toUpperCase() === "SIM";
+
+  // Buscar OS aguardando aprovação deste número
+  const { data: os } = await sb.from("ordens_servico")
+    .select("id, numero_os, nome_cliente, telefone_cliente, valor_total, valor_orcamento")
+    .eq("tenant_id", tenantId)
+    .eq("status", "AGUARDANDO_APROVACAO")
+    .or(\`mecanico_responsavel.eq.\${from},telefone_cliente.eq.\${from}\`)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (!os) return new Response("sem_os_pendente");
+
+  const novoStatus = aprovado ? "APROVADO" : "CANCELADO";
+  await sb.from("ordens_servico").update({ status: novoStatus }).eq("id", os.id);
+
+  if (aprovado) {
+    const resp = \`✅ *OS #\${os.numero_os} APROVADA!*\\n\\nServiço iniciado. Avisaremos quando estiver pronto.\`;
+    await enviarWpp(instance, from, resp);
+
+    // Avisar cliente se aprovação foi do dono
+    if (os.telefone_cliente) {
+      const msgCliente = \`✅ Ótima notícia! Seu orçamento foi aprovado e o serviço já começou.\\n\\nAcompanhe: https://mecaniia.com.br/portal-cliente.html\`;
+      await enviarWpp(instance, \`55\${os.telefone_cliente.replace(/\\D/g,"")}\`, msgCliente);
+    }
+  } else {
+    await enviarWpp(instance, from, \`❌ OS #\${os.numero_os} cancelada conforme solicitado.\`);
+  }
+
+  return new Response(JSON.stringify({ os_id: os.id, status: novoStatus }));
+});
+
+async function enviarWpp(inst: string, num: string, txt: string) {
+  await fetch(\`\${EVO}/message/sendText/\${inst}\`, {
+    method: "POST", headers: { "Content-Type": "application/json", "apikey": EK },
+    body: JSON.stringify({ number: num, text: txt })
+  }).catch(() => {});
+}
+`;
+const CONCLUSAO=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+const EVO = Deno.env.get("EVOLUTION_API_URL")!;
+const EK = Deno.env.get("EVOLUTION_API_KEY")!;
+const RESEND = Deno.env.get("RESEND_API_KEY")!;
+
+Deno.serve(async (req) => {
+  const { tenantId, from, msg, instance } = await req.json();
+
+  // Buscar OS em execução do mecânico
+  const { data: os } = await sb.from("ordens_servico")
+    .select("*")
+    .eq("tenant_id", tenantId)
+    .eq("mecanico_responsavel", from)
+    .in("status", ["APROVADO", "EM_EXECUCAO", "AGUARDANDO_PECA"])
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (!os) return new Response("sem_os_ativa");
+
+  // Fechar OS
+  const agora = new Date().toISOString();
+  await sb.from("ordens_servico").update({
+    status: "CONCLUIDO",
+    data_conclusao: agora
+  }).eq("id", os.id);
+
+  // Registrar no caixa
+  if (os.valor_total || os.valor_orcamento) {
+    await sb.from("caixa").insert({
+      tenant_id: tenantId,
+      os_id: os.id,
+      tipo: "ENTRADA",
+      valor: os.valor_total || os.valor_orcamento,
+      descricao: \`OS #\${os.numero_os} — \${os.nome_cliente || "Cliente"}\`,
+      data: agora
+    }).catch(() => {});
+  }
+
+  // Responder mecânico
+  await enviarWpp(instance, from,
+    \`🏁 *OS #\${os.numero_os} concluída!*\\n\\n\` +
+    \`💰 Valor: R$ \${(os.valor_total || os.valor_orcamento || 0).toFixed(2)}\\n\` +
+    \`📧 Recibo enviado ao cliente\`
+  );
+
+  // Avisar cliente
+  if (os.telefone_cliente) {
+    await enviarWpp(instance, \`55\${os.telefone_cliente.replace(/\\D/g,"")}\`,
+      \`🎉 *\${os.nome_cliente ? os.nome_cliente.split(" ")[0] + ", seu" : "Seu"} veículo está pronto!*\\n\\n\` +
+      \`Pode vir buscar. O recibo foi enviado para o seu email.\\n\\n\` +
+      \`📊 Sua opinião é muito importante! Responda com uma nota de 1 a 10 sobre o serviço. ⭐\`
+    );
+  }
+
+  // Enviar email recibo via Resend
+  if (os.email_cliente) {
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "Authorization": \`Bearer \${RESEND}\`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: "Mecani.AI <no-reply@mecaniia.com.br>",
+        to: [os.email_cliente],
+        subject: \`Recibo OS #\${os.numero_os} — Serviço Concluído\`,
+        html: \`<h2>Serviço Concluído ✅</h2><p>OS #\${os.numero_os}<br>Valor: R$ \${(os.valor_total||0).toFixed(2)}<br>Obrigado!</p>\`
+      })
+    }).catch(() => {});
+  }
+
+  // Programar NPS em 72h (via banco)
+  await sb.from("avaliacoes_nps").insert({
+    tenant_id: tenantId,
+    os_id: os.id,
+    telefone_cliente: os.telefone_cliente,
+    nome_cliente: os.nome_cliente,
+    data_envio_programado: new Date(Date.now() + 72*3600*1000).toISOString(),
+    status: "PENDENTE"
+  }).catch(() => {});
+
+  return new Response(JSON.stringify({ os_id: os.id, status: "CONCLUIDO" }));
+});
+
+async function enviarWpp(inst: string, num: string, txt: string) {
+  await fetch(\`\${EVO}/message/sendText/\${inst}\`, {
+    method: "POST", headers: { "Content-Type": "application/json", "apikey": EK },
+    body: JSON.stringify({ number: num, text: txt })
+  }).catch(() => {});
+}
+`;
+const NPS=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+const EVO = Deno.env.get("EVOLUTION_API_URL")!;
+const EK = Deno.env.get("EVOLUTION_API_KEY")!;
+
+Deno.serve(async (req) => {
+  const { tenantId, from, nota, instance } = await req.json();
+
+  // Buscar avaliação pendente deste número
+  const { data: nps } = await sb.from("avaliacoes_nps")
+    .select("id, os_id, nome_cliente")
+    .eq("tenant_id", tenantId)
+    .eq("telefone_cliente", from)
+    .eq("status", "PENDENTE")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (nps) {
+    await sb.from("avaliacoes_nps").update({
+      nota, status: "RESPONDIDO",
+      data_resposta: new Date().toISOString()
+    }).eq("id", nps.id);
+  }
+
+  if (nota >= 9) {
+    await enviarWpp(instance, from,
+      \`⭐ Que ótimo! Fico feliz que tenha gostado!\\n\\n\` +
+      \`Você pode nos ajudar deixando uma avaliação no Google? Leva apenas 1 minuto:\\n\` +
+      \`👉 https://g.page/r/review\`
+    );
+  } else if (nota <= 6) {
+    // Alertar dono
+    const { data: tenant } = await sb.from("tenants").select("telefone_dono, telefone").eq("id", tenantId).single();
+    const numDono = tenant?.telefone_dono || tenant?.telefone;
+    if (numDono) {
+      await enviarWpp(instance, \`55\${numDono.replace(/\\D/g,"")}\`,
+        \`⚠️ *Alerta NPS!*\\n\\nCliente \${nps?.nome_cliente || from} deu nota *\${nota}*.\\n\\nEntre em contato para resolver. 📱\`
+      );
+    }
+    await enviarWpp(instance, from, \`Obrigado pelo feedback! Vamos melhorar. 🙏\\nSe precisar de qualquer coisa, estamos à disposição.\`);
+  } else {
+    await enviarWpp(instance, from, \`Obrigado pela avaliação! Sempre trabalhando para melhorar. 💪\`);
+  }
+
+  return new Response(JSON.stringify({ nota, status: "ok" }));
+});
+
+async function enviarWpp(inst: string, num: string, txt: string) {
+  await fetch(\`\${EVO}/message/sendText/\${inst}\`, {
+    method: "POST", headers: { "Content-Type": "application/json", "apikey": EK },
+    body: JSON.stringify({ number: num, text: txt })
+  }).catch(() => {});
+}
+`;
+</script>
+</body>
+</html>
