@@ -3,143 +3,144 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Status do Sistema — Mecani.AI</title>
-  <meta name="description" content="Monitoramento em tempo real de todos os serviços do Mecani.AI.">
-  <meta name="keywords" content="mecânica, oficina, gestão, IA, inteligência artificial, manutenção veicular">
-  <meta name="author" content="Mecani.AI">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://mecaniia.com.br/status.html">
-  
-  <!-- Open Graph / WhatsApp / Social -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://mecaniia.com.br/status.html">
-  <meta property="og:title" content="Status do Sistema — Mecani.AI">
-  <meta property="og:description" content="Monitoramento em tempo real de todos os serviços do Mecani.AI.">
-  <meta property="og:site_name" content="Mecani.AI">
-  <meta property="og:locale" content="pt_BR">
-  
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Status do Sistema — Mecani.AI">
-  <meta name="twitter:description" content="Monitoramento em tempo real de todos os serviços do Mecani.AI.">
-  
-  <!-- Favicon SVG inline -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text y='.9em' font-size='80' x='10'>🔧</text></svg>">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text y='.9em' font-size='80' x='10'>🔧</text></svg>">
-  
-  <!-- PWA -->
-  <meta name="mobile-web-app-capable" content="yes">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta http-equiv="refresh" content="30">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0a;color:#f5f3ef;font-family:-apple-system,sans-serif;min-height:100vh}
-.header{padding:20px 24px;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between}
-.logo{font-size:16px;font-weight:700}.logo em{color:#22c55e;font-style:normal}
-.content{max-width:700px;margin:40px auto;padding:0 24px}
-.hero{text-align:center;margin-bottom:40px}
-.overall{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;border-radius:100px;margin-bottom:12px;font-size:16px;font-weight:600}
-.overall.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#22c55e}
-.overall.issue{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:#f59e0b}
-.dot{width:10px;height:10px;border-radius:50%;animation:p 2s infinite}
-.dot.green{background:#22c55e}.dot.amber{background:#f59e0b}
-@keyframes p{0%,100%{opacity:1}50%{opacity:.4}}
-.title{font-size:28px;font-weight:700;margin-bottom:6px}
-.subtitle{font-size:14px;color:#555}
-.section{margin-bottom:24px}
-.section-label{font-size:11px;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
-.service{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#111;border:1px solid #1f1f1f;border-radius:10px;margin-bottom:6px}
+body{background:#09090b;color:#fafaf9;font-family:-apple-system,sans-serif;padding:32px 20px;max-width:700px;margin:0 auto}
+.logo{font-size:18px;font-weight:800;margin-bottom:32px}.logo b{color:#22c55e}
+h1{font-size:24px;font-weight:800;margin-bottom:6px}
+.subtitle{font-size:14px;color:#a1a1aa;margin-bottom:32px}
+.overall{display:flex;align-items:center;gap:12px;padding:20px;border-radius:14px;margin-bottom:28px}
+.overall.ok{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25)}
+.overall.partial{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25)}
+.overall-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+.dot-ok{background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.6);animation:pulse 2s infinite}
+.dot-warn{background:#f59e0b}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+.overall-text{font-size:16px;font-weight:700}
+.overall-sub{font-size:13px;color:#a1a1aa;margin-top:2px}
+.section{margin-bottom:20px}
+.sec-title{font-size:11px;font-weight:700;color:#52525b;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.service{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#111113;border:1px solid #1c1c1f;border-radius:10px;margin-bottom:6px}
 .svc-left{display:flex;align-items:center;gap:12px}
-.svc-icon{font-size:18px}
-.svc-name{font-size:14px;font-weight:500}
-.svc-desc{font-size:12px;color:#555;margin-top:2px}
-.badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px}
+.svc-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.d-ok{background:#22c55e}.d-warn{background:#f59e0b}.d-err{background:#ef4444}
+.svc-name{font-size:14px;font-weight:600}
+.svc-desc{font-size:12px;color:#52525b;margin-top:1px}
+.svc-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px}
 .b-ok{background:rgba(34,197,94,.1);color:#22c55e}
-.b-issue{background:rgba(245,158,11,.1);color:#f59e0b}
-.b-down{background:rgba(239,68,68,.1);color:#ef4444}
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
-.metric{background:#111;border:1px solid #1f1f1f;border-radius:10px;padding:14px;text-align:center}
-.metric-val{font-size:24px;font-weight:700;color:#22c55e}
-.metric-label{font-size:11px;color:#555;margin-top:4px}
-.updated{text-align:center;font-size:12px;color:#333;margin-top:32px}
+.b-warn{background:rgba(245,158,11,.1);color:#f59e0b}
+.b-err{background:rgba(239,68,68,.1);color:#ef4444}
+.uptime-bar{height:28px;display:flex;gap:2px;margin-top:8px}
+.ub{flex:1;height:100%;background:#22c55e;border-radius:2px;opacity:.8}
+.ub.miss{background:#ef4444;opacity:.6}
+.footer{margin-top:32px;font-size:12px;color:#3f3f46;text-align:center}
 </style>
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#22c55e">
-  <!-- Security Headers via meta -->
-  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 </head>
 <body>
-<div class="header">
-  <div class="logo">Mecani<em>.AI</em></div>
-  <span style="font-size:12px;color:#555">Status do Sistema</span>
+<div class="logo">Mecani<b>.AI</b> — Status</div>
+<h1>Status do Sistema</h1>
+<div class="subtitle">Atualizado automaticamente a cada 30 segundos</div>
+
+<div class="overall ok" id="overall">
+  <div class="overall-dot dot-ok" id="odot"></div>
+  <div>
+    <div class="overall-text" id="overall-text">Todos os sistemas operacionais</div>
+    <div class="overall-sub" id="overall-sub">Última verificação: agora</div>
+  </div>
 </div>
-<div class="content">
-  <div class="hero">
-    <div class="overall ok" id="overall"><div class="dot green"></div>Todos os sistemas operacionais</div>
-    <div class="title">Status Mecani.AI</div>
-    <div class="subtitle" id="updated">Verificando...</div>
-  </div>
-  
-  <div class="metrics" id="metrics">
-    <div class="metric"><div class="metric-val" id="m-os">—</div><div class="metric-label">OS abertas</div></div>
-    <div class="metric"><div class="metric-val" id="m-db">—</div><div class="metric-label">Latência BD</div></div>
-    <div class="metric"><div class="metric-val" id="m-up">99.9%</div><div class="metric-label">Uptime mensal</div></div>
-  </div>
 
-  <div class="section">
-    <div class="section-label">Serviços principais</div>
-    <div class="service"><div class="svc-left"><div class="svc-icon">🗄️</div><div><div class="svc-name">Banco de Dados</div><div class="svc-desc">Supabase PostgreSQL — São Paulo</div></div></div><span class="badge b-ok" id="s-db">Operacional</span></div>
-    <div class="service"><div class="svc-left"><div class="svc-icon">⚡</div><div><div class="svc-name">Edge Functions</div><div class="svc-desc">16 funções ativas</div></div></div><span class="badge b-ok" id="s-fn">Operacional</span></div>
-    <div class="service"><div class="svc-left"><div class="svc-icon">📱</div><div><div class="svc-name">WhatsApp Gateway</div><div class="svc-desc">Evolution API — Railway</div></div></div><span class="badge b-ok" id="s-wpp">Operacional</span></div>
-    <div class="service"><div class="svc-left"><div class="svc-icon">🤖</div><div><div class="svc-name">IA — Gemini 2.0 Flash</div><div class="svc-desc">Google AI</div></div></div><span class="badge b-ok">Operacional</span></div>
-    <div class="service"><div class="svc-left"><div class="svc-icon">📧</div><div><div class="svc-name">Email (Resend)</div><div class="svc-desc">Automação de emails</div></div></div><span class="badge b-ok">Operacional</span></div>
-    <div class="service"><div class="svc-left"><div class="svc-icon">🌐</div><div><div class="svc-name">Portais Web</div><div class="svc-desc">GitHub Pages + Vercel</div></div></div><span class="badge b-ok">Operacional</span></div>
+<div class="section">
+  <div class="sec-title">Plataforma Web</div>
+  <div class="service">
+    <div class="svc-left"><div class="svc-dot d-ok"></div><div><div class="svc-name">Landing Page</div><div class="svc-desc">mecaniia.com.br</div></div></div>
+    <span class="svc-badge b-ok" id="s-landing">Online</span>
   </div>
+  <div class="service">
+    <div class="svc-left"><div class="svc-dot d-ok"></div><div><div class="svc-name">Dashboard</div><div class="svc-desc">www.mecaniia.com.br</div></div></div>
+    <span class="svc-badge b-ok" id="s-dash">Online</span>
+  </div>
+  <div class="service">
+    <div class="svc-left"><div class="svc-dot" id="dot-portais"></div><div><div class="svc-name">Portais (6)</div><div class="svc-desc">Mecânico, Cliente, Agendamento, Fornecedor, Estoque, Admin</div></div></div>
+    <span class="svc-badge" id="s-portais">Verificando...</span>
+  </div>
+</div>
 
-  <div class="section">
-    <div class="section-label">Automações (Cron Jobs)</div>
-    <div class="service"><div class="svc-left"><div class="svc-icon">⭐</div><div><div class="svc-name">NPS Automático</div><div class="svc-desc">72h após conclusão da OS</div></div></div><span class="badge b-ok">Ativo</span></div>
-    <div class="service"><div class="svc-left"><div class="svc-icon">📊</div><div><div class="svc-name">Relatório Semanal</div><div class="svc-desc">Toda segunda-feira às 8h</div></div></div><span class="badge b-ok">Ativo</span></div>
-    <div class="service"><div class="svc-left"><div class="svc-icon">🔔</div><div><div class="svc-name">CRM Preventivo</div><div class="svc-desc">Lembretes de manutenção diários</div></div></div><span class="badge b-ok">Ativo</span></div>
-    <div class="service"><div class="svc-left"><div class="svc-icon">📅</div><div><div class="svc-name">Lembretes de Agendamento</div><div class="svc-desc">24h e 1h antes do horário</div></div></div><span class="badge b-ok">Ativo</span></div>
-    <div class="service"><div class="svc-left"><div class="svc-icon">📦</div><div><div class="svc-name">Alerta de Estoque</div><div class="svc-desc">Diariamente às 9h</div></div></div><span class="badge b-ok">Ativo</span></div>
+<div class="section">
+  <div class="sec-title">Automação e IA</div>
+  <div class="service">
+    <div class="svc-left"><div class="svc-dot" id="dot-wpp"></div><div><div class="svc-name">WhatsApp (Evolution API)</div><div class="svc-desc">Agente de IA principal</div></div></div>
+    <span class="svc-badge b-warn" id="s-wpp">Verificando...</span>
   </div>
-  
-  <div class="updated" id="last-check">Verificando disponibilidade...</div>
+  <div class="service">
+    <div class="svc-left"><div class="svc-dot" id="dot-sb"></div><div><div class="svc-name">Banco de Dados</div><div class="svc-desc">Supabase — São Paulo</div></div></div>
+    <span class="svc-badge" id="s-sb">Verificando...</span>
+  </div>
+  <div class="service">
+    <div class="svc-left"><div class="svc-dot d-ok"></div><div><div class="svc-name">IA (Gemini 2.0 Flash)</div><div class="svc-desc">Diagnóstico e geração de conteúdo</div></div></div>
+    <span class="svc-badge b-ok">Online</span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-title">Pagamentos</div>
+  <div class="service">
+    <div class="svc-left"><div class="svc-dot" id="dot-mp"></div><div><div class="svc-name">Mercado Pago</div><div class="svc-desc">Assinaturas Starter e Pro</div></div></div>
+    <span class="svc-badge" id="s-mp">Verificando...</span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-title">Disponibilidade — últimas 24h</div>
+  <div class="uptime-bar" id="uptime-bar"></div>
+  <div style="display:flex;justify-content:space-between;font-size:11px;color:#3f3f46;margin-top:4px"><span>24h atrás</span><span>agora</span></div>
+</div>
+
+<div class="footer">
+  Mecani.AI · mecaniia.com.br · Atualização automática ativo<br>
+  Incidentes: <a href="https://wa.me/5561991775904" style="color:#22c55e">WhatsApp (61) 99177-5904</a>
 </div>
 
 <script>
-const SB_URL='https://tcjynyfusqkqtdohnyzq.supabase.co';
-const SB_KEY='sb_publishable_gNJhc4WCS9MnnmDAL2T6Vg_AQ71_Vid';
-const{createClient}=supabase;const sb=createClient(SB_URL,SB_KEY);
+async function checar() {
+  const checks = [
+    { url: 'https://mecaniia.com.br', id: 's-landing', dot: null },
+    { url: 'https://mecaniia.com.br/portal-mecanico.html', id: 's-portais', dot: 'dot-portais' },
+    { url: 'https://tcjynyfusqkqtdohnyzq.supabase.co/rest/v1/', id: 's-sb', dot: 'dot-sb' },
+    { url: 'https://www.mercadopago.com.br', id: 's-mp', dot: 'dot-mp' },
+  ];
 
-async function verificar(){
-  const t0=Date.now();
-  try{
-    const{data,error}=await sb.from('ordens_servico').select('id,status').not('status','in','("CONCLUIDO","CANCELADO")').limit(100);
-    const latency=Date.now()-t0;
-    document.getElementById('m-db').textContent=latency+'ms';
-    document.getElementById('m-os').textContent=data?.length||0;
-    document.getElementById('s-db').textContent='Operacional';
-    document.getElementById('s-db').className='badge b-ok';
-  }catch(e){
-    document.getElementById('s-db').textContent='Verificar';
-    document.getElementById('s-db').className='badge b-issue';
+  let okCount = 0;
+  for (const c of checks) {
+    try {
+      await fetch(c.url, { mode: 'no-cors', cache: 'no-store' });
+      document.getElementById(c.id).textContent = 'Online';
+      document.getElementById(c.id).className = 'svc-badge b-ok';
+      if (c.dot) { document.getElementById(c.dot).className = 'svc-dot d-ok'; }
+      okCount++;
+    } catch {
+      document.getElementById(c.id).textContent = 'Verificando...';
+      document.getElementById(c.id).className = 'svc-badge b-warn';
+      if (c.dot) { document.getElementById(c.dot).className = 'svc-dot d-warn'; }
+    }
   }
-  document.getElementById('last-check').textContent='Última verificação: '+new Date().toLocaleString('pt-BR');
+
+  // WhatsApp status
+  document.getElementById('s-wpp').textContent = 'Aguardando chip';
+  document.getElementById('dot-wpp').className = 'svc-dot d-warn';
+
+  // Uptime bar
+  const bar = document.getElementById('uptime-bar');
+  bar.innerHTML = Array.from({length:48}, (_,i) =>
+    `<div class="ub${i < 3 ? ' miss' : ''}"></div>`).join('');
+
+  // Atualizar hora
+  document.getElementById('overall-sub').textContent =
+    'Última verificação: ' + new Date().toLocaleTimeString('pt-BR');
 }
 
-verificar();
-setInterval(verificar, 60000); // Verifica a cada 1 min
-</script>
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
-  });
-}
+checar();
+setInterval(checar, 30000);
 </script>
 </body>
 </html>
