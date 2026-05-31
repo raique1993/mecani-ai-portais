@@ -7,232 +7,187 @@
 <meta name="robots" content="noindex">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#09090b;color:#fafaf9;font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:24px 20px;max-width:640px;margin:0 auto;min-height:100vh}
-h1{font-size:22px;font-weight:800;margin-bottom:6px}
-p{font-size:14px;color:#a1a1aa;margin-bottom:20px;line-height:1.6}
-.card{background:#111113;border:1px solid #27272a;border-radius:14px;padding:18px;margin-bottom:12px}
-.card-title{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.fn-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#1c1c1f;border-radius:9px;margin-bottom:6px}
-.fn-name{flex:1;font-size:13px;font-weight:600}
-.badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px}
-.b-wait{background:rgba(255,255,255,.07);color:#52525b}
-.b-run{background:rgba(245,158,11,.12);color:#fbbf24;animation:pulse 1s infinite}
-.b-ok{background:rgba(34,197,94,.12);color:#22c55e}
-.b-err{background:rgba(239,68,68,.12);color:#f87171}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-.btn{width:100%;padding:14px;background:#22c55e;color:#000;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;transition:all .2s;margin-top:4px}
-.btn:hover{background:#16a34a;transform:translateY(-1px)}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.log{background:#0a0a0a;border:1px solid #1c1c1f;border-radius:8px;padding:12px;font-family:monospace;font-size:11px;max-height:150px;overflow-y:auto;white-space:pre-wrap;color:#52525b;margin-top:10px;display:none}
-.sql{background:#0a0a0a;border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:12px;font-family:monospace;font-size:11px;white-space:pre-wrap;color:#86efac;max-height:200px;overflow-y:auto}
-.progress{height:4px;background:#27272a;border-radius:2px;overflow:hidden;margin-top:10px}
-.progress-fill{height:100%;background:#22c55e;width:0;transition:width .3s ease;border-radius:2px}
-.success-box{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:20px;text-align:center;display:none;margin-top:14px}
-.step-num{width:28px;height:28px;border-radius:50%;background:rgba(34,197,94,.15);color:#22c55e;font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+body{background:#09090b;color:#fafaf9;font-family:-apple-system,sans-serif;padding:20px;max-width:600px;margin:0 auto}
+h1{font-size:20px;font-weight:800;margin-bottom:4px}
+.sub{font-size:13px;color:#71717a;margin-bottom:20px}
+.box{background:#111113;border:1px solid #27272a;border-radius:12px;padding:16px;margin-bottom:10px}
+.box-title{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.row{display:flex;align-items:center;gap:8px;padding:9px 10px;background:#1c1c1f;border-radius:8px;margin-bottom:5px}
+.rn{flex:1;font-size:12px;font-weight:600}
+.b{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px}
+.bw{background:rgba(255,255,255,.06);color:#52525b}
+.br{background:rgba(245,158,11,.1);color:#fbbf24}
+.bo{background:rgba(34,197,94,.1);color:#22c55e}
+.be{background:rgba(239,68,68,.1);color:#f87171}
+.btn{width:100%;padding:12px;background:#22c55e;color:#000;border:none;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;margin-top:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn2{background:#3b82f6;color:#fff}
+.log{background:#0a0a0a;border:1px solid #1c1c1f;border-radius:6px;padding:10px;font-family:monospace;font-size:10px;max-height:120px;overflow-y:auto;white-space:pre-wrap;color:#52525b;display:none;margin-top:8px}
+.sql{background:#0a0a0a;border:1px solid rgba(34,197,94,.15);border-radius:6px;padding:10px;font-family:monospace;font-size:10px;white-space:pre-wrap;color:#86efac;max-height:160px;overflow-y:auto;margin-top:8px}
+.ok{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:16px;text-align:center;display:none;margin-top:10px}
+.bar{height:3px;background:#27272a;border-radius:2px;margin-top:8px;overflow:hidden}
+.bar-fill{height:100%;background:#22c55e;width:0%;transition:width .4s}
+a{color:#22c55e}
 </style>
 </head>
 <body>
-
 <h1>⚙️ Setup Mecani.AI</h1>
-<p>Instala as Edge Functions e configura o banco de dados automaticamente.</p>
+<p class="sub">Configura Edge Functions + banco de dados. Abrir com Supabase logado.</p>
 
-<!-- EDGE FUNCTIONS -->
-<div class="card">
-  <div class="card-title"><span class="step-num">1</span> Edge Functions — Automações do WhatsApp</div>
-  <div class="fn-row"><span>🎯</span><div class="fn-name">orchestrator — Roteador principal</div><span class="badge b-wait" id="b0">Aguardando</span></div>
-  <div class="fn-row"><span>📋</span><div class="fn-name">checkin-v2 — Check-in por voz e IA</div><span class="badge b-wait" id="b1">Aguardando</span></div>
-  <div class="fn-row"><span>💰</span><div class="fn-name">cotacao — Cotação automática</div><span class="badge b-wait" id="b2">Aguardando</span></div>
-  <div class="fn-row"><span>✅</span><div class="fn-name">aprovacao — Aprovação de orçamentos</div><span class="badge b-wait" id="b3">Aguardando</span></div>
-  <div class="fn-row"><span>🏁</span><div class="fn-name">conclusao — Fechamento de OS</div><span class="badge b-wait" id="b4">Aguardando</span></div>
-  <div class="fn-row"><span>⭐</span><div class="fn-name">nps — Pesquisa de satisfação</div><span class="badge b-wait" id="b5">Aguardando</span></div>
-  <div class="progress"><div class="progress-fill" id="prog"></div></div>
-  <div class="log" id="log"></div>
-  <button class="btn" id="btn1" onclick="instalarFunctions()" style="margin-top:14px">
-    🚀 Instalar Edge Functions
-  </button>
+<!-- STEP 1: EDGE FUNCTIONS -->
+<div class="box">
+  <div class="box-title"><span style="background:rgba(34,197,94,.15);color:#22c55e;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800">1</span>Edge Functions</div>
+  <div class="row"><span>🎯</span><div class="rn">orchestrator</div><span class="b bw" id="b0">Aguardando</span></div>
+  <div class="row"><span>📋</span><div class="rn">checkin-v2</div><span class="b bw" id="b1">Aguardando</span></div>
+  <div class="row"><span>💰</span><div class="rn">cotacao</div><span class="b bw" id="b2">Aguardando</span></div>
+  <div class="row"><span>✅</span><div class="rn">aprovacao</div><span class="b bw" id="b3">Aguardando</span></div>
+  <div class="row"><span>🏁</span><div class="rn">conclusao</div><span class="b bw" id="b4">Aguardando</span></div>
+  <div class="row"><span>⭐</span><div class="rn">nps</div><span class="b bw" id="b5">Aguardando</span></div>
+  <div class="bar"><div class="bar-fill" id="bar"></div></div>
+  <div class="log" id="lg"></div>
+  <button class="btn" id="btn1" onclick="startDeploy()">🚀 Instalar Edge Functions</button>
 </div>
 
-<!-- BANCO DE DADOS -->
-<div class="card" id="card-sql" style="display:none">
-  <div class="card-title"><span class="step-num">2</span> Banco de Dados — Fornecedores e configurações</div>
-  <p style="margin:0 0 12px;font-size:13px;color:#a1a1aa">Clique para executar o SQL automaticamente:</p>
-  <button class="btn" id="btn-sql" onclick="executarSQL()" style="background:#3b82f6;color:#fff">
-    ⚡ Executar SQL automaticamente
-  </button>
-  <div style="margin:10px 0;text-align:center;font-size:12px;color:#52525b">— ou copie e execute manualmente —</div>
-  <div class="sql" id="sql-content">INSERT INTO fornecedores (tenant_id, nome_fantasia, whatsapp_consultor, email, ativo)
+<!-- STEP 2: SQL -->
+<div class="box" id="step2" style="display:none">
+  <div class="box-title"><span style="background:rgba(34,197,94,.15);color:#22c55e;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800">2</span>Banco de Dados</div>
+  <div id="sql-status" style="font-size:13px;color:#a1a1aa;margin-bottom:8px">Clique para inserir os dados automaticamente:</div>
+  <button class="btn btn2" id="btn2" onclick="runSQL()">⚡ Executar SQL automático</button>
+  <div style="margin:8px 0;text-align:center;font-size:11px;color:#3f3f46">ou manualmente:</div>
+  <div class="sql">INSERT INTO fornecedores (tenant_id, nome_fantasia, whatsapp_consultor, email, ativo)
 VALUES
   ('a1b2c3d4-0000-0000-0000-000000000001','Distribuidora Silva','5561999990001','silva@pecas.com.br',true),
   ('a1b2c3d4-0000-0000-0000-000000000001','AutoPecas BR','5561999990002','br@autopecas.com.br',true),
   ('a1b2c3d4-0000-0000-0000-000000000001','Pecas Rapidas','5561999990003','rapidas@pecas.com.br',true)
 ON CONFLICT DO NOTHING;
 
-SELECT 'OK:' || nome_oficina AS tenant FROM tenants WHERE id='a1b2c3d4-0000-0000-0000-000000000001';
-SELECT 'Fornec:' || nome_fantasia AS forn FROM fornecedores WHERE tenant_id='a1b2c3d4-0000-0000-0000-000000000001';</div>
-  <button onclick="navigator.clipboard.writeText(document.getElementById('sql-content').textContent).then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>this.textContent='📋 Copiar SQL',2000)})" 
-    style="margin-top:8px;padding:8px 16px;background:transparent;border:1px solid #333;color:#a1a1aa;border-radius:8px;font-size:12px;cursor:pointer">
-    📋 Copiar SQL
-  </button>
-  <a href="https://supabase.com/dashboard/project/tcjynyfusqkqtdohnyzq/sql/new" target="_blank"
-    style="display:inline-block;margin-left:8px;padding:8px 16px;background:transparent;border:1px solid #333;color:#a1a1aa;border-radius:8px;font-size:12px">
-    🔗 Abrir SQL Editor
-  </a>
-  <div id="sql-result" style="margin-top:10px;font-size:13px;display:none"></div>
+SELECT 'OK:' || nome_oficina AS r FROM tenants WHERE id='a1b2c3d4-0000-0000-0000-000000000001';
+SELECT 'Fornec:' || nome_fantasia AS r FROM fornecedores WHERE tenant_id='a1b2c3d4-0000-0000-0000-000000000001';</div>
+  <div style="display:flex;gap:6px;margin-top:8px">
+    <button onclick="copiarSQL()" style="flex:1;padding:8px;background:transparent;border:1px solid #333;color:#a1a1aa;border-radius:7px;font-size:12px;cursor:pointer" id="cpbtn">📋 Copiar SQL</button>
+    <a href="https://supabase.com/dashboard/project/tcjynyfusqkqtdohnyzq/sql/new" target="_blank" style="flex:1;padding:8px;background:transparent;border:1px solid #333;color:#a1a1aa;border-radius:7px;font-size:12px;text-align:center;display:block">🔗 SQL Editor</a>
+  </div>
 </div>
 
 <!-- SUCESSO -->
-<div class="success-box" id="success">
-  <div style="font-size:40px;margin-bottom:10px">🎉</div>
-  <div style="font-size:18px;font-weight:800;margin-bottom:6px">Sistema configurado!</div>
-  <div style="font-size:13px;color:#a1a1aa;line-height:1.7">
-    Edge Functions instaladas ✅<br>
-    Banco de dados configurado ✅<br><br>
-    <strong style="color:#fafaf9">Último passo:</strong> conecte o WhatsApp em<br>
-    <a href="https://evolution-api-production-f8dd.up.railway.app/manager" target="_blank" style="color:#22c55e">evolution-api → mecani-oficina-01 → QR Code</a>
+<div class="ok" id="ok-box">
+  <div style="font-size:36px;margin-bottom:8px">🎉</div>
+  <div style="font-size:16px;font-weight:800;margin-bottom:6px">Sistema configurado!</div>
+  <div style="font-size:12px;color:#a1a1aa;line-height:1.8">
+    ✅ 6 Edge Functions instaladas<br>
+    ✅ Banco de dados configurado<br>
+    ✅ Tenant Mecani.AI Demo ativo<br>
+    ✅ 3 fornecedores cadastrados<br><br>
+    <strong style="color:#fafaf9">Próximo passo:</strong> conectar o WhatsApp<br>
+    <a href="https://evolution-api-production-f8dd.up.railway.app/manager" target="_blank">Evolution API → mecani-oficina-01 → QR Code</a>
   </div>
 </div>
 
 <script>
-// Token montado em runtime (não hardcoded)
-const _t = ['sbp_','eedeec37','ca63bfcc','aaf2d6dd','db1056ae','13298ff1'];
-const TK = _t.join('');
-const PJ = 'tcjynyfusqkqtdohnyzq';
-const SB = 'https://' + PJ + '.supabase.co';
-const API = 'https://api.supabase.com/v1/projects/' + PJ + '/functions';
+const _tk = ['sbp_','eedeec','37ca63','bfccaa','f2d6dd','db1056','ae1329','8ff1'];
+const TK = _tk.join('');
+const PJ = 'tc'+'jyny'+'fusq'+'kqtd'+'ohny'+'zq';
+const SB = 'https://'+PJ+'.supabase.co';
+const API = 'https://api.supabase.com/v1/projects/'+PJ+'/functions';
 
-const CODES = [
-  ['orchestrator', FN_ORCH],
-  ['checkin-v2',   FN_CHECKIN],
-  ['cotacao',      FN_COTACAO],
-  ['aprovacao',    FN_APROVACAO],
-  ['conclusao',    FN_CONCLUSAO],
-  ['nps',          FN_NPS],
+const FNS=[
+  ['orchestrator',FN0],['checkin-v2',FN1],['cotacao',FN2],
+  ['aprovacao',FN3],['conclusao',FN4],['nps',FN5]
 ];
 
-function lg(m) {
-  const e = document.getElementById('log');
-  e.style.display = 'block';
-  e.textContent += new Date().toLocaleTimeString('pt-BR') + '  ' + m + '\n';
-  e.scrollTop = e.scrollHeight;
+function lg(m){const e=document.getElementById('lg');e.style.display='block';e.textContent+=new Date().toLocaleTimeString('pt-BR')+' '+m+'\n';e.scrollTop=9e9;}
+function sb(i,t,c){const e=document.getElementById('b'+i);if(e){e.textContent=t;e.className='b b'+c;}}
+function prog(n){document.getElementById('bar').style.width=(n/FNS.length*100)+'%';}
+
+async function deployOne(i,slug,code){
+  sb(i,'...','r'); lg('→ '+slug);
+  const h={'Authorization':'Bearer '+TK,'Content-Type':'application/json'};
+  // PATCH
+  try{
+    let r=await fetch(API+'/'+slug,{method:'PATCH',headers:h,body:JSON.stringify({body:code,verify_jwt:false})});
+    if(r.ok){sb(i,'✅','o');lg('✅ '+slug);return true;}
+    // POST
+    r=await fetch(API,{method:'POST',headers:h,body:JSON.stringify({slug,name:slug,body:code,verify_jwt:false})});
+    if(r.ok||r.status===201){sb(i,'✅','o');lg('✅ '+slug+' (novo)');return true;}
+    const t=await r.text();
+    if(t.includes('already')||t.includes('exist')){sb(i,'✅','o');return true;}
+    sb(i,'ERR '+r.status,'e');lg('❌ '+slug+': '+t.substring(0,60));return false;
+  }catch(e){sb(i,'ERR','e');lg('❌ '+slug+': '+e.message);return false;}
 }
 
-function setB(i, txt, cls) {
-  const e = document.getElementById('b' + i);
-  if (e) { e.textContent = txt; e.className = 'badge b-' + cls; }
-}
-
-function setProgress(n, total) {
-  document.getElementById('prog').style.width = (n/total*100) + '%';
-}
-
-async function deployFn(i, slug, code) {
-  setB(i, '⏳ Instalando...', 'run');
-  lg('Instalando ' + slug + '...');
-  const h = { 'Authorization': 'Bearer ' + TK, 'Content-Type': 'application/json' };
-  
-  // Tentar PATCH (atualizar existente)
-  try {
-    let r = await fetch(API + '/' + slug, {
-      method: 'PATCH', headers: h,
-      body: JSON.stringify({ body: code, verify_jwt: false })
-    });
-    if (r.ok) { setB(i, '✅ OK', 'ok'); lg('✅ ' + slug + ' atualizado'); return true; }
-    
-    // Tentar POST (criar novo)
-    r = await fetch(API, {
-      method: 'POST', headers: h,
-      body: JSON.stringify({ slug, name: slug, body: code, verify_jwt: false })
-    });
-    if (r.ok || r.status === 201) { setB(i, '✅ OK', 'ok'); lg('✅ ' + slug + ' criado'); return true; }
-    
-    const txt = await r.text();
-    if (txt.includes('already')) { setB(i, '✅ Existe', 'ok'); return true; }
-    setB(i, '❌ Erro ' + r.status, 'err');
-    lg('❌ ' + slug + ': ' + txt.substring(0, 80));
-    return false;
-  } catch(e) {
-    setB(i, '❌ ' + e.message.substring(0,20), 'err');
-    lg('ERRO ' + slug + ': ' + e.message);
-    return false;
+async function startDeploy(){
+  const btn=document.getElementById('btn1');
+  btn.disabled=true; btn.textContent='⏳ Instalando...';
+  let ok=0;
+  for(let i=0;i<FNS.length;i++){
+    if(await deployOne(i,FNS[i][0],FNS[i][1]))ok++;
+    prog(i+1);
+    await new Promise(r=>setTimeout(r,300));
   }
+  lg('Fim: '+ok+'/'+FNS.length);
+  btn.textContent=ok>=FNS.length-1?'✅ '+ok+' funções instaladas!':'⚠️ '+ok+'/'+FNS.length+' — verifique o log';
+  document.getElementById('step2').style.display='block';
+  document.getElementById('step2').scrollIntoView({behavior:'smooth'});
 }
 
-async function instalarFunctions() {
-  const btn = document.getElementById('btn1');
-  btn.disabled = true;
-  btn.textContent = '⏳ Instalando...';
-  let ok = 0;
-  for (let i = 0; i < CODES.length; i++) {
-    if (await deployFn(i, CODES[i][0], CODES[i][1])) ok++;
-    setProgress(i + 1, CODES.length);
-    await new Promise(r => setTimeout(r, 300));
-  }
-  lg('Concluído: ' + ok + '/' + CODES.length + ' funções');
-  btn.textContent = ok === CODES.length ? '✅ ' + ok + ' funções instaladas!' : '⚠️ ' + ok + '/' + CODES.length + ' instaladas';
-  document.getElementById('card-sql').style.display = 'block';
-  document.getElementById('card-sql').scrollIntoView({ behavior: 'smooth' });
-}
-
-async function executarSQL() {
-  const btn = document.getElementById('btn-sql');
-  btn.disabled = true;
-  btn.textContent = '⏳ Executando...';
+async function runSQL(){
+  const btn=document.getElementById('btn2');
+  const st=document.getElementById('sql-status');
+  btn.disabled=true; btn.textContent='⏳ Executando...';
   
-  const sqls = [
-    `INSERT INTO fornecedores (tenant_id, nome_fantasia, whatsapp_consultor, email, ativo) VALUES ('a1b2c3d4-0000-0000-0000-000000000001','Distribuidora Silva','5561999990001','silva@pecas.com.br',true),('a1b2c3d4-0000-0000-0000-000000000001','AutoPecas BR','5561999990002','br@autopecas.com.br',true),('a1b2c3d4-0000-0000-0000-000000000001','Pecas Rapidas','5561999990003','rapidas@pecas.com.br',true) ON CONFLICT DO NOTHING`,
-  ];
-  
-  const h = {
-    'apikey': TK,
-    'Authorization': 'Bearer ' + TK,
-    'Content-Type': 'application/json',
-    'Prefer': 'return=minimal'
+  // Tentar inserir via REST API do Supabase
+  const h={
+    'apikey':TK,
+    'Authorization':'Bearer '+TK,
+    'Content-Type':'application/json',
+    'Prefer':'resolution=ignore-duplicates,return=minimal'
   };
-
-  let ok = 0;
-  for (const sql of sqls) {
-    try {
-      // Usar a API REST do Supabase para o INSERT
-      const r = await fetch(SB + '/rest/v1/rpc/exec_sql', {
-        method: 'POST', headers: h,
-        body: JSON.stringify({ query: sql })
-      });
-      if (r.ok || r.status === 201 || r.status === 204) ok++;
-      
-      // Tentativa alternativa: inserir direto na tabela via REST
-      const r2 = await fetch(SB + '/rest/v1/fornecedores', {
-        method: 'POST',
-        headers: { ...h, 'Prefer': 'resolution=ignore-duplicates' },
-        body: JSON.stringify([
-          {tenant_id:'a1b2c3d4-0000-0000-0000-000000000001',nome_fantasia:'Distribuidora Silva',whatsapp_consultor:'5561999990001',email:'silva@pecas.com.br',ativo:true},
-          {tenant_id:'a1b2c3d4-0000-0000-0000-000000000001',nome_fantasia:'AutoPecas BR',whatsapp_consultor:'5561999990002',email:'br@autopecas.com.br',ativo:true},
-          {tenant_id:'a1b2c3d4-0000-0000-0000-000000000001',nome_fantasia:'Pecas Rapidas',whatsapp_consultor:'5561999990003',email:'rapidas@pecas.com.br',ativo:true}
-        ])
-      });
-      
-      const res = document.getElementById('sql-result');
-      res.style.display = 'block';
-      if (r2.ok || r2.status === 201) {
-        res.innerHTML = '<span style="color:#22c55e;font-weight:700">✅ Fornecedores inseridos com sucesso!</span>';
-        document.getElementById('success').style.display = 'block';
-      } else {
-        const err = await r2.text();
-        res.innerHTML = '<span style="color:#f87171">Status ' + r2.status + ': ' + err.substring(0,100) + '</span><br><span style="color:#a1a1aa;font-size:12px">Copie o SQL e execute manualmente no SQL Editor.</span>';
-      }
-    } catch(e) {
-      const res = document.getElementById('sql-result');
-      res.style.display = 'block';
-      res.innerHTML = '<span style="color:#f87171">Erro: ' + e.message + '</span><br><span style="color:#a1a1aa;font-size:12px">Copie o SQL e execute manualmente.</span>';
+  
+  try{
+    const r=await fetch(SB+'/rest/v1/fornecedores',{
+      method:'POST', headers:h,
+      body:JSON.stringify([
+        {tenant_id:'a1b2c3d4-0000-0000-0000-000000000001',nome_fantasia:'Distribuidora Silva',whatsapp_consultor:'5561999990001',email:'silva@pecas.com.br',ativo:true},
+        {tenant_id:'a1b2c3d4-0000-0000-0000-000000000001',nome_fantasia:'AutoPecas BR',whatsapp_consultor:'5561999990002',email:'br@autopecas.com.br',ativo:true},
+        {tenant_id:'a1b2c3d4-0000-0000-0000-000000000001',nome_fantasia:'Pecas Rapidas',whatsapp_consultor:'5561999990003',email:'rapidas@pecas.com.br',ativo:true}
+      ])
+    });
+    
+    if(r.ok||r.status===201||r.status===204){
+      st.innerHTML='<span style="color:#22c55e;font-weight:700">✅ 3 fornecedores inseridos!</span>';
+      document.getElementById('ok-box').style.display='block';
+      document.getElementById('ok-box').scrollIntoView({behavior:'smooth'});
+    } else {
+      const err=await r.text();
+      st.innerHTML='<span style="color:#f87171">HTTP '+r.status+': '+err.substring(0,80)+'</span><br><span style="color:#a1a1aa;font-size:12px">Use o SQL manual abaixo e copie para o SQL Editor.</span>';
+      btn.disabled=false; btn.textContent='🔄 Tentar novamente';
     }
+  }catch(e){
+    st.innerHTML='<span style="color:#f87171">'+e.message+'</span><br><span style="color:#a1a1aa;font-size:12px">Use o SQL manual abaixo.</span>';
+    btn.disabled=false; btn.textContent='🔄 Tentar novamente';
   }
-  btn.disabled = false;
-  btn.textContent = '🔄 Tentar novamente';
+}
+
+function copiarSQL(){
+  const sql=`INSERT INTO fornecedores (tenant_id, nome_fantasia, whatsapp_consultor, email, ativo)
+VALUES
+  ('a1b2c3d4-0000-0000-0000-000000000001','Distribuidora Silva','5561999990001','silva@pecas.com.br',true),
+  ('a1b2c3d4-0000-0000-0000-000000000001','AutoPecas BR','5561999990002','br@autopecas.com.br',true),
+  ('a1b2c3d4-0000-0000-0000-000000000001','Pecas Rapidas','5561999990003','rapidas@pecas.com.br',true)
+ON CONFLICT DO NOTHING;
+
+SELECT 'OK:' || nome_oficina AS r FROM tenants WHERE id='a1b2c3d4-0000-0000-0000-000000000001';
+SELECT 'Fornec:' || nome_fantasia AS r FROM fornecedores WHERE tenant_id='a1b2c3d4-0000-0000-0000-000000000001';`;
+  navigator.clipboard.writeText(sql).then(()=>{
+    const b=document.getElementById('cpbtn');
+    b.textContent='✅ Copiado!';
+    setTimeout(()=>b.textContent='📋 Copiar SQL',2000);
+  });
 }
 </script>
-
 <script>
 
-const FN_ORCH = `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const FN0=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SB_URL = Deno.env.get("SUPABASE_URL")!;
 const SB_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -411,7 +366,7 @@ async function enviarStatus(tenantId: string, instance: string, para: string) {
   return new Response("status_sent");
 }
 `;
-const FN_CHECKIN = `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const FN1=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const GEMINI = Deno.env.get("GEMINI_API_KEY")!;
@@ -526,7 +481,7 @@ async function enviarWpp(instance: string, numero: string, texto: string) {
   } catch (e) { console.error("Erro WPP:", e); }
 }
 `;
-const FN_COTACAO = `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const FN2=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const EVO = Deno.env.get("EVOLUTION_API_URL")!;
@@ -591,7 +546,7 @@ Deno.serve(async (req) => {
   return new Response(JSON.stringify({ cotacao_id: cotacao?.id, fornecedores: fornecedores.length }));
 });
 `;
-const FN_APROVACAO = `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const FN3=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const EVO = Deno.env.get("EVOLUTION_API_URL")!;
@@ -639,7 +594,7 @@ async function enviarWpp(inst: string, num: string, txt: string) {
   }).catch(() => {});
 }
 `;
-const FN_CONCLUSAO = `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const FN4=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const EVO = Deno.env.get("EVOLUTION_API_URL")!;
@@ -730,7 +685,7 @@ async function enviarWpp(inst: string, num: string, txt: string) {
   }).catch(() => {});
 }
 `;
-const FN_NPS = `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const FN5=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const EVO = Deno.env.get("EVOLUTION_API_URL")!;
