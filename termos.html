@@ -1,63 +1,404 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Termos de Uso — Mecani.AI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Termos de Uso e Responsabilidade — Mecani.AI</title>
+<meta name="description" content="Termos de Uso, Política de Dados e Responsabilidade da plataforma Mecani.AI.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text y='.9em' font-size='80' x='10'>🔧</text></svg>">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#fff;color:#1a1a1a;font-family:-apple-system,'Segoe UI',sans-serif;max-width:800px;margin:0 auto;padding:40px 24px}
-.header{margin-bottom:40px;padding-bottom:24px;border-bottom:1px solid #e5e7eb}
-.logo{font-size:18px;font-weight:700;margin-bottom:8px}.logo em{color:#22c55e;font-style:normal}
-h1{font-size:28px;font-weight:700;margin-bottom:8px}
-.date{font-size:13px;color:#9ca3af}
-h2{font-size:18px;font-weight:700;margin:28px 0 10px}
-p{font-size:15px;line-height:1.7;color:#374151;margin-bottom:12px}
-ul{margin-left:20px;margin-bottom:12px}
-li{font-size:15px;line-height:1.7;color:#374151;margin-bottom:4px}
+body{background:#fff;color:#1a1a1a;font-family:-apple-system,'Segoe UI',Arial,sans-serif;line-height:1.7}
+a{color:#16a34a;text-decoration:none}
+a:hover{text-decoration:underline}
+.hd{background:#09090b;padding:16px 5%;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:17px;font-weight:800;color:#fff}.logo b{color:#22c55e}
+.hd-back{font-size:13px;color:#a1a1aa;transition:color .2s}.hd-back:hover{color:#fff}
+.wrap{max-width:820px;margin:0 auto;padding:48px 24px 100px}
+.doc-header{border-bottom:3px solid #22c55e;padding-bottom:24px;margin-bottom:36px}
+.doc-title{font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:8px}
+.doc-meta{font-size:13px;color:#666;display:flex;gap:20px;flex-wrap:wrap}
+.doc-meta span{display:flex;align-items:center;gap:5px}
+.toc{background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px 24px;margin-bottom:36px}
+.toc-title{font-size:13px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.toc-list li a{font-size:14px;color:#374151}.toc-list li a:hover{color:#16a34a}
+.toc-num{color:#9ca3af;margin-right:6px;font-size:12px}
+h2{font-size:19px;font-weight:800;margin:36px 0 14px;padding-bottom:8px;border-bottom:1px solid #f3f4f6;color:#111;scroll-margin-top:20px}
+h3{font-size:15px;font-weight:700;margin:20px 0 8px;color:#374151}
+p{font-size:14px;color:#374151;margin-bottom:12px;line-height:1.75}
+ul,ol{margin:0 0 14px 20px}
+li{font-size:14px;color:#374151;margin-bottom:5px;line-height:1.6}
+.lei{background:#f0fdf4;border-left:3px solid #22c55e;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13px;color:#15803d;font-weight:500}
+.alerta{background:#fef3c7;border-left:3px solid #f59e0b;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13px;color:#92400e}
+.destaque{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px 16px;margin:14px 0;font-size:14px;color:#166534}
+.destaque strong{color:#14532d}
+.grave{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:14px 16px;margin:14px 0;font-size:14px;color:#991b1b}
+.grave strong{display:block;font-size:15px;margin-bottom:4px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px}
+th{background:#f9fafb;padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #e5e7eb}
+td{padding:10px 12px;border-bottom:1px solid #f3f4f6;color:#374151;vertical-align:top}
+.footer-doc{margin-top:48px;padding-top:24px;border-top:1px solid #e5e7eb;font-size:13px;color:#6b7280;text-align:center}
+.version-box{background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#6b7280}
+@media print{.hd,.toc{display:none}.wrap{padding:0}}
 </style>
 </head>
 <body>
-<div class="header">
-  <div class="logo">Mecani<em>.AI</em></div>
-  <h1>Termos de Uso</h1>
-  <div class="date">Última atualização: Janeiro de 2025</div>
+
+<div class="hd">
+  <div class="logo">Mecani<b>.AI</b></div>
+  <a href="/" class="hd-back">← Voltar ao site</a>
 </div>
 
-<p>Ao utilizar o sistema Mecani.AI, você concorda com os seguintes termos e condições.</p>
+<div class="wrap">
 
-<h2>1. Sobre o Serviço</h2>
-<p>O Mecani.AI é um sistema de gestão para oficinas mecânicas que utiliza inteligência artificial para automatizar processos administrativos, incluindo check-in de veículos, diagnóstico assistido, cotação de peças, comunicação com clientes e fornecedores.</p>
+<div class="doc-header">
+  <div class="doc-title">Termos de Uso, Responsabilidade e Política de Dados</div>
+  <div class="doc-meta">
+    <span>📅 Versão: 1.0 — Junho de 2025</span>
+    <span>⚖️ Jurisdição: Brasil</span>
+    <span>🏢 Mecani.AI — CNPJ em processo de regularização</span>
+  </div>
+</div>
 
-<h2>2. Uso Adequado</h2>
-<p>Você se compromete a:</p>
+<div class="version-box">
+  <strong>Leia com atenção antes de contratar.</strong> Ao criar uma conta, assinar um plano ou utilizar qualquer funcionalidade da plataforma Mecani.AI, você declara que leu, entendeu e concorda integralmente com os termos abaixo. A aceitação é obrigatória para o uso da plataforma.
+</div>
+
+<!-- ÍNDICE -->
+<div class="toc">
+  <div class="toc-title">Índice</div>
+  <ul class="toc-list">
+    <li><a href="#s1"><span class="toc-num">1.</span>Das Partes e Definições</a></li>
+    <li><a href="#s2"><span class="toc-num">2.</span>Do Objeto e Natureza do Serviço</a></li>
+    <li><a href="#s3"><span class="toc-num">3.</span>Da Contratação e Período de Teste</a></li>
+    <li><a href="#s4"><span class="toc-num">4.</span>Do Cancelamento e Rescisão</a></li>
+    <li><a href="#s5"><span class="toc-num">5.</span>Da Responsabilidade sobre os Dados</a></li>
+    <li><a href="#s6"><span class="toc-num">6.</span>Da Exclusão de Dados por Inadimplência</a></li>
+    <li><a href="#s7"><span class="toc-num">7.</span>Da Limitação de Responsabilidade da Contratada</a></li>
+    <li><a href="#s8"><span class="toc-num">8.</span>Das Obrigações do Contratante</a></li>
+    <li><a href="#s9"><span class="toc-num">9.</span>Da Propriedade Intelectual</a></li>
+    <li><a href="#s10"><span class="toc-num">10.</span>Da Segurança e Sigilo</a></li>
+    <li><a href="#s11"><span class="toc-num">11.</span>Das Disposições Gerais e Foro</a></li>
+  </ul>
+</div>
+
+<!-- 1 -->
+<h2 id="s1">1. Das Partes e Definições</h2>
+
+<h3>1.1 Identificação das Partes</h3>
+<p><strong>CONTRATADA:</strong> Mecani.AI, plataforma de software como serviço (SaaS) para gestão de oficinas mecânicas, operada por Raíque Dornelas Almeida, inscrito no CPF/CNPJ devidamente registrado, com sede em Brasília/DF, doravante denominada simplesmente <strong>"Mecani.AI"</strong> ou <strong>"Contratada"</strong>.</p>
+<p><strong>CONTRATANTE:</strong> Pessoa física ou jurídica que realiza o cadastro na plataforma, assina um dos planos disponíveis ou utiliza qualquer funcionalidade do sistema, doravante denominada <strong>"Contratante"</strong>, <strong>"Usuário"</strong> ou <strong>"Assinante"</strong>.</p>
+
+<h3>1.2 Definições</h3>
+<table>
+  <tr><th>Termo</th><th>Definição</th></tr>
+  <tr><td><strong>Plataforma</strong></td><td>Sistema Mecani.AI acessível via mecaniia.com.br e subdomínios, incluindo todos os portais, APIs, automações e agentes de inteligência artificial</td></tr>
+  <tr><td><strong>Dados do Contratante</strong></td><td>Toda informação inserida pelo Contratante e seus usuários finais na plataforma, incluindo dados de clientes, veículos, ordens de serviço, financeiro e comunicações</td></tr>
+  <tr><td><strong>Usuário Final</strong></td><td>Clientes, mecânicos, fornecedores e demais terceiros cujos dados são inseridos na plataforma pelo Contratante</td></tr>
+  <tr><td><strong>Dados Pessoais</strong></td><td>Informações que identificam ou tornam identificável uma pessoa natural, conforme art. 5º, I da Lei 13.709/2018 (LGPD)</td></tr>
+  <tr><td><strong>Tratamento</strong></td><td>Toda operação realizada com dados pessoais, incluindo coleta, armazenamento, processamento e exclusão</td></tr>
+</table>
+
+<!-- 2 -->
+<h2 id="s2">2. Do Objeto e Natureza do Serviço</h2>
+
+<h3>2.1 Objeto</h3>
+<p>A Mecani.AI fornece ao Contratante acesso a plataforma de gestão para oficinas mecânicas, incluindo, mas não se limitando a: automação de ordens de serviço via WhatsApp, diagnóstico assistido por inteligência artificial, cotação automática com fornecedores, portal do cliente, controle de estoque, relatórios e publicação em redes sociais.</p>
+
+<h3>2.2 Natureza da Inteligência Artificial</h3>
+<p>Os diagnósticos, sugestões técnicas e análises geradas pela inteligência artificial da plataforma possuem caráter meramente <strong>auxiliar e informativo</strong>, não substituindo o julgamento técnico profissional do mecânico habilitado. A Contratada não se responsabiliza por decisões técnicas tomadas com base exclusiva nas sugestões da IA.</p>
+
+<div class="lei">
+  📋 Base legal: Art. 20 da Lei 13.709/2018 (LGPD) — Direito à revisão de decisões automatizadas. O usuário final pode solicitar revisão humana de qualquer decisão tomada exclusivamente com base em tratamento automatizado.
+</div>
+
+<h3>2.3 Disponibilidade</h3>
+<p>A Contratada empreenderá esforços razoáveis para manter a plataforma disponível 24 (vinte e quatro) horas por dia, 7 (sete) dias por semana, ressalvados casos de manutenção programada, força maior, falhas de terceiros (provedores de nuvem, operadoras de telecomunicação, API de WhatsApp) e demais situações previstas no art. 393 do Código Civil Brasileiro (Lei 10.406/2002).</p>
+
+<!-- 3 -->
+<h2 id="s3">3. Da Contratação e Período de Teste</h2>
+
+<h3>3.1 Planos Disponíveis</h3>
+<table>
+  <tr><th>Plano</th><th>Valor</th><th>Ciclo</th><th>OS incluídas</th></tr>
+  <tr><td>Starter</td><td>R$ 197,00</td><td>Mensal</td><td>Até 50 por mês</td></tr>
+  <tr><td>Pro</td><td>R$ 397,00</td><td>Mensal</td><td>Ilimitadas</td></tr>
+  <tr><td>Enterprise</td><td>Sob consulta</td><td>Personalizado</td><td>Ilimitadas + multi-unidade</td></tr>
+</table>
+
+<h3>3.2 Período de Teste Gratuito</h3>
+<p>Todo novo Contratante tem direito a <strong>7 (sete) dias corridos de uso gratuito</strong> da plataforma no plano contratado, sem cobrança, contados a partir da data de ativação da conta.</p>
+
+<div class="destaque">
+  <strong>Durante o período de teste:</strong>
+  <ul style="margin:8px 0 0 16px">
+    <li>O Contratante tem acesso completo a todas as funcionalidades do plano escolhido</li>
+    <li>Nenhum valor será cobrado nos primeiros 7 dias</li>
+    <li>O Contratante pode cancelar a qualquer momento antes do término do período de teste sem qualquer custo</li>
+    <li>Após os 7 dias, inicia-se automaticamente a cobrança da assinatura escolhida</li>
+  </ul>
+</div>
+
+<div class="lei">
+  📋 Base legal: Art. 49 do Código de Defesa do Consumidor (Lei 8.078/1990) — Direito de arrependimento em contratos celebrados fora do estabelecimento comercial, garantindo ao consumidor o prazo de reflexão sem ônus.
+</div>
+
+<h3>3.3 Renovação Automática</h3>
+<p>Após o período de teste, a assinatura será renovada automaticamente no início de cada ciclo mensal, mediante cobrança no cartão de crédito cadastrado ou emissão de novo documento de cobrança (PIX/boleto), conforme método de pagamento selecionado pelo Contratante.</p>
+
+<!-- 4 -->
+<h2 id="s4">4. Do Cancelamento e Rescisão</h2>
+
+<h3>4.1 Cancelamento durante o período de teste (até 7 dias)</h3>
+<p>O Contratante pode cancelar a assinatura durante os primeiros 7 (sete) dias sem nenhum custo, sem necessidade de justificativa, através de qualquer dos canais abaixo:</p>
 <ul>
-  <li>Fornecer informações verdadeiras e atualizadas</li>
-  <li>Não utilizar o sistema para fins ilegais ou fraudulentos</li>
-  <li>Não tentar acessar dados de outras oficinas ou clientes</li>
-  <li>Manter a confidencialidade das suas credenciais de acesso</li>
+  <li>📱 WhatsApp: (61) 99177-5904 — mensagem com a palavra "CANCELAR"</li>
+  <li>📧 E-mail: cancelamento@mecaniia.com.br</li>
+  <li>🌐 Portal: mecaniia.com.br/cancelar.html</li>
+</ul>
+<p>O cancelamento será processado em até <strong>24 (vinte e quatro) horas úteis</strong> após a solicitação, com confirmação enviada ao e-mail e WhatsApp cadastrados.</p>
+
+<div class="lei">
+  📋 Base legal: Art. 49, parágrafo único, CDC — "Se o consumidor exercitar o direito de arrependimento previsto neste artigo, os valores eventualmente pagos, a qualquer título, durante o prazo de reflexão, serão devolvidos, de imediato, monetariamente atualizados."
+</div>
+
+<h3>4.2 Cancelamento após o período de teste</h3>
+<p>Após os 7 dias de teste, o cancelamento pode ser solicitado a qualquer momento pelos mesmos canais acima. Neste caso:</p>
+<ul>
+  <li>O acesso à plataforma permanece ativo até o <strong>último dia do ciclo já pago</strong></li>
+  <li>Não haverá renovação automática para o próximo ciclo</li>
+  <li>Não há devolução proporcional de valores já cobrados, salvo em caso de falha técnica grave comprovada da Contratada</li>
+  <li>O Contratante terá <strong>15 (quinze) dias corridos</strong> após o cancelamento para exportar seus dados</li>
 </ul>
 
-<h2>3. Responsabilidades</h2>
-<p>O Mecani.AI não se responsabiliza por:</p>
+<h3>4.3 Rescisão por Inadimplência</h3>
+<p>Na hipótese de não identificação de pagamento válido após o vencimento do ciclo:</p>
+<ol>
+  <li><strong>Dias 1-3 após vencimento:</strong> Notificação automática via WhatsApp e e-mail</li>
+  <li><strong>Dias 4-7 após vencimento:</strong> Acesso à plataforma suspenso. Nova notificação de regularização</li>
+  <li><strong>Dia 8-15 após vencimento:</strong> Conta em estado de bloqueio. Dados preservados. Nova notificação final</li>
+  <li><strong>Após o 15º dia:</strong> Rescisão automática e exclusão definitiva de todos os dados conforme Cláusula 6</li>
+</ol>
+
+<div class="alerta">
+  ⚠️ A Contratada envidará todos os esforços para notificar o Contratante antes da exclusão. Contudo, a responsabilidade pela manutenção de contato ativo (WhatsApp e e-mail válidos) é exclusivamente do Contratante.
+</div>
+
+<h3>4.4 Rescisão por Violação de Termos</h3>
+<p>A Contratada reserva-se o direito de rescindir o contrato imediatamente, sem aviso prévio e sem restituição de valores, caso o Contratante:</p>
 <ul>
-  <li>Diagnósticos técnicos — as sugestões da IA são auxiliares, não substituem o julgamento do mecânico</li>
-  <li>Decisões de negócio tomadas com base nos relatórios do sistema</li>
-  <li>Falhas de comunicação causadas por problemas no WhatsApp ou operadoras</li>
+  <li>Utilize a plataforma para fins ilícitos ou contrários à ordem pública</li>
+  <li>Tente acessar dados de outros Contratantes ou comprometer a segurança do sistema</li>
+  <li>Revenda, sublicencie ou transfira o acesso à plataforma sem autorização expressa</li>
+  <li>Forneça informações falsas no cadastro</li>
+  <li>Viole direitos de terceiros, incluindo dados pessoais de Usuários Finais</li>
 </ul>
 
-<h2>4. Propriedade Intelectual</h2>
-<p>Todo o código, design e tecnologia do Mecani.AI são propriedade exclusiva da Mecani.AI. É proibida a reprodução ou uso comercial sem autorização prévia.</p>
+<!-- 5 -->
+<h2 id="s5">5. Da Responsabilidade sobre os Dados</h2>
 
-<h2>5. Disponibilidade</h2>
-<p>Nos esforçamos para manter o sistema disponível 24/7, mas não garantimos disponibilidade ininterrupta. Manutenções programadas serão comunicadas com antecedência.</p>
+<h3>5.1 Papéis no tratamento de dados — LGPD</h3>
+<p>Em conformidade com a Lei Geral de Proteção de Dados (Lei 13.709/2018), as partes assumem os seguintes papéis:</p>
 
-<h2>6. Cancelamento</h2>
-<p>Você pode cancelar o uso do sistema a qualquer momento. Os dados serão mantidos por 30 dias após o cancelamento para eventual recuperação, sendo então excluídos permanentemente.</p>
+<table>
+  <tr><th>Parte</th><th>Papel (LGPD)</th><th>Responsabilidade</th></tr>
+  <tr><td><strong>Contratante</strong></td><td>Controlador de Dados</td><td>Define finalidade e meios do tratamento dos dados dos Usuários Finais. Responsável pela coleta, base legal e relacionamento com titulares.</td></tr>
+  <tr><td><strong>Mecani.AI</strong></td><td>Operador de Dados</td><td>Trata dados em nome do Controlador, seguindo suas instruções. Não define finalidade. Responsável pela segurança técnica.</td></tr>
+</table>
 
-<h2>7. Alterações</h2>
-<p>Podemos alterar estes termos com aviso prévio de 15 dias. O uso continuado após as alterações implica aceitação dos novos termos.</p>
+<div class="destaque">
+  <strong>Em linguagem clara:</strong> O Contratante é o dono dos dados dos seus clientes. A Mecani.AI apenas processa esses dados seguindo as instruções do Contratante. A responsabilidade pelo relacionamento com os titulares dos dados (clientes da oficina) é do Contratante.
+</div>
 
-<h2>8. Lei Aplicável</h2>
-<p>Estes termos são regidos pela lei brasileira. Eventuais disputas serão resolvidas no foro da comarca de Brasília/DF.</p>
+<h3>5.2 Responsabilidades do Contratante (Controlador)</h3>
+<p>O Contratante, na qualidade de Controlador dos Dados, é o único responsável por:</p>
+<ul>
+  <li>Obter as bases legais adequadas para coleta dos dados dos Usuários Finais (art. 7º e art. 11 da LGPD)</li>
+  <li>Informar os Usuários Finais sobre o tratamento de seus dados, conforme art. 9º da LGPD</li>
+  <li>Atender requisições de titulares (acesso, correção, exclusão, portabilidade), nos termos dos arts. 17 a 22 da LGPD</li>
+  <li>Garantir que os dados inseridos na plataforma foram coletados de forma lícita</li>
+  <li>Comunicar aos Usuários Finais eventuais incidentes de segurança que possam afetá-los</li>
+  <li>Cumprir as obrigações do Código de Defesa do Consumidor em relação aos seus próprios clientes</li>
+</ul>
+
+<h3>5.3 Isenção de Responsabilidade da Mecani.AI sobre Dados</h3>
+<p>A Mecani.AI <strong>expressamente não se responsabiliza por:</strong></p>
+<ul>
+  <li>Veracidade, completude ou licitude dos dados inseridos pelo Contratante</li>
+  <li>Uso indevido dos dados pelo próprio Contratante ou por seus colaboradores</li>
+  <li>Dados inseridos erroneamente pelo Contratante ou por Usuários Finais</li>
+  <li>Consequências do uso de diagnósticos ou sugestões geradas pela IA como único critério de decisão</li>
+  <li>Danos causados a Usuários Finais decorrentes de ações ou omissões do Contratante</li>
+  <li>Informações financeiras e fiscais da oficina — a plataforma oferece relatórios informativos, não substitui contabilidade profissional</li>
+  <li>Perda de dados decorrente de exclusão voluntária pelo próprio Contratante</li>
+</ul>
+
+<div class="lei">
+  📋 Base legal: Arts. 37 a 40 da LGPD — responsabilidades do Controlador e do Operador. Art. 14 do Marco Civil da Internet (Lei 12.965/2014) — responsabilidade de provedores de aplicações. Art. 186 do Código Civil — ato ilícito e responsabilidade civil.
+</div>
+
+<h3>5.4 Segurança dos Dados pela Mecani.AI</h3>
+<p>A Mecani.AI adotará medidas técnicas e administrativas adequadas para proteger os dados contra:</p>
+<ul>
+  <li>Acesso não autorizado de terceiros</li>
+  <li>Destruição acidental ou ilícita</li>
+  <li>Alteração indevida</li>
+  <li>Comunicação ou difusão não autorizadas</li>
+</ul>
+<p>As medidas incluem criptografia em trânsito (HTTPS/TLS), isolamento de dados por Contratante (Row Level Security), controles de acesso e backups regulares. Contudo, nenhum sistema é 100% inviolável, e a Mecani.AI não garante segurança absoluta.</p>
+
+<div class="lei">
+  📋 Base legal: Art. 46 da LGPD — "Os agentes de tratamento devem adotar medidas de segurança, técnicas e administrativas aptas a proteger os dados pessoais de acessos não autorizados e de situações acidentais ou ilícitas de destruição, perda, alteração, comunicação ou qualquer forma de tratamento inadequado ou ilícito."
+</div>
+
+<!-- 6 -->
+<h2 id="s6">6. Da Exclusão de Dados por Inadimplência</h2>
+
+<div class="grave">
+  <strong>⚠️ CLÁUSULA CRÍTICA — LEIA COM ATENÇÃO</strong>
+  Após 15 (quinze) dias corridos do vencimento do pagamento sem regularização, TODOS os dados do Contratante e dos Usuários Finais armazenados na plataforma serão excluídos de forma definitiva e irreversível, incluindo ordens de serviço, cadastro de clientes, histórico de veículos, dados financeiros, registros de comunicação e qualquer outro dado vinculado à conta.
+</div>
+
+<h3>6.1 Processo de Exclusão por Inadimplência</h3>
+<p>O processo seguirá rigorosamente as seguintes etapas:</p>
+
+<table>
+  <tr><th>Prazo</th><th>Ação da Mecani.AI</th><th>Status da Conta</th></tr>
+  <tr><td>Vencimento (Dia 0)</td><td>Tentativa automática de cobrança</td><td>✅ Ativa</td></tr>
+  <tr><td>Dia 1</td><td>Notificação via WhatsApp e e-mail</td><td>✅ Ativa</td></tr>
+  <tr><td>Dia 3</td><td>Segunda notificação com urgência</td><td>✅ Ativa</td></tr>
+  <tr><td>Dia 7</td><td>Terceira notificação — alerta de suspensão</td><td>⚠️ Suspensa</td></tr>
+  <tr><td>Dia 10</td><td>Notificação final com aviso de exclusão</td><td>🔒 Bloqueada</td></tr>
+  <tr><td>Dia 15</td><td><strong>Exclusão definitiva de todos os dados</strong></td><td>❌ Encerrada</td></tr>
+</table>
+
+<h3>6.2 Caráter Definitivo e Irreversível da Exclusão</h3>
+<p>A exclusão realizada após o 15º dia é <strong>definitiva e irreversível</strong>. A Mecani.AI <strong>não manterá cópias de segurança</strong> ou arquivos dos dados excluídos após esse prazo. Não será possível recuperar qualquer informação após a exclusão, mesmo mediante pagamento de valores em atraso ou recontratação dos serviços.</p>
+
+<h3>6.3 Responsabilidade pelo Backup</h3>
+<p>É de <strong>exclusiva responsabilidade do Contratante</strong> realizar cópias de segurança dos seus dados antes do término do acesso. A Mecani.AI disponibiliza ferramentas de exportação no dashboard durante o período de acesso ativo.</p>
+
+<div class="lei">
+  📋 Base legal: Art. 16, IV da LGPD — "Os dados pessoais serão eliminados após o término do seu tratamento." Art. 15, III do Marco Civil da Internet — possibilidade de rescisão contratual. Art. 473 do Código Civil — resolução do contrato por inadimplemento. Art. 54, §3º do CDC — cláusulas que imponham limitações de direitos ao consumidor devem ser redigidas com destaque, permitem que esta cláusula seja considerada válida por ter sido destacada.
+</div>
+
+<h3>6.4 Dados de Titulares após Exclusão</h3>
+<p>Após a exclusão da conta por inadimplência, os dados de Usuários Finais (clientes da oficina) também serão excluídos, conforme art. 16 da LGPD. O Contratante é responsável por comunicar aos seus clientes essa situação caso necessário, tendo em vista sua condição de Controlador dos Dados.</p>
+
+<!-- 7 -->
+<h2 id="s7">7. Da Limitação de Responsabilidade da Contratada</h2>
+
+<h3>7.1 Exclusões de Responsabilidade</h3>
+<p>A Mecani.AI <strong>não será responsável</strong> por perdas ou danos, diretos ou indiretos, incluindo lucros cessantes, perda de negócios, perda de dados ou danos morais, decorrentes de:</p>
+<ul>
+  <li>Interrupções, falhas ou indisponibilidade da plataforma por causas fora de seu controle</li>
+  <li>Falhas em serviços de terceiros (WhatsApp/Meta, Google, provedores de cloud, operadoras de telefonia, Mercado Pago)</li>
+  <li>Uso inadequado da plataforma pelo Contratante ou seus colaboradores</li>
+  <li>Perda de dados por ação do próprio Contratante</li>
+  <li>Decisões de negócio tomadas com base em relatórios ou diagnósticos da plataforma</li>
+  <li>Bloqueio ou suspensão do WhatsApp utilizado pela oficina por violação das políticas da Meta</li>
+  <li>Integração com APIs de terceiros que estejam fora do controle da Mecani.AI</li>
+  <li>Ataques cibernéticos de terceiros (hackers), desde que a Contratada tenha adotado medidas razoáveis de segurança</li>
+  <li>Casos fortuitos ou de força maior, conforme art. 393 do Código Civil</li>
+</ul>
+
+<h3>7.2 Limitação de Valor</h3>
+<p>Em qualquer hipótese de responsabilidade civil da Mecani.AI, o valor máximo de indenização estará limitado ao total de mensalidades efetivamente pagas pelo Contratante nos últimos <strong>3 (três) meses</strong> anteriores ao evento danoso.</p>
+
+<div class="lei">
+  📋 Base legal: Arts. 393 e 944 do Código Civil — força maior e proporcionalidade da indenização. Art. 51, I do CDC — nulidade de cláusulas abusivas, desde que o limite não seja manifestamente desproporcional. Súmula 302 do STJ — legitimidade de cláusulas limitativas em contratos B2B.
+</div>
+
+<!-- 8 -->
+<h2 id="s8">8. Das Obrigações do Contratante</h2>
+
+<h3>8.1 O Contratante obriga-se a:</h3>
+<ul>
+  <li>Fornecer informações cadastrais verdadeiras, completas e atualizadas (art. 299 do Código Penal — falsidade ideológica)</li>
+  <li>Manter suas credenciais de acesso em sigilo, sendo responsável por todos os atos praticados com seu login</li>
+  <li>Utilizar a plataforma apenas para fins lícitos e dentro do escopo contratado</li>
+  <li>Não tentar acessar, modificar ou destruir dados de outros Contratantes</li>
+  <li>Cumprir a LGPD em relação aos dados dos Usuários Finais que inserir na plataforma</li>
+  <li>Obter consentimento adequado dos Usuários Finais para o tratamento de seus dados via plataforma</li>
+  <li>Não utilizar a plataforma para envio de spam, mensagens não solicitadas ou conteúdo ilegal</li>
+  <li>Notificar a Mecani.AI imediatamente em caso de suspeita de comprometimento de suas credenciais</li>
+  <li>Manter WhatsApp e e-mail cadastrados ativos para recebimento de notificações</li>
+  <li>Realizar backup regular de seus dados importantes</li>
+</ul>
+
+<!-- 9 -->
+<h2 id="s9">9. Da Propriedade Intelectual</h2>
+
+<h3>9.1 Titularidade da Mecani.AI</h3>
+<p>Todo o software, código-fonte, algoritmos, modelos de inteligência artificial, interface, design, marca, logotipo, textos e demais elementos da plataforma Mecani.AI são de titularidade exclusiva da Contratada, protegidos pela Lei de Direitos Autorais (Lei 9.610/1998) e pela Lei de Propriedade Industrial (Lei 9.279/1996).</p>
+
+<h3>9.2 Licença de Uso</h3>
+<p>A assinatura concede ao Contratante uma licença de uso <strong>não exclusiva, intransferível, revogável e limitada</strong> para acessar e utilizar a plataforma durante o período de vigência do contrato, exclusivamente para fins de gestão da própria oficina.</p>
+
+<h3>9.3 Dados do Contratante</h3>
+<p>Os dados inseridos pelo Contratante na plataforma permanecem de titularidade do Contratante. A Mecani.AI não reivindica qualquer propriedade sobre esses dados e os utiliza exclusivamente para prestação do serviço contratado e melhoria da plataforma, de forma anonimizada e agregada, sem identificação de Contratantes individuais.</p>
+
+<!-- 10 -->
+<h2 id="s10">10. Da Segurança e Sigilo</h2>
+
+<h3>10.1 Sigilo e Confidencialidade</h3>
+<p>A Mecani.AI compromete-se a manter sigilo sobre os dados do Contratante, não os divulgando a terceiros, salvo:</p>
+<ul>
+  <li>Por determinação judicial ou administrativa de autoridade competente</li>
+  <li>Para cumprimento de obrigação legal ou regulatória</li>
+  <li>Com autorização expressa do Contratante</li>
+  <li>Para prestadores de serviços que auxiliam na operação da plataforma, mediante cláusulas de confidencialidade</li>
+</ul>
+
+<h3>10.2 Incidentes de Segurança</h3>
+<p>Em caso de incidente de segurança que possa acarretar risco ou dano relevante aos titulares dos dados, a Mecani.AI notificará:</p>
+<ul>
+  <li>A Autoridade Nacional de Proteção de Dados (ANPD), no prazo previsto na LGPD</li>
+  <li>O Contratante afetado, em até 72 (setenta e duas) horas do conhecimento do incidente</li>
+</ul>
+
+<div class="lei">
+  📋 Base legal: Art. 48 da LGPD — "O controlador deverá comunicar à autoridade nacional e ao titular a ocorrência de incidente de segurança que possa acarretar risco ou dano relevante aos titulares."
+</div>
+
+<!-- 11 -->
+<h2 id="s11">11. Das Disposições Gerais e Foro</h2>
+
+<h3>11.1 Alterações nos Termos</h3>
+<p>A Mecani.AI reserva-se o direito de alterar estes termos mediante notificação prévia de <strong>15 (quinze) dias</strong> ao Contratante via e-mail e WhatsApp cadastrados. O uso continuado da plataforma após esse prazo implica aceitação das alterações. Caso o Contratante discorde das alterações, poderá cancelar o contrato sem ônus durante o prazo de notificação.</p>
+
+<h3>11.2 Ausência de Vínculo Trabalhista</h3>
+<p>O presente contrato não estabelece qualquer vínculo empregatício, societário ou de representação entre as partes. A Mecani.AI é prestadora de serviço de tecnologia, não tendo qualquer ingerência sobre as atividades da oficina do Contratante.</p>
+
+<h3>11.3 Independência das Cláusulas</h3>
+<p>A invalidade ou inaplicabilidade de qualquer cláusula destes termos não afetará a validade das demais, que permanecerão em pleno vigor.</p>
+
+<h3>11.4 Comunicações Oficiais</h3>
+<p>Todas as comunicações formais entre as partes deverão ser realizadas por escrito, através dos seguintes canais:</p>
+<ul>
+  <li>E-mail: juridico@mecaniia.com.br</li>
+  <li>WhatsApp: (61) 99177-5904</li>
+  <li>Endereço: Brasília, Distrito Federal</li>
+</ul>
+
+<h3>11.5 Lei Aplicável e Foro</h3>
+<p>O presente contrato é regido pelas leis da República Federativa do Brasil. Para dirimir quaisquer controvérsias que não possam ser resolvidas amigavelmente, fica eleito o foro da <strong>Comarca de Brasília, Distrito Federal</strong>, com renúncia expressa a qualquer outro, por mais privilegiado que seja.</p>
+
+<div class="lei">
+  📋 Legislação aplicável: Lei 10.406/2002 (Código Civil) · Lei 8.078/1990 (Código de Defesa do Consumidor) · Lei 13.709/2018 (LGPD) · Lei 12.965/2014 (Marco Civil da Internet) · Lei 9.610/1998 (Direitos Autorais) · Lei 9.279/1996 (Propriedade Industrial) · Lei 12.850/2013 (organizações criminosas, aplicável em caso de uso ilícito da plataforma).
+</div>
+
+<h3>11.6 Vigência</h3>
+<p>Estes Termos entram em vigor na data de publicação e aplicam-se a todos os Contratantes ativos e novos, substituindo versões anteriores.</p>
+
+<div class="footer-doc">
+  <p><strong>Mecani.AI</strong> — Plataforma de Gestão Inteligente para Oficinas Mecânicas</p>
+  <p>mecaniia.com.br | (61) 99177-5904 | Brasília, DF — Brasil</p>
+  <p style="margin-top:8px">Versão 1.0 — Junho de 2025 · Próxima revisão prevista: Junho de 2026</p>
+  <p style="margin-top:16px;font-size:11px;color:#9ca3af">Este documento foi redigido com base na legislação brasileira vigente. Para questões jurídicas específicas, consulte um advogado habilitado pela OAB.</p>
+</div>
+
+</div>
 </body>
 </html>
