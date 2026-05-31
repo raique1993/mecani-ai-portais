@@ -436,22 +436,18 @@ function setP(p, el) {
 }
 
 // ── Abrir checkout ──────────────────────────────────────
+// Links reais Mercado Pago
+const MP_LINKS = {
+  starter: { m: 'https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=f29c586986da487da45698a3dabbcd44', a: 'https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=f29c586986da487da45698a3dabbcd44' },
+  pro:     { m: 'https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=198cb3701dd545caa78713efc461f5f1',     a: 'https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=198cb3701dd545caa78713efc461f5f1' }
+};
+
 function abrirCheckout(plano) {
-  planoAtual = plano;
-  const preco = precos[plano][periodoAtual];
-  const nomePlano = plano === 'starter' ? 'Starter' : 'Pro';
-  const periodo = periodoAtual === 'm' ? 'mês' : 'ano';
-
-  document.getElementById('modal-title').textContent = `Plano ${nomePlano} — R$ ${preco}/${periodo}`;
-  document.getElementById('modal-sub2').textContent = `Plano ${nomePlano} • R$ ${preco}/${periodo}`;
-
-  // Atualizar parcelas
-  const p1 = document.getElementById('parc-1');
-  if (p1) p1.textContent = `1x de R$ ${preco} sem juros`;
-
-  mostrarStep('step1');
-  document.getElementById('modal-bg').classList.add('show');
-  document.body.style.overflow = 'hidden';
+  // Redirecionar direto ao Mercado Pago
+  const link = MP_LINKS[plano][periodoAtual];
+  if (link) {
+    window.open(link, '_blank');
+  }
 }
 
 function fecharModal() {
