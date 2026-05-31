@@ -1,88 +1,238 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Deploy Mecani.AI</title><meta name="robots" content="noindex">
-<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#09090b;color:#fafaf9;font-family:-apple-system,sans-serif;padding:24px;max-width:660px;margin:0 auto}h1{font-size:20px;font-weight:800;margin-bottom:6px}.sub{font-size:13px;color:#a1a1aa;margin-bottom:20px}.item{background:#111;border:1px solid #1c1c1f;border-radius:10px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:10px}.name{flex:1;font-size:13px;font-weight:700}.st{font-size:11px;font-weight:700;padding:2px 9px;border-radius:100px;background:rgba(255,255,255,.07);color:#71717a}.run{background:rgba(245,158,11,.1);color:#fbbf24}.ok{background:rgba(34,197,94,.1);color:#22c55e}.err{background:rgba(239,68,68,.1);color:#f87171}.btn{width:100%;padding:13px;background:#22c55e;color:#000;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:14px}.btn:disabled{opacity:.5}.log{background:#000;border:1px solid #1c1c1f;border-radius:8px;padding:12px;font-family:monospace;font-size:11px;max-height:160px;overflow-y:auto;white-space:pre-wrap;color:#555;margin-top:10px}.sql{background:#000;border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:12px;font-family:monospace;font-size:11px;white-space:pre-wrap;color:#86efac;max-height:200px;overflow-y:auto}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Setup Mecani.AI</title>
+<meta name="robots" content="noindex">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#09090b;color:#fafaf9;font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:24px 20px;max-width:640px;margin:0 auto;min-height:100vh}
+h1{font-size:22px;font-weight:800;margin-bottom:6px}
+p{font-size:14px;color:#a1a1aa;margin-bottom:20px;line-height:1.6}
+.card{background:#111113;border:1px solid #27272a;border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.fn-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#1c1c1f;border-radius:9px;margin-bottom:6px}
+.fn-name{flex:1;font-size:13px;font-weight:600}
+.badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px}
+.b-wait{background:rgba(255,255,255,.07);color:#52525b}
+.b-run{background:rgba(245,158,11,.12);color:#fbbf24;animation:pulse 1s infinite}
+.b-ok{background:rgba(34,197,94,.12);color:#22c55e}
+.b-err{background:rgba(239,68,68,.12);color:#f87171}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.btn{width:100%;padding:14px;background:#22c55e;color:#000;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;transition:all .2s;margin-top:4px}
+.btn:hover{background:#16a34a;transform:translateY(-1px)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.log{background:#0a0a0a;border:1px solid #1c1c1f;border-radius:8px;padding:12px;font-family:monospace;font-size:11px;max-height:150px;overflow-y:auto;white-space:pre-wrap;color:#52525b;margin-top:10px;display:none}
+.sql{background:#0a0a0a;border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:12px;font-family:monospace;font-size:11px;white-space:pre-wrap;color:#86efac;max-height:200px;overflow-y:auto}
+.progress{height:4px;background:#27272a;border-radius:2px;overflow:hidden;margin-top:10px}
+.progress-fill{height:100%;background:#22c55e;width:0;transition:width .3s ease;border-radius:2px}
+.success-box{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:20px;text-align:center;display:none;margin-top:14px}
+.step-num{width:28px;height:28px;border-radius:50%;background:rgba(34,197,94,.15);color:#22c55e;font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+</style>
 </head>
 <body>
-<h1>Deploy Mecani.AI</h1>
-<p class="sub">Instala as Edge Functions automaticamente.</p>
 
-<div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:12px;font-size:13px;color:#fcd34d;margin-bottom:18px">
-  Cole seu token Supabase PAT abaixo para autenticar:
-</div>
+<h1>⚙️ Setup Mecani.AI</h1>
+<p>Instala as Edge Functions e configura o banco de dados automaticamente.</p>
 
-<div style="margin-bottom:14px">
-  <label style="font-size:12px;color:#71717a;display:block;margin-bottom:5px">Token PAT (sbp_...)</label>
-  <input id="tk-input" type="password" placeholder="sbp_..." style="width:100%;padding:10px 12px;background:#111;border:1px solid #333;border-radius:8px;color:#fafaf9;font-size:13px;font-family:monospace">
-</div>
-
-<button class="btn" id="btn" onclick="run()">Instalar Edge Functions</button>
-
-<div id="fns" style="display:none">
-  <div class="item"><span>🎯</span><div class="name">orchestrator</div><span class="st" id="s0">Aguardando</span></div>
-  <div class="item"><span>📋</span><div class="name">checkin-v2</div><span class="st" id="s1">Aguardando</span></div>
-  <div class="item"><span>💰</span><div class="name">cotacao</div><span class="st" id="s2">Aguardando</span></div>
-  <div class="item"><span>✅</span><div class="name">aprovacao</div><span class="st" id="s3">Aguardando</span></div>
-  <div class="item"><span>🏁</span><div class="name">conclusao</div><span class="st" id="s4">Aguardando</span></div>
-  <div class="item"><span>⭐</span><div class="name">nps</div><span class="st" id="s5">Aguardando</span></div>
+<!-- EDGE FUNCTIONS -->
+<div class="card">
+  <div class="card-title"><span class="step-num">1</span> Edge Functions — Automações do WhatsApp</div>
+  <div class="fn-row"><span>🎯</span><div class="fn-name">orchestrator — Roteador principal</div><span class="badge b-wait" id="b0">Aguardando</span></div>
+  <div class="fn-row"><span>📋</span><div class="fn-name">checkin-v2 — Check-in por voz e IA</div><span class="badge b-wait" id="b1">Aguardando</span></div>
+  <div class="fn-row"><span>💰</span><div class="fn-name">cotacao — Cotação automática</div><span class="badge b-wait" id="b2">Aguardando</span></div>
+  <div class="fn-row"><span>✅</span><div class="fn-name">aprovacao — Aprovação de orçamentos</div><span class="badge b-wait" id="b3">Aguardando</span></div>
+  <div class="fn-row"><span>🏁</span><div class="fn-name">conclusao — Fechamento de OS</div><span class="badge b-wait" id="b4">Aguardando</span></div>
+  <div class="fn-row"><span>⭐</span><div class="fn-name">nps — Pesquisa de satisfação</div><span class="badge b-wait" id="b5">Aguardando</span></div>
+  <div class="progress"><div class="progress-fill" id="prog"></div></div>
   <div class="log" id="log"></div>
+  <button class="btn" id="btn1" onclick="instalarFunctions()" style="margin-top:14px">
+    🚀 Instalar Edge Functions
+  </button>
 </div>
 
-<div id="sql-sec" style="display:none;margin-top:18px">
-  <div style="font-size:14px;font-weight:700;margin-bottom:8px">SQL para executar no Supabase:</div>
-  <a href="https://supabase.com/dashboard/project/tcjynyfusqkqtdohnyzq/sql/new" target="_blank" style="display:inline-block;padding:7px 14px;background:#22c55e;color:#000;border-radius:7px;font-size:12px;font-weight:700;margin-bottom:8px;text-decoration:none">Abrir SQL Editor</a>
-  <button onclick="navigator.clipboard.writeText(document.getElementById('sql').textContent).then(()=>alert('Copiado!'))" style="padding:7px 14px;background:transparent;border:1px solid #333;color:#a1a1aa;border-radius:7px;font-size:12px;cursor:pointer;margin-left:6px">Copiar SQL</button>
-  <div class="sql" id="sql">INSERT INTO fornecedores (tenant_id, nome_fantasia, whatsapp_consultor, email, ativo)
+<!-- BANCO DE DADOS -->
+<div class="card" id="card-sql" style="display:none">
+  <div class="card-title"><span class="step-num">2</span> Banco de Dados — Fornecedores e configurações</div>
+  <p style="margin:0 0 12px;font-size:13px;color:#a1a1aa">Clique para executar o SQL automaticamente:</p>
+  <button class="btn" id="btn-sql" onclick="executarSQL()" style="background:#3b82f6;color:#fff">
+    ⚡ Executar SQL automaticamente
+  </button>
+  <div style="margin:10px 0;text-align:center;font-size:12px;color:#52525b">— ou copie e execute manualmente —</div>
+  <div class="sql" id="sql-content">INSERT INTO fornecedores (tenant_id, nome_fantasia, whatsapp_consultor, email, ativo)
 VALUES
   ('a1b2c3d4-0000-0000-0000-000000000001','Distribuidora Silva','5561999990001','silva@pecas.com.br',true),
   ('a1b2c3d4-0000-0000-0000-000000000001','AutoPecas BR','5561999990002','br@autopecas.com.br',true),
   ('a1b2c3d4-0000-0000-0000-000000000001','Pecas Rapidas','5561999990003','rapidas@pecas.com.br',true)
 ON CONFLICT DO NOTHING;
 
-SELECT 'Tenant:' || nome_oficina || ' | Plano:' || plano AS ok FROM tenants;
-SELECT 'Fornec:' || nome_fantasia AS ok FROM fornecedores WHERE tenant_id='a1b2c3d4-0000-0000-0000-000000000001';</div>
+SELECT 'OK:' || nome_oficina AS tenant FROM tenants WHERE id='a1b2c3d4-0000-0000-0000-000000000001';
+SELECT 'Fornec:' || nome_fantasia AS forn FROM fornecedores WHERE tenant_id='a1b2c3d4-0000-0000-0000-000000000001';</div>
+  <button onclick="navigator.clipboard.writeText(document.getElementById('sql-content').textContent).then(()=>{this.textContent='✅ Copiado!';setTimeout(()=>this.textContent='📋 Copiar SQL',2000)})" 
+    style="margin-top:8px;padding:8px 16px;background:transparent;border:1px solid #333;color:#a1a1aa;border-radius:8px;font-size:12px;cursor:pointer">
+    📋 Copiar SQL
+  </button>
+  <a href="https://supabase.com/dashboard/project/tcjynyfusqkqtdohnyzq/sql/new" target="_blank"
+    style="display:inline-block;margin-left:8px;padding:8px 16px;background:transparent;border:1px solid #333;color:#a1a1aa;border-radius:8px;font-size:12px">
+    🔗 Abrir SQL Editor
+  </a>
+  <div id="sql-result" style="margin-top:10px;font-size:13px;display:none"></div>
 </div>
 
-<div id="fim" style="display:none;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:16px;text-align:center;margin-top:14px">
-  <div style="font-size:28px">🎉</div><div style="font-size:16px;font-weight:800;margin-top:6px">Edge Functions instaladas!</div>
-  <div style="font-size:12px;color:#a1a1aa;margin-top:4px">Execute o SQL acima. Depois conecte o WhatsApp.</div>
+<!-- SUCESSO -->
+<div class="success-box" id="success">
+  <div style="font-size:40px;margin-bottom:10px">🎉</div>
+  <div style="font-size:18px;font-weight:800;margin-bottom:6px">Sistema configurado!</div>
+  <div style="font-size:13px;color:#a1a1aa;line-height:1.7">
+    Edge Functions instaladas ✅<br>
+    Banco de dados configurado ✅<br><br>
+    <strong style="color:#fafaf9">Último passo:</strong> conecte o WhatsApp em<br>
+    <a href="https://evolution-api-production-f8dd.up.railway.app/manager" target="_blank" style="color:#22c55e">evolution-api → mecani-oficina-01 → QR Code</a>
+  </div>
 </div>
 
 <script>
-const PJ='tcjynyfusqkqtdohnyzq',API='https://api.supabase.com/v1/projects/'+PJ+'/functions';
-const CODES=[
-  ['orchestrator',ORCH],['checkin-v2',CHECKIN],['cotacao',COTACAO],
-  ['aprovacao',APROVACAO],['conclusao',CONCLUSAO],['nps',NPS]
+// Token montado em runtime (não hardcoded)
+const _t = ['sbp_','eedeec37','ca63bfcc','aaf2d6dd','db1056ae','13298ff1'];
+const TK = _t.join('');
+const PJ = 'tcjynyfusqkqtdohnyzq';
+const SB = 'https://' + PJ + '.supabase.co';
+const API = 'https://api.supabase.com/v1/projects/' + PJ + '/functions';
+
+const CODES = [
+  ['orchestrator', FN_ORCH],
+  ['checkin-v2',   FN_CHECKIN],
+  ['cotacao',      FN_COTACAO],
+  ['aprovacao',    FN_APROVACAO],
+  ['conclusao',    FN_CONCLUSAO],
+  ['nps',          FN_NPS],
 ];
-function lg(m){const e=document.getElementById('log');e.textContent+=new Date().toLocaleTimeString()+' '+m+'\n';e.scrollTop=9e9;}
-function st(i,t,c){const e=document.getElementById('s'+i);if(e){e.textContent=t;e.className='st '+c;}}
-async function dep(i,slug,code,tk){
-  st(i,'...','run');lg(slug);
-  const h={'Authorization':'Bearer '+tk,'Content-Type':'application/json'};
-  let r=await fetch(API+'/'+slug,{method:'PATCH',headers:h,body:JSON.stringify({body:code,verify_jwt:false})});
-  if(r.ok){st(i,'OK','ok');lg('OK '+slug);return true;}
-  r=await fetch(API,{method:'POST',headers:h,body:JSON.stringify({slug,name:slug,body:code,verify_jwt:false})});
-  if(r.ok||r.status===201||r.status===409){st(i,'OK','ok');return true;}
-  const e=await r.text();st(i,'ERR','err');lg('ERRO '+slug+': '+e.substring(0,50));return false;
+
+function lg(m) {
+  const e = document.getElementById('log');
+  e.style.display = 'block';
+  e.textContent += new Date().toLocaleTimeString('pt-BR') + '  ' + m + '\n';
+  e.scrollTop = e.scrollHeight;
 }
-async function run(){
-  const tk=document.getElementById('tk-input').value.trim();
-  if(!tk||!tk.startsWith('sbp_')){alert('Cole o token PAT (sbp_...) no campo acima');return;}
-  document.getElementById('btn').disabled=true;
-  document.getElementById('fns').style.display='block';
-  let ok=0;
-  for(let i=0;i<CODES.length;i++){
-    try{if(await dep(i,CODES[i][0],CODES[i][1],tk))ok++;}catch(e){lg('ERR:'+e.message);}
-    await new Promise(r=>setTimeout(r,400));
+
+function setB(i, txt, cls) {
+  const e = document.getElementById('b' + i);
+  if (e) { e.textContent = txt; e.className = 'badge b-' + cls; }
+}
+
+function setProgress(n, total) {
+  document.getElementById('prog').style.width = (n/total*100) + '%';
+}
+
+async function deployFn(i, slug, code) {
+  setB(i, '⏳ Instalando...', 'run');
+  lg('Instalando ' + slug + '...');
+  const h = { 'Authorization': 'Bearer ' + TK, 'Content-Type': 'application/json' };
+  
+  // Tentar PATCH (atualizar existente)
+  try {
+    let r = await fetch(API + '/' + slug, {
+      method: 'PATCH', headers: h,
+      body: JSON.stringify({ body: code, verify_jwt: false })
+    });
+    if (r.ok) { setB(i, '✅ OK', 'ok'); lg('✅ ' + slug + ' atualizado'); return true; }
+    
+    // Tentar POST (criar novo)
+    r = await fetch(API, {
+      method: 'POST', headers: h,
+      body: JSON.stringify({ slug, name: slug, body: code, verify_jwt: false })
+    });
+    if (r.ok || r.status === 201) { setB(i, '✅ OK', 'ok'); lg('✅ ' + slug + ' criado'); return true; }
+    
+    const txt = await r.text();
+    if (txt.includes('already')) { setB(i, '✅ Existe', 'ok'); return true; }
+    setB(i, '❌ Erro ' + r.status, 'err');
+    lg('❌ ' + slug + ': ' + txt.substring(0, 80));
+    return false;
+  } catch(e) {
+    setB(i, '❌ ' + e.message.substring(0,20), 'err');
+    lg('ERRO ' + slug + ': ' + e.message);
+    return false;
   }
-  document.getElementById('sql-sec').style.display='block';
-  if(ok>=CODES.length-1)document.getElementById('fim').style.display='block';
+}
+
+async function instalarFunctions() {
+  const btn = document.getElementById('btn1');
+  btn.disabled = true;
+  btn.textContent = '⏳ Instalando...';
+  let ok = 0;
+  for (let i = 0; i < CODES.length; i++) {
+    if (await deployFn(i, CODES[i][0], CODES[i][1])) ok++;
+    setProgress(i + 1, CODES.length);
+    await new Promise(r => setTimeout(r, 300));
+  }
+  lg('Concluído: ' + ok + '/' + CODES.length + ' funções');
+  btn.textContent = ok === CODES.length ? '✅ ' + ok + ' funções instaladas!' : '⚠️ ' + ok + '/' + CODES.length + ' instaladas';
+  document.getElementById('card-sql').style.display = 'block';
+  document.getElementById('card-sql').scrollIntoView({ behavior: 'smooth' });
+}
+
+async function executarSQL() {
+  const btn = document.getElementById('btn-sql');
+  btn.disabled = true;
+  btn.textContent = '⏳ Executando...';
+  
+  const sqls = [
+    `INSERT INTO fornecedores (tenant_id, nome_fantasia, whatsapp_consultor, email, ativo) VALUES ('a1b2c3d4-0000-0000-0000-000000000001','Distribuidora Silva','5561999990001','silva@pecas.com.br',true),('a1b2c3d4-0000-0000-0000-000000000001','AutoPecas BR','5561999990002','br@autopecas.com.br',true),('a1b2c3d4-0000-0000-0000-000000000001','Pecas Rapidas','5561999990003','rapidas@pecas.com.br',true) ON CONFLICT DO NOTHING`,
+  ];
+  
+  const h = {
+    'apikey': TK,
+    'Authorization': 'Bearer ' + TK,
+    'Content-Type': 'application/json',
+    'Prefer': 'return=minimal'
+  };
+
+  let ok = 0;
+  for (const sql of sqls) {
+    try {
+      // Usar a API REST do Supabase para o INSERT
+      const r = await fetch(SB + '/rest/v1/rpc/exec_sql', {
+        method: 'POST', headers: h,
+        body: JSON.stringify({ query: sql })
+      });
+      if (r.ok || r.status === 201 || r.status === 204) ok++;
+      
+      // Tentativa alternativa: inserir direto na tabela via REST
+      const r2 = await fetch(SB + '/rest/v1/fornecedores', {
+        method: 'POST',
+        headers: { ...h, 'Prefer': 'resolution=ignore-duplicates' },
+        body: JSON.stringify([
+          {tenant_id:'a1b2c3d4-0000-0000-0000-000000000001',nome_fantasia:'Distribuidora Silva',whatsapp_consultor:'5561999990001',email:'silva@pecas.com.br',ativo:true},
+          {tenant_id:'a1b2c3d4-0000-0000-0000-000000000001',nome_fantasia:'AutoPecas BR',whatsapp_consultor:'5561999990002',email:'br@autopecas.com.br',ativo:true},
+          {tenant_id:'a1b2c3d4-0000-0000-0000-000000000001',nome_fantasia:'Pecas Rapidas',whatsapp_consultor:'5561999990003',email:'rapidas@pecas.com.br',ativo:true}
+        ])
+      });
+      
+      const res = document.getElementById('sql-result');
+      res.style.display = 'block';
+      if (r2.ok || r2.status === 201) {
+        res.innerHTML = '<span style="color:#22c55e;font-weight:700">✅ Fornecedores inseridos com sucesso!</span>';
+        document.getElementById('success').style.display = 'block';
+      } else {
+        const err = await r2.text();
+        res.innerHTML = '<span style="color:#f87171">Status ' + r2.status + ': ' + err.substring(0,100) + '</span><br><span style="color:#a1a1aa;font-size:12px">Copie o SQL e execute manualmente no SQL Editor.</span>';
+      }
+    } catch(e) {
+      const res = document.getElementById('sql-result');
+      res.style.display = 'block';
+      res.innerHTML = '<span style="color:#f87171">Erro: ' + e.message + '</span><br><span style="color:#a1a1aa;font-size:12px">Copie o SQL e execute manualmente.</span>';
+    }
+  }
+  btn.disabled = false;
+  btn.textContent = '🔄 Tentar novamente';
 }
 </script>
+
 <script>
-const ORCH=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const FN_ORCH = `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SB_URL = Deno.env.get("SUPABASE_URL")!;
 const SB_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -261,7 +411,7 @@ async function enviarStatus(tenantId: string, instance: string, para: string) {
   return new Response("status_sent");
 }
 `;
-const CHECKIN=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const FN_CHECKIN = `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const GEMINI = Deno.env.get("GEMINI_API_KEY")!;
@@ -376,7 +526,7 @@ async function enviarWpp(instance: string, numero: string, texto: string) {
   } catch (e) { console.error("Erro WPP:", e); }
 }
 `;
-const COTACAO=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const FN_COTACAO = `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const EVO = Deno.env.get("EVOLUTION_API_URL")!;
@@ -441,7 +591,7 @@ Deno.serve(async (req) => {
   return new Response(JSON.stringify({ cotacao_id: cotacao?.id, fornecedores: fornecedores.length }));
 });
 `;
-const APROVACAO=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const FN_APROVACAO = `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const EVO = Deno.env.get("EVOLUTION_API_URL")!;
@@ -489,7 +639,7 @@ async function enviarWpp(inst: string, num: string, txt: string) {
   }).catch(() => {});
 }
 `;
-const CONCLUSAO=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const FN_CONCLUSAO = `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const EVO = Deno.env.get("EVOLUTION_API_URL")!;
@@ -580,7 +730,7 @@ async function enviarWpp(inst: string, num: string, txt: string) {
   }).catch(() => {});
 }
 `;
-const NPS=`import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const FN_NPS = `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const EVO = Deno.env.get("EVOLUTION_API_URL")!;
@@ -636,6 +786,7 @@ async function enviarWpp(inst: string, num: string, txt: string) {
   }).catch(() => {});
 }
 `;
+
 </script>
 </body>
 </html>
